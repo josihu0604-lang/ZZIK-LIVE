@@ -4,9 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:monitor": "./scripts/dev-server-monitor.sh",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "health": "./scripts/health-check.sh",
+    "errors": "./scripts/error-analyzer.sh",
+    "fix:all": "./scripts/auto-fix.sh all",
+    "fix:deps": "./scripts/auto-fix.sh deps",
+    "fix:cache": "./scripts/auto-fix.sh cache",
+    "fix:port": "./scripts/auto-fix.sh port",
+    "fix:types": "./scripts/auto-fix.sh types",
+    "logs:clean": "./scripts/auto-fix.sh logs"
   },
   "dependencies": {
     "lucide-react": "^0.553.0",
