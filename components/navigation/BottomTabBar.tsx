@@ -1,7 +1,7 @@
 'use client';
 
 import { TabName } from '@/types';
-import { Ticket, Gift, QrCode, Wallet } from 'lucide-react';
+import { Map, Gift, QrCode, Wallet } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -14,12 +14,12 @@ interface BottomTabBarProps {
 const tabs: Array<{
   id: TabName;
   label: string;
-  icon: typeof Ticket;
+  icon: typeof Map;
   path: string;
 }> = [
-  { id: 'pass', label: '체험권', icon: Ticket, path: '/pass' },
-  { id: 'offers', label: '받은 오퍼', icon: Gift, path: '/offers' },
-  { id: 'scan', label: 'QR 스캔', icon: QrCode, path: '/scan' },
+  { id: 'pass', label: '탐색', icon: Map, path: '/pass' },
+  { id: 'offers', label: '오퍼', icon: Gift, path: '/offers' },
+  { id: 'scan', label: '스캔', icon: QrCode, path: '/scan' },
   { id: 'wallet', label: '지갑', icon: Wallet, path: '/wallet' },
 ];
 
