@@ -2,7 +2,7 @@ import 'server-only';
 export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { redis } from '@/lib/redis';
+import { redis } from '@/lib/server/redis';
 
 export async function GET() {
   let db = 'fail', cache = 'skip';

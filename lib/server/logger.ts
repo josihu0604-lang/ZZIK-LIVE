@@ -61,7 +61,8 @@ export function createRequestId(): string {
 
 export function log(level: Level, msg: string, ctx: Record<string, unknown> = {}): void {
   const ts = new Date().toISOString();
-  const payload = { ts, level, msg, ...redact(ctx) };
+  const redacted = redact(ctx) as Record<string, unknown>;
+  const payload = { ts, level, msg, ...redacted };
 
   // Always use structured JSON logging
   // eslint-disable-next-line no-console
