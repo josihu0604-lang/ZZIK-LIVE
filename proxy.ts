@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(req: NextRequest) {
+// Next.js 16: Renamed from middleware() to proxy()
+// proxy.ts runs on Node.js runtime (Edge runtime deprecated for middleware)
+export function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   
   // Block /feed route when FEATURE_FEED_LABS is not enabled
