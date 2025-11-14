@@ -1,170 +1,187 @@
 'use client';
 
 import { useState } from 'react';
-import QRScannerView from '@/components/scan/QRScannerView';
-import { ScanResult, ScanError } from '@/types';
-import { analytics } from '@/lib/analytics';
-import { CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
-import { getButtonClasses } from '@/lib/button-presets';
+import dynamic from 'next/dynamic';
+import AuthGate from '@/components/auth/AuthGate';
+import BottomTabBar from '@/components/navigation/BottomTabBar';
+import { track } from '@/lib/analytics';
+import { Icon } from '@/components/ui/Icon';
+
+// Dynamic import for QR Scanner to reduce initial bundle size
+const QRScannerView = dynamic(() => import('./_components/QRScannerView'), {
+  ssr: false,
+  loading: () => (
+    <div className="card" style={{ height: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="zzik-skeleton animate" style={{ width: '100%', height: '100%', borderRadius: 'var(--radius-lg)' }}>
+        <p className="caption text-muted" style={{ textAlign: 'center', paddingTop: '150px' }}>Loading camera...</p>
+      </div>
+    </div>
+  ),
+});
 
 export default function ScanPage() {
-  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
-  const [showScanner, setShowScanner] = useState(true);
+  const [scanResult, setScanResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  const handleScanResult = (payload: string) => {
-    console.log('Scan result:', payload);
+  const handleQRCode = async (payload: string) => {
+    track('qr_scan_open', {
+      offer_id: 'demo',
+      location_granted: true,
+    });
 
-    // Parse QR code payload
-    let result: ScanResult;
+    setIsVerifying(true);
+    setScanResult(null);
 
-    if (payload.startsWith('VOUCHER:')) {
-      const voucherId = payload.replace('VOUCHER:', '');
-      result = {
-        kind: 'voucher',
-        payload,
-        voucherId,
-        timestamp: new Date(),
-      };
-      analytics.qrScanResult('voucher');
-    } else if (payload.startsWith('CHECKIN:')) {
-      const placeId = payload.replace('CHECKIN:', '');
-      result = {
-        kind: 'checkin',
-        payload,
-        placeId,
-        timestamp: new Date(),
-      };
-      analytics.qrScanResult('checkin');
-    } else if (payload.startsWith('MEMBER:')) {
-      result = {
-        kind: 'membership',
-        payload,
-        timestamp: new Date(),
-      };
-      analytics.qrScanResult('membership');
-    } else {
-      result = {
-        kind: 'unknown',
-        payload,
-        timestamp: new Date(),
-      };
-      analytics.qrScanResult('unknown');
+    try {
+      // In production, send to API with idempotency key
+      // const response = await fetch('/api/qr/verify', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Idempotency-Key': crypto.randomUUID(),
+      //   },
+      //   body: JSON.stringify({ token: payload }),
+      // });
+
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Random success/failure for demo
+      const success = Math.random() > 0.3;
+
+      if (success) {
+        setScanResult({
+          success: true,
+          message: '✅ 검증 성공! 포인트가 적립되었습니다.',
+        });
+
+        track('qr_scan_result', {
+          state: 'success',
+          took_ms: 120,
+          retry_count: 0,
+        });
+      } else {
+        setScanResult({
+          success: false,
+          message: '❌ 이미 사용된 QR 코드입니다.',
+        });
+
+        track('qr_scan_result', {
+          state: 'already_used',
+          took_ms: 120,
+          retry_count: 0,
+        });
+      }
+    } catch (error) {
+      setScanResult({
+        success: false,
+        message: '⚠️ 검증 중 오류가 발생했습니다.',
+      });
+
+      track('qr_scan_result', {
+        state: 'invalid',
+        took_ms: 120,
+        retry_count: 0,
+      });
+    } finally {
+      setIsVerifying(false);
     }
-
-    setScanResult(result);
-    setShowScanner(false);
-  };
-
-  const handleScanError = (code: ScanError) => {
-    console.error('Scan error:', code);
-    analytics.qrError(code);
-  };
-
-  const handleClose = () => {
-    setShowScanner(false);
   };
 
   const handleReset = () => {
     setScanResult(null);
-    setShowScanner(true);
-    analytics.qrScanStart();
   };
 
-  const handleConfirmUse = () => {
-    if (scanResult?.voucherId) {
-      console.log('Use voucher:', scanResult.voucherId);
-      // In production, call API to use voucher
-      alert('체험권이 사용되었습니다!');
-      setScanResult(null);
-      setShowScanner(true);
-    }
-  };
-
-  if (showScanner) {
-    return (
-      <QRScannerView
-        onResult={handleScanResult}
-        onError={handleScanError}
-        onClose={handleClose}
-      />
-    );
-  }
-
-  // Result sheet
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] p-4 flex items-center justify-center">
-      <div className="max-w-md w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-[var(--radius-xl)] p-6 shadow-[var(--elev-2)]">
-        {/* Icon based on result kind */}
-        <div className="flex justify-center mb-4">
-          {scanResult?.kind === 'voucher' && (
-            <div className="rounded-full bg-[var(--success)]/10 p-6">
-              <CheckCircle size={48} className="text-[var(--success)]" />
-            </div>
-          )}
-          {scanResult?.kind === 'checkin' && (
-            <div className="rounded-full bg-[var(--info)]/10 p-6">
-              <CheckCircle size={48} className="text-[var(--info)]" />
-            </div>
-          )}
-          {scanResult?.kind === 'membership' && (
-            <div className="rounded-full bg-[var(--brand)]/10 p-6">
-              <CheckCircle size={48} className="text-[var(--brand)]" />
-            </div>
-          )}
-          {scanResult?.kind === 'unknown' && (
-            <div className="rounded-full bg-[var(--warning)]/10 p-6">
-              <AlertTriangle size={48} className="text-[var(--warning)]" />
-            </div>
-          )}
-        </div>
+    <AuthGate>
+      <main style={{ flex: 1, overflow: 'auto' }} aria-label="QR Scanner">
+        <section className="zzik-page">
+          <header className="zzik-col" style={{ marginBottom: '24px' }}>
+            <h1 className="h2">
+              <Icon name="qr-code" size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              QR Scan
+            </h1>
+            <p className="body-small text-muted">Scan the store's QR code to verify your visit</p>
+          </header>
 
-        {/* Result info */}
-        <div className="text-center mb-6">
-          <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
-            {scanResult?.kind === 'voucher' && '체험권 확인됨'}
-            {scanResult?.kind === 'checkin' && '체크인 완료'}
-            {scanResult?.kind === 'membership' && '멤버십 확인됨'}
-            {scanResult?.kind === 'unknown' && '알 수 없는 QR 코드'}
-          </h3>
-          <p className="text-sm text-[var(--text-secondary)]">
-            {scanResult?.kind === 'voucher' &&
-              '체험권을 사용하시겠습니까?'}
-            {scanResult?.kind === 'checkin' &&
-              '장소에 체크인되었습니다.'}
-            {scanResult?.kind === 'membership' &&
-              '멤버십이 확인되었습니다.'}
-            {scanResult?.kind === 'unknown' &&
-              '이 QR 코드는 ZZIK LIVE에서 지원하지 않습니다.'}
-          </p>
-        </div>
+          {scanResult ? (
+            <div className="grid" style={{ gap: '16px' }}>
+              <div
+                className="card"
+                style={{
+                  padding: '32px',
+                  textAlign: 'center',
+                  background: scanResult.success ? 'var(--success)' : 'var(--danger)',
+                  opacity: 0.1,
+                }}
+              >
+                <Icon 
+                  name={scanResult.success ? 'check' : 'x'} 
+                  size={48} 
+                  className={scanResult.success ? 'text-success' : 'text-danger'}
+                  style={{ marginBottom: '16px' }}
+                />
+                <p className="typo-body" style={{ fontWeight: 500 }}>
+                  {scanResult.message}
+                </p>
+              </div>
 
-        {/* Actions */}
-        <div className="space-y-[var(--sp-2)]">
-          {scanResult?.kind === 'voucher' && (
-            <button
-              onClick={handleConfirmUse}
-              className={getButtonClasses('primary', 'md') + ' w-full'}
-            >
-              체험권 사용하기
-            </button>
+              <button className="btn primary" onClick={handleReset}>
+                <Icon name="refresh" size={18} style={{ marginRight: '8px' }} />
+                Scan Again
+              </button>
+            </div>
+          ) : isVerifying ? (
+            <div className="grid" style={{ placeItems: 'center', minHeight: '400px' }}>
+              <div className="zzik-col" style={{ textAlign: 'center' }}>
+                <div
+                  className="zzik-skeleton animate"
+                  style={{ width: '60px', height: '4px', margin: '0 auto' }}
+                />
+                <p className="typo-caption muted" style={{ marginTop: '16px' }}>
+                  검증 중...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <QRScannerView
+              onToken={handleQRCode}
+              onError={(error) => {
+                console.error('QR Scanner error:', error);
+                setScanResult({
+                  success: false,
+                  message: '카메라 접근에 실패했습니다.',
+                });
+              }}
+            />
           )}
 
-          <button
-            onClick={handleReset}
-            className={getButtonClasses('ghost', 'md') + ' w-full'}
-          >
-            다시 스캔하기
-          </button>
-        </div>
-
-        {/* Debug info (remove in production) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mt-6 p-3 bg-[var(--bg-subtle)] rounded-[var(--radius-sm)] text-xs font-mono text-[var(--text-tertiary)]">
-            <p>Kind: {scanResult?.kind}</p>
-            <p className="truncate">Payload: {scanResult?.payload}</p>
+          <div className="card" style={{ padding: '16px', marginTop: '24px' }}>
+            <h2 className="h5" style={{ marginBottom: '12px' }}>
+              <Icon name="shield" size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              Triple Verification Process
+            </h2>
+            <ol className="body-small text-secondary" style={{ paddingLeft: '20px', lineHeight: 1.8 }}>
+              <li>
+                <Icon name="map-pin" size={14} style={{ marginRight: '6px' }} />
+                GPS location verification
+              </li>
+              <li>
+                <Icon name="qr-code" size={14} style={{ marginRight: '6px' }} />
+                Store QR code scan (current step)
+              </li>
+              <li>
+                <Icon name="receipt" size={14} style={{ marginRight: '6px' }} />
+                Receipt photo verification
+              </li>
+            </ol>
           </div>
-        )}
-      </div>
-    </div>
+        </section>
+      </main>
+      <BottomTabBar />
+    </AuthGate>
   );
 }

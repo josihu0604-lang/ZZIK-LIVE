@@ -1,0 +1,85 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  user-select: none;
+  min-height: 32px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip[role="button"]:hover:not(.disabled) {
+  background: var(--surface);
+  border-color: var(--primary);
+}
+
+.chip[role="button"]:active:not(.disabled) {
+  transform: scale(0.98);
+}
+
+.chip:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+
+/* Selected State */
+.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.selected:hover:not(.disabled) {
+  background: color-mix(in srgb, var(--primary) 85%, black);
+  border-color: color-mix(in srgb, var(--primary) 85%, black);
+}
+
+/* Disabled State */
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Label */
+.label {
+  display: inline-block;
+}
+
+/* Remove Button */
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  margin-right: calc(var(--sp-1) * -1);
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.remove:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.remove:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: -1px;
+}
+
+.selected .remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

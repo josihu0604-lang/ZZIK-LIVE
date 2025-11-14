@@ -1,0 +1,69 @@
+{
+  "short_name": "ZZIK LIVE",
+  "name": "ZZIK LIVE - Personal Safety Companion",
+  "description": "Your personal safety companion for real-time location sharing and emergency assistance",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#4F46E5",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["safety", "navigation", "social"],
+  "shortcuts": [
+    {
+      "name": "Emergency SOS",
+      "short_name": "SOS",
+      "description": "Send emergency alert",
+      "url": "/emergency",
+      "icons": [{ "src": "/icons/sos.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Share Location",
+      "short_name": "Share",
+      "description": "Share your location",
+      "url": "/share",
+      "icons": [{ "src": "/icons/share.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/map.png",
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "protocol_handlers": [
+    {
+      "protocol": "web+zziklive",
+      "url": "/open?url=%s"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+.container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  contain: strict;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.spacer {
+  position: relative;
+  width: 100%;
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.row {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Performance optimizations */
+.container {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Scrollbar styling */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}

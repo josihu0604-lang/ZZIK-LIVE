@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  nickname   String
+  phone      String?  @unique
+  email      String?  @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reels      Reel[]
+  vouchers   Voucher[]
+  ledgers    Ledger[]
+  receipts   Receipt[]
+  verifications Verification[]
+}
+
+model Place {
+  id         String   @id @default(cuid())
+  name       String
+  // PostGIS geography type for spatial data (requires GIST index via migration)
+  location   Unsupported("geography(Point,4326)")
+  geohash6   String   @db.VarChar(6)
+  address    String?
+  popularity Float    @default(0.0)
+  category   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  offers     Offer[]
+  reels      Reel[]
+  receipts   Receipt[]
+  qrTokens   QRToken[]
+  verifications Verification[]
+  
+  // Optimized indexes for geospatial queries
+  @@index([geohash6])
+  @@index([popularity])
+  @@index([createdAt(sort: Desc)])
+  @@index([category, popularity])
+  // Note: GIST index for location field should be created via raw SQL migration
+}
+
+model Offer {
+  id         String   @id @default(cuid())
+  placeId    String
+  place      Place    @relation(fields: [placeId], references: [id])
+  title      String
+  description String?
+  status     String   @db.VarChar(16) // active|expired|archived
+  validFrom  DateTime @default(now())
+  validUntil DateTime?
+  maxRedemptions Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  vouchers   Voucher[]
+  
+  @@index([placeId, status])
+  @@index([validUntil])
+}
+
+model Voucher {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  offerId    String
+  offer      Offer    @relation(fields: [offerId], references: [id])
+  status     String   @db.VarChar(16) @default("issued") // issued|used|expired|revoked
+  codeHash   String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  usedAt     DateTime?
+  
+  @@unique([userId, offerId])
+  // Covering index for wallet queries (userId + status + createdAt DESC)
+  @@index([userId, status, createdAt(sort: Desc)])
+  @@index([userId, status])
+  @@index([expiresAt])
+  @@index([status, expiresAt])
+}
+
+model QRToken {
+  id        String   @id @default(cuid())
+  codeHash  String   @unique
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id])
+  status    String   @db.VarChar(16) // issued|used|expired|revoked
+  ttlSec    Int      @default(600)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  
+  @@index([placeId, status])
+  @@index([status, createdAt])
+  @@index([createdAt(sort: Desc)])
+  @@index([codeHash, status])
+}
+
+model Receipt {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  placeId    String
+  place      Place    @relation(fields: [placeId], references: [id])
+  amount     Float
+  ocrStatus  String   @db.VarChar(16) // pending|ok|fail
+  fileKey    String
+  paidAt     DateTime?
+  ocrData    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([userId, placeId])
+  @@index([ocrStatus])
+}
+
+model Reel {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  placeId    String
+  place      Place    @relation(fields: [placeId], references: [id])
+  url        String
+  thumbnailUrl String?
+  durationMs Int
+  viewCount  Int      @default(0)
+  tags       String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([placeId, createdAt])
+  @@index([viewCount])
+}
+
+model Ledger {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String   // credit|debit
+  amount    Int
+  balance   Int
+  reason    String
+  meta      Json?
+  createdAt DateTime @default(now())
+  
+  @@index([userId, createdAt])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  placeId    String
+  place      Place    @relation(fields: [placeId], references: [id])
+  gpsOk      Boolean  @default(false)
+  qrOk       Boolean  @default(false)
+  receiptOk  Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  
+  @@unique([userId, placeId])
+}

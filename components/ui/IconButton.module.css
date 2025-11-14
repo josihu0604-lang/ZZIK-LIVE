@@ -1,0 +1,95 @@
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--surface);
+  color: var(--text);
+  aspect-ratio: 1;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sizes - Ensuring minimum touch targets */
+.sm {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  font-size: 16px;
+}
+
+.md {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  font-size: 20px;
+}
+
+.lg {
+  width: var(--touch-comfortable);
+  height: var(--touch-comfortable);
+  font-size: 24px;
+}
+
+/* Variants */
+.default {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.default:hover:not(:disabled) {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--primary) 85%, black);
+  box-shadow: var(--shadow-md);
+}
+
+.danger {
+  background: var(--danger);
+  color: white;
+}
+
+.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 85%, black);
+  box-shadow: var(--shadow-md);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--surface);
+}
+
+/* States */
+.iconButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.iconButton:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+
+/* Icon sizing */
+.iconButton svg {
+  width: 1em;
+  height: 1em;
+}

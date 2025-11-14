@@ -1,132 +1,174 @@
 'use client';
 
-import { useState } from 'react';
-import FilterChips from '@/components/pass/FilterChips';
-import OfferCard from '@/components/offers/OfferCard';
-import EmptyState from '@/components/states/EmptyState';
-import { Filter, Offer } from '@/types';
-import { Gift } from 'lucide-react';
-import { analytics } from '@/lib/analytics';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import AuthGate from '@/components/auth/AuthGate';
+import BottomTabBar from '@/components/navigation/BottomTabBar';
+import { EmptyState } from '@/components/states/EmptyState';
+import { LoadingState } from '@/components/states/LoadingState';
+import { track } from '@/lib/analytics';
 
-const filterOptions: Filter[] = [
-  { id: 'all', label: '전체', selected: true },
-  { id: 'new', label: '새로온', selected: false },
-  { id: 'expiring', label: '만료임박', selected: false },
-];
-
-// Mock data
-const mockOffers: Offer[] = [
-  {
-    id: '1',
-    brandName: '스타벅스',
-    brandLogo: 'https://images.unsplash.com/photo-1561882468-9110e03e0f78?w=100',
-    title: '신규 고객 환영 이벤트',
-    benefit: '아메리카노 1잔 무료',
-    conditions: ['첫 방문 시', '1인 1회 한정'],
-    validFrom: new Date('2024-01-01'),
-    validUntil: new Date('2024-12-31'),
-    distance: 0.5,
-    isNew: true,
-    status: 'new',
-    places: [],
-  },
-  {
-    id: '2',
-    brandName: '올리브영',
-    brandLogo: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=100',
-    title: '뷰티 체험단 모집',
-    benefit: '5만원 이상 구매 시 20% 할인',
-    conditions: ['신규 가입 회원', '기간 내 사용'],
-    validFrom: new Date('2024-01-15'),
-    validUntil: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
-    distance: 1.2,
-    status: 'expiring_soon',
-    places: [],
-  },
-];
+interface Offer {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  discount: string;
+  expiresIn: string;
+  expiresAt: Date;
+  status: 'active' | 'used' | 'expired';
+}
 
 export default function OffersPage() {
-  const router = useRouter();
-  const [filters, setFilters] = useState<Filter[]>(filterOptions);
-  const [offers] = useState<Offer[]>(mockOffers);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const activeFilter = filters.find((f) => f.selected)?.id || 'all';
+  useEffect(() => {
+    // Simulate loading offers
+    const loadOffers = async () => {
+      // In production, fetch from API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // Track page view
-  useState(() => {
-    analytics.offersView(activeFilter as 'all' | 'new' | 'expiring');
-  });
+      const sampleOffers: Offer[] = [
+        {
+          id: 'o1',
+          title: '성수 카페 베타',
+          description: '아메리카노 20% 할인',
+          location: '성수동 2가',
+          discount: '20%',
+          expiresIn: '23시간',
+          expiresAt: new Date(Date.now() + 23 * 60 * 60 * 1000),
+          status: 'active',
+        },
+        {
+          id: 'o2',
+          title: '강남 버거집',
+          description: '세트 메뉴 15% 할인',
+          location: '강남역 3번 출구',
+          discount: '15%',
+          expiresIn: '2일',
+          expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          status: 'active',
+        },
+      ];
 
-  const filteredOffers = offers.filter((offer) => {
-    if (activeFilter === 'all') return true;
-    if (activeFilter === 'new') return offer.status === 'new';
-    if (activeFilter === 'expiring') return offer.status === 'expiring_soon';
-    return true;
-  });
+      setOffers(sampleOffers);
+      setIsLoading(false);
 
-  const handleFilterToggle = (id: string) => {
-    setFilters((prev) =>
-      prev.map((f) => ({
-        ...f,
-        selected: f.id === id,
-      }))
+      track('offers_view', {
+        offer_count: sampleOffers.length,
+        active_count: sampleOffers.filter((o) => o.status === 'active').length,
+      });
+    };
+
+    loadOffers();
+  }, []);
+
+  const handleOfferClick = (offer: Offer) => {
+    track('offer_click', {
+      offer_id: offer.id,
+      status: offer.status,
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <AuthGate>
+        <main style={{ flex: 1, display: 'grid', placeItems: 'center' }}>
+          <LoadingState label="오퍼를 불러오는 중..." />
+        </main>
+        <BottomTabBar />
+      </AuthGate>
     );
-    analytics.offersView(id as 'all' | 'new' | 'expiring');
-  };
-
-  const handleAccept = (offerId: string) => {
-    console.log('Accept offer:', offerId);
-    analytics.offerAccept(offerId);
-    // In production, save to wallet
-  };
-
-  const handleDismiss = (offerId: string) => {
-    console.log('Dismiss offer:', offerId);
-    analytics.offerDismiss(offerId);
-    // In production, hide offer
-  };
-
-  const handleOpenDetail = (offerId: string) => {
-    analytics.offerView(offerId);
-    router.push(`/offers/${offerId}`);
-  };
+  }
 
   return (
-    <div className="p-4 space-y-[var(--sp-4)]">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
-          받은 오퍼
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          브랜드에서 보낸 맞춤 제안을 확인하세요
-        </p>
-      </div>
+    <AuthGate>
+      <main style={{ flex: 1, overflow: 'auto' }}>
+        <section className="zzik-page">
+          <header className="zzik-col" style={{ marginBottom: '24px' }}>
+            <h1 className="typo-body" style={{ fontSize: '20px', fontWeight: 600 }}>
+              받은 오퍼
+            </h1>
+            <p className="typo-caption muted">
+              삼중 검증(GPS+QR+영수증)으로 사용 가능한 오퍼입니다
+            </p>
+          </header>
 
-      {/* Filters */}
-      <FilterChips filters={filters} onToggle={handleFilterToggle} />
-
-      {/* Offers List */}
-      {filteredOffers.length === 0 ? (
-        <EmptyState
-          icon={Gift}
-          title="받은 오퍼가 없습니다"
-          description="브랜드에서 새로운 제안이 오면 여기에 표시됩니다."
-        />
-      ) : (
-        <div className="space-y-[var(--sp-3)]">
-          {filteredOffers.map((offer) => (
-            <OfferCard
-              key={offer.id}
-              offer={offer}
-              onAccept={handleAccept}
-              onDismiss={handleDismiss}
-              onOpenDetail={handleOpenDetail}
+          {offers.length === 0 ? (
+            <EmptyState
+              label="아직 받은 오퍼가 없습니다"
+              description="지도에서 주변 매장을 탐색해보세요"
+              action={
+                <Link href="/(tabs)/explore" className="btn">
+                  지도에서 탐색하기
+                </Link>
+              }
             />
-          ))}
-        </div>
-      )}
-    </div>
+          ) : (
+            <div className="grid" style={{ gap: '12px' }}>
+              {offers.map((offer) => (
+                <div
+                  key={offer.id}
+                  className="card"
+                  style={{ padding: '16px' }}
+                  onClick={() => handleOfferClick(offer)}
+                >
+                  <div className="row" style={{ justifyContent: 'space-between' }}>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '4px' }}>
+                        {offer.title}
+                      </h3>
+                      <p className="typo-caption muted" style={{ marginBottom: '8px' }}>
+                        {offer.description}
+                      </p>
+                      <div className="row" style={{ gap: '8px' }}>
+                        <span className="typo-caption">📍 {offer.location}</span>
+                        <span
+                          className="typo-caption"
+                          style={{
+                            color: offer.expiresIn.includes('시간')
+                              ? 'var(--warning)'
+                              : 'var(--text-tertiary)',
+                          }}
+                        >
+                          ⏱️ {offer.expiresIn} 남음
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '8px 16px',
+                        background: 'var(--primary)',
+                        color: '#00130e',
+                        borderRadius: 'var(--radius)',
+                        fontWeight: 600,
+                        fontSize: '20px',
+                      }}
+                    >
+                      {offer.discount}
+                    </div>
+                  </div>
+
+                  <div className="row" style={{ marginTop: '12px', gap: '8px' }}>
+                    <button className="btn ghost" style={{ flex: 1 }}>
+                      🗺️ 길찾기
+                    </button>
+                    <Link href="/(tabs)/scan" className="btn" style={{ flex: 1 }}>
+                      📷 QR 스캔
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+      <BottomTabBar />
+    </AuthGate>
   );
 }

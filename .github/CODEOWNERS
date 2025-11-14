@@ -1,0 +1,42 @@
+# ZZIK LIVE Code Ownership
+# These owners will be requested for review when someone opens a pull request
+
+# Default owners for everything in the repo
+*                    @zzik/core-team
+
+# Frontend code
+app/**              @zzik/frontend
+components/**       @zzik/frontend
+public/**           @zzik/frontend
+styles/**           @zzik/frontend
+
+# Backend code
+app/api/**          @zzik/backend
+lib/server/**       @zzik/backend
+prisma/**           @zzik/backend
+db/**               @zzik/backend
+
+# Shared libraries
+lib/**              @zzik/frontend @zzik/backend
+
+# Infrastructure
+infra/**            @zzik/devops
+.github/**          @zzik/devops
+scripts/**          @zzik/devops
+docker/**           @zzik/devops
+
+# Testing
+__tests__/**        @zzik/qa
+k6/**               @zzik/qa
+*.test.ts           @zzik/qa
+*.spec.ts           @zzik/qa
+
+# Documentation
+*.md                @zzik/docs
+docs/**             @zzik/docs
+
+# Configuration files
+*.config.*          @zzik/devops
+.env*               @zzik/devops
+tsconfig.json       @zzik/core-team
+package.json        @zzik/core-team
