@@ -7,7 +7,10 @@
     "dev:monitor": "./scripts/dev-server-monitor.sh",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:unit": "vitest run",
     "health": "./scripts/health-check.sh",
     "errors": "./scripts/error-analyzer.sh",
     "fix:all": "./scripts/auto-fix.sh all",
@@ -18,10 +21,14 @@
     "logs:clean": "./scripts/auto-fix.sh logs"
   },
   "dependencies": {
+    "ioredis": "^5.8.2",
     "lucide-react": "^0.553.0",
     "next": "16.0.2",
+    "ngeohash": "^0.6.3",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "zod": "^3.23.8",
+    "@prisma/client": "^6.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -31,6 +38,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^2.1.8",
+    "@vitest/ui": "^2.1.8",
+    "prisma": "^6.1.0"
   }
 }

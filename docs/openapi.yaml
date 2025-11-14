@@ -1,0 +1,377 @@
+openapi: 3.0.3
+info:
+  title: ZZIK LIVE API
+  description: Location-based rewards and verification platform API
+  version: 1.0.0
+  contact:
+    name: ZZIK Team
+    email: api@zzik.live
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.zzik.live
+    description: Production server
+tags:
+  - name: Search
+    description: Location and place search
+  - name: Places
+    description: Place information and discovery
+  - name: Verification
+    description: QR code and location verification
+  - name: Receipts
+    description: Receipt upload and OCR
+  - name: Wallet
+    description: Voucher and rewards management
+paths:
+  /api/health:
+    get:
+      summary: Health check endpoint
+      tags: [System]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+  /api/search:
+    get:
+      summary: Search for places
+      tags: [Search]
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+            maxLength: 64
+          description: Search query
+        - in: query
+          name: geohash5
+          required: true
+          schema:
+            type: string
+            minLength: 5
+            maxLength: 5
+          description: User's geohash5 for proximity ranking
+        - in: query
+          name: radius
+          schema:
+            type: integer
+            minimum: 50
+            maximum: 3000
+            default: 1000
+          description: Search radius in meters
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        geohash6:
+                          type: string
+                        category:
+                          type: string
+                        score:
+                          type: number
+        '422':
+          description: Invalid parameters
+  /api/places/nearby:
+    get:
+      summary: Get nearby places with keyset pagination
+      tags: [Places]
+      parameters:
+        - in: query
+          name: geohash6
+          required: true
+          schema:
+            type: string
+            minLength: 6
+          description: Center location geohash
+        - in: query
+          name: radius
+          schema:
+            type: integer
+            minimum: 50
+            maximum: 3000
+            default: 1000
+          description: Search radius in meters
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+          description: Number of results per page
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Pagination cursor from previous response
+      responses:
+        '200':
+          description: Nearby places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        geohash6:
+                          type: string
+                        distanceMeters:
+                          type: integer
+                        address:
+                          type: string
+                        category:
+                          type: string
+                  nextCursor:
+                    type: string
+                    nullable: true
+                  meta:
+                    type: object
+                    properties:
+                      center:
+                        type: object
+                        properties:
+                          lat:
+                            type: number
+                          lng:
+                            type: number
+                      radius:
+                        type: integer
+                      limit:
+                        type: integer
+                      count:
+                        type: integer
+        '422':
+          description: Invalid parameters
+  /api/qr/verify:
+    post:
+      summary: Verify QR code
+      tags: [Verification]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - codeData
+                - placeId
+                - userGeohash
+              properties:
+                codeData:
+                  type: string
+                placeId:
+                  type: string
+                userGeohash:
+                  type: string
+      responses:
+        '200':
+          description: Verification successful
+        '422':
+          description: Invalid or expired QR code
+  /api/verify/location:
+    post:
+      summary: Verify user location
+      tags: [Verification]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - placeId
+                - userGeohash6
+              properties:
+                placeId:
+                  type: string
+                userGeohash6:
+                  type: string
+      responses:
+        '200':
+          description: Location verified
+        '422':
+          description: Location mismatch
+  /api/receipts/upload:
+    post:
+      summary: Upload receipt image
+      tags: [Receipts]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - placeId
+              properties:
+                file:
+                  type: string
+                  format: binary
+                placeId:
+                  type: string
+      responses:
+        '201':
+          description: Receipt uploaded successfully
+        '422':
+          description: Invalid file or parameters
+  /api/receipts/ocr:
+    post:
+      summary: Process receipt with OCR
+      tags: [Receipts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - receiptId
+              properties:
+                receiptId:
+                  type: string
+      responses:
+        '200':
+          description: OCR processing complete
+        '422':
+          description: Invalid receipt ID
+  /api/verify/complete:
+    post:
+      summary: Complete verification process
+      tags: [Verification]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - placeId
+                - verificationId
+              properties:
+                placeId:
+                  type: string
+                verificationId:
+                  type: string
+      responses:
+        '200':
+          description: Verification completed
+        '422':
+          description: Verification incomplete
+  /api/wallet/redeem:
+    post:
+      summary: Redeem a voucher (idempotent)
+      tags: [Wallet]
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+          description: Unique key for idempotent operation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - voucherId
+              properties:
+                voucherId:
+                  type: string
+      responses:
+        '200':
+          description: Voucher redeemed successfully
+          headers:
+            X-Idempotent-Replay:
+              schema:
+                type: string
+                enum: ['0', '1']
+              description: Whether this was a replay of previous request
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Rate limit maximum
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining requests in window
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when limit resets
+            Server-Timing:
+              schema:
+                type: string
+              description: Performance timing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  state:
+                    type: string
+                    enum: [used]
+                  usedAt:
+                    type: string
+                    format: date-time
+                  voucherId:
+                    type: string
+                  offerId:
+                    type: string
+        '422':
+          description: Invalid voucher or parameters
+        '429':
+          description: Rate limit exceeded
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds to wait before retry
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
