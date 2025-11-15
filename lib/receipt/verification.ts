@@ -39,7 +39,7 @@ function generateReceiptHash(fileKey: string): string {
  * Mock OCR function - replace with actual OCR service
  * In production, this would call Google Vision API, AWS Textract, etc.
  */
-async function performOCR(fileKey: string): Promise<{
+async function performOCR(_fileKey: string): Promise<{
   amount?: number; // Changed from total to match Prisma schema
   items?: Array<{ name: string; price: number }>;
   date?: string;
@@ -87,7 +87,7 @@ export async function verifyReceipt(
   params: VerifyReceiptParams
 ): Promise<ReceiptVerificationResult> {
   const { userId, placeId, fileKey, expectedTotal } = params;
-  const fileHash = generateReceiptHash(fileKey);
+  const _fileHash = generateReceiptHash(fileKey); // Unused for now, reserved for future dedup
 
   try {
     // Step 1: Check for existing receipt (idempotency)
