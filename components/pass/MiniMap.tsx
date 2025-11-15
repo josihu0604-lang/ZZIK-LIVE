@@ -19,6 +19,24 @@ export default function MiniMap({
   // This is a placeholder - in production, you'd integrate with Mapbox GL JS
   // For now, we'll show a styled placeholder with pins
 
+  // Generate deterministic position based on pin ID to avoid hydration mismatch
+  const getPinPosition = (pinId: string) => {
+    // Simple hash function to convert string to number
+    let hash = 0;
+    for (let i = 0; i < pinId.length; i++) {
+      const char = pinId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    
+    // Use hash to generate consistent position between 10% and 90%
+    const absHash = Math.abs(hash);
+    const left = (absHash % 80) + 10;
+    const top = ((absHash >> 8) % 80) + 10; // Use different bits for top
+    
+    return { left: `${left}%`, top: `${top}%` };
+  };
+
   return (
     <div
       className={`relative rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-subtle)] border border-[var(--border)] ${className}`}
@@ -33,17 +51,19 @@ export default function MiniMap({
 
       {/* Pins (overlay) */}
       <div className="absolute inset-0 pointer-events-none">
-        {pins.map((pin) => (
-          <button
-            key={pin.id}
-            onClick={() => onPinTap(pin.id)}
-            className="absolute pointer-events-auto animate-pin-pulse"
-            style={{
-              left: `${Math.random() * 80 + 10}%`,
-              top: `${Math.random() * 80 + 10}%`,
-            }}
-            aria-label={`장소 ${pin.id}`}
-          >
+        {pins.map((pin) => {
+          const position = getPinPosition(pin.id);
+          return (
+            <button
+              key={pin.id}
+              onClick={() => onPinTap(pin.id)}
+              className="absolute pointer-events-auto animate-pin-pulse"
+              style={{
+                left: position.left,
+                top: position.top,
+              }}
+              aria-label={`장소 ${pin.id}`}
+            >
             <Crosshair
               size={28}
               className="text-[var(--brand)] drop-shadow-lg"
@@ -56,7 +76,8 @@ export default function MiniMap({
               </span>
             )}
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {/* My Location FAB */}

@@ -1,0 +1,170 @@
+/* Splash Screen - Optimized for UX/UI */
+
+/* Container */
+.container {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-subtle) 100%);
+  padding: var(--sp-4);
+  isolation: isolate;
+}
+
+/* Content wrapper */
+.content {
+  text-align: center;
+  animation: fadeInUp 0.6s var(--ease-out);
+}
+
+/* Brand mark */
+.brandMark {
+  position: relative;
+  display: inline-block;
+  margin-bottom: var(--sp-4);
+}
+
+/* Title */
+.title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Brand indicator line */
+.brandIndicator {
+  width: 32px;
+  height: 3px;
+  background: var(--brand);
+  margin: var(--sp-3) auto 0;
+  border-radius: var(--radius-full);
+  animation: expandWidth 0.4s var(--ease-out) 0.3s both;
+}
+
+/* Tagline */
+.tagline {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  margin-top: var(--sp-4);
+  opacity: 0;
+  animation: fadeIn 0.4s var(--ease-out) 0.5s both;
+}
+
+/* Loading dots */
+.loadingDots {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: center;
+  margin-top: var(--sp-6);
+  height: 24px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: 32px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Accessibility: Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .brandIndicator,
+  .tagline,
+  .dot {
+    animation: none;
+  }
+  
+  .content {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .brandIndicator {
+    width: 32px;
+  }
+  
+  .tagline {
+    opacity: 1;
+  }
+  
+  .dot {
+    opacity: 0.6;
+    transform: none;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .title {
+    font-size: var(--text-3xl);
+  }
+  
+  .tagline {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Dark mode support (if implementing) */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-subtle) 100%);
+  }
+}

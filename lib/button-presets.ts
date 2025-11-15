@@ -1,27 +1,45 @@
-// Button Presets using Design Tokens
+// lib/button-presets.ts
+// Tailwind v4 + CSS Variables 기반 일관 버튼 프리셋 (color-mix 문법 수정)
 
-export const buttonBase =
-  "inline-flex items-center justify-center rounded-[var(--radius-md)] font-medium transition-[colors,transform,opacity] duration-[var(--dur-md)] ease-[var(--ease-out)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+const base =
+  "inline-flex items-center justify-center font-medium select-none rounded-[var(--radius-md)] outline-none " +
+  "transition-[background-color,transform,box-shadow] duration-150 active:scale-95 " +
+  "focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 " +
+  "disabled:opacity-50 disabled:pointer-events-none";
 
-export const buttonSizes = {
-  sm: "h-9 px-3 text-sm gap-[var(--sp-1)]",
-  md: "h-11 px-4 text-base gap-[var(--sp-2)]",
-  lg: "h-12 px-6 text-lg gap-[var(--sp-2)]",
-  icon: "h-12 w-12",
-};
+const sizes = {
+  sm: "h-9 px-3 text-sm gap-1.5",
+  md: "h-11 px-4 text-base gap-2",
+  lg: "h-12 px-6 text-lg gap-2.5",
+  icon: "h-11 w-11",
+} as const;
 
-export const buttonVariants = {
-  primary: `${buttonBase} bg-[var(--brand)] text-white hover:bg-[var(--brand-hover)] active:bg-[var(--brand-active)] active:scale-98`,
-  ghost: `${buttonBase} text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]`,
-  outline: `${buttonBase} border border-[var(--brand)] text-[var(--brand)] hover:bg-[color-mix(in_oklab,var(--brand)_12%,transparent)]`,
-  danger: `${buttonBase} bg-[var(--danger)] text-white hover:opacity-90 active:scale-98`,
-  secondary: `${buttonBase} bg-[var(--bg-subtle)] text-[var(--text-primary)] hover:bg-[var(--border)] active:scale-98`,
-};
+const variants = {
+  primary:
+    `${base} text-white bg-[var(--brand)] ` +
+    "hover:bg-[var(--brand-hover)] active:bg-[var(--brand-active)]",
+  secondary:
+    `${base} text-[var(--text-primary)] bg-[var(--bg-subtle)] ` +
+    "hover:bg-[var(--border)]",
+  outline:
+    `${base} text-[var(--brand)] border border-[var(--brand)] ` +
+    "hover:bg-[color-mix(in oklab,var(--brand) 12%,transparent)]",
+  ghost:
+    `${base} text-[var(--text-primary)] ` +
+    "hover:bg-[color-mix(in oklab,var(--text-primary) 8%,transparent)]",
+  danger:
+    `${base} text-white bg-[var(--danger)] ` +
+    "hover:bg-[color-mix(in oklab,var(--danger) 85%,black)]",
+} as const;
 
-export function getButtonClasses(
-  variant: keyof typeof buttonVariants = 'primary',
-  size: keyof typeof buttonSizes = 'md',
-  className?: string
-) {
-  return `${buttonVariants[variant]} ${buttonSizes[size]} ${className || ''}`;
+export function getButtonClasses<
+  V extends keyof typeof variants,
+  S extends keyof typeof sizes
+>(variant: V = 'primary' as V, size: S = 'md' as S, extra?: string) {
+  return `${variants[variant]} ${sizes[size]} ${extra ?? ''}`;
 }
+
+// Re-export for compatibility
+export const buttonBase = base;
+export const buttonSizes = sizes;
+export const buttonVariants = variants;
