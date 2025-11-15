@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Post, Influencer } from '@/lib/data/influencers-2025';
 import { formatNumber } from '@/lib/data/influencers-2025';
 import styles from './FeedCard.module.css';
@@ -11,18 +12,24 @@ interface FeedCardProps {
 }
 
 export default function FeedCard({ post, influencer, onClick }: FeedCardProps) {
-  const timeAgo = (timestamp: string) => {
-    const now = new Date();
-    const postDate = new Date(timestamp);
-    const diffMs = now.getTime() - postDate.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
+  const [timeText, setTimeText] = useState('방금 전');
 
-    if (diffMins < 60) return `${diffMins}분 전`;
-    if (diffHours < 24) return `${diffHours}시간 전`;
-    return `${diffDays}일 전`;
-  };
+  useEffect(() => {
+    const calculateTimeAgo = () => {
+      const now = new Date();
+      const postDate = new Date(post.timestamp);
+      const diffMs = now.getTime() - postDate.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffMins < 60) return `${diffMins}분 전`;
+      if (diffHours < 24) return `${diffHours}시간 전`;
+      return `${diffDays}일 전`;
+    };
+
+    setTimeText(calculateTimeAgo());
+  }, [post.timestamp]);
 
   return (
     <article className={styles.card} onClick={onClick}>
@@ -50,7 +57,7 @@ export default function FeedCard({ post, influencer, onClick }: FeedCardProps) {
                 {influencer.verified && <span className={styles.verified}>✓</span>}
               </div>
               <div className={styles.meta}>
-                {post.location.name} · {timeAgo(post.timestamp)}
+                {post.location.name} · {timeText}
               </div>
             </div>
           </div>
