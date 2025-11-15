@@ -35,7 +35,22 @@ export async function POST(req: NextRequest) {
       return withRateHeaders(res, rateMeta);
     }
 
-    const body = await req.json();
+    // Safely parse JSON with error handling
+    let body;
+    try {
+      body = await req.json();
+    } catch (parseError) {
+      log('warn', 'Invalid JSON payload', { requestId });
+      return NextResponse.json(
+        {
+          error: 'invalid_json',
+          message: 'Request body must be valid JSON',
+          requestId,
+        },
+        { status: 400 }
+      );
+    }
+
     const { email } = MagicLinkSchema.parse(body);
 
     // Generate magic link token

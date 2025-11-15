@@ -1,0 +1,44 @@
+{
+  "@types/node": {
+    "current": "20.19.25",
+    "wanted": "20.19.25",
+    "latest": "24.10.1",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/@types/node"
+  },
+  "@types/react": {
+    "current": "19.2.4",
+    "wanted": "19.2.5",
+    "latest": "19.2.5",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/@types/react"
+  },
+  "@vitest/ui": {
+    "current": "2.1.9",
+    "wanted": "2.1.9",
+    "latest": "4.0.9",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/@vitest/ui"
+  },
+  "eslint-config-next": {
+    "current": "16.0.2",
+    "wanted": "16.0.2",
+    "latest": "16.0.3",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/eslint-config-next"
+  },
+  "vitest": {
+    "current": "2.1.9",
+    "wanted": "2.1.9",
+    "latest": "4.0.9",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/vitest"
+  },
+  "zod": {
+    "current": "3.25.76",
+    "wanted": "3.25.76",
+    "latest": "4.1.12",
+    "dependent": "webapp",
+    "location": "/home/user/webapp/node_modules/zod"
+  }
+}

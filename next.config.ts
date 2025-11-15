@@ -1,5 +1,11 @@
 import type { NextConfig } from 'next';
 
+// Bundle analyzer
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
+});
+
 // Environment detection
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -87,22 +93,43 @@ const nextConfig: NextConfig = {
         // Enhanced security headers for API routes
         source: '/api/:path*',
         headers: [
-          { 
+          {
             key: 'Content-Security-Policy',
-            value: "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; form-action 'none'; connect-src 'self'"
+            value:
+              "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; form-action 'none'; connect-src 'self'",
           },
-          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
           { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
           { key: 'Referrer-Policy', value: 'no-referrer' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'Permissions-Policy', value: 'geolocation=(self)' }
-        ]
-      }
+          { key: 'Permissions-Policy', value: 'geolocation=(self)' },
+        ],
+      },
     ];
   },
+  // Webpack optimization configuration
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Optimize client-side bundle
+      config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+        sideEffects: true,
+        concatenateModules: true,
+      };
+    }
+    return config;
+  },
+  // Bundle size optimization
+  productionBrowserSourceMaps: false, // Disable source maps in production
+  compress: true,
+  poweredByHeader: false, // Remove X-Powered-By header
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

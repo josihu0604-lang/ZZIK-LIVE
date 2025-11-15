@@ -35,7 +35,23 @@ export async function POST(req: NextRequest) {
 
   const idemResult = await withIdempotency(idemKey, async () => {
     try {
-      const body = await req.json();
+      // Safely parse JSON
+      let body;
+      try {
+        body = await req.json();
+      } catch (parseError) {
+        log('warn', 'receipt.verify.invalid_json', {
+          request_id: requestId,
+          took_ms: Date.now() - started,
+        });
+
+        const res = new NextResponse(
+          JSON.stringify({ state: 'failed', message: 'Invalid JSON payload' }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+        return withRateHeaders(res, rateMeta);
+      }
+
       const { userId, placeId, fileKey, expectedTotal } = body; // Changed mediaUrl to fileKey
 
       // Validation
