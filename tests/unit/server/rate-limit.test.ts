@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { rateLimit } from '@/lib/server/rate-limit';
 import { sha256 } from '@/lib/hash';
-import { redis } from '@/lib/server/redis';
+import { redis } from '@/lib/redis';
 
 // Mock Redis
 vi.mock('@/lib/redis', () => ({

@@ -1,0 +1,204 @@
+{
+  "tools": {
+    "codeAnalysis": {
+      "typeCheck": {
+        "command": "npm run typecheck",
+        "description": "TypeScript strict type checking",
+        "autoRun": "on-save",
+        "failOn": "error"
+      },
+      "lint": {
+        "command": "npm run lint",
+        "description": "ESLint with auto-fix",
+        "autoRun": "on-save",
+        "failOn": "error"
+      },
+      "format": {
+        "command": "npm run format",
+        "description": "Prettier code formatting",
+        "autoRun": "on-save",
+        "failOn": "never"
+      }
+    },
+    "testing": {
+      "unit": {
+        "command": "npm run test:unit",
+        "description": "Vitest unit tests with coverage",
+        "watch": true,
+        "coverage": {
+          "threshold": 70,
+          "report": "coverage/lcov-report/index.html"
+        }
+      },
+      "e2e": {
+        "command": "npm run test:e2e",
+        "description": "Playwright E2E tests",
+        "browsers": ["chromium"],
+        "headless": true
+      },
+      "a11y": {
+        "command": "npx playwright test tests/e2e/login.a11y.spec.ts",
+        "description": "Accessibility compliance tests",
+        "standard": "WCAG2.1AA"
+      },
+      "consoleErrors": {
+        "command": "node test-all-pages.js",
+        "description": "Check for console errors/warnings",
+        "expectation": "0 errors, 0 warnings"
+      }
+    },
+    "codeQuality": {
+      "complexity": {
+        "command": "npx ts-complexity",
+        "description": "Measure code complexity",
+        "threshold": 10
+      },
+      "duplicates": {
+        "command": "npx jscpd .",
+        "description": "Detect code duplication",
+        "threshold": 5
+      },
+      "security": {
+        "command": "npm audit",
+        "description": "Check dependency vulnerabilities",
+        "autoRun": "weekly"
+      }
+    },
+    "performance": {
+      "bundleAnalyzer": {
+        "command": "npm run build && npx @next/bundle-analyzer",
+        "description": "Analyze bundle size",
+        "output": ".next/analyze"
+      },
+      "lighthouse": {
+        "command": "npx lighthouse http://localhost:3000 --view",
+        "description": "Lighthouse performance audit",
+        "thresholds": {
+          "performance": 90,
+          "accessibility": 100,
+          "bestPractices": 90,
+          "seo": 90
+        }
+      },
+      "k6": {
+        "command": "npm run k6:smoke",
+        "description": "Load testing with k6",
+        "scenarios": ["smoke", "load", "stress"]
+      }
+    },
+    "database": {
+      "migrate": {
+        "command": "npm run db:migrate",
+        "description": "Run Prisma migrations",
+        "confirm": true
+      },
+      "seed": {
+        "command": "npm run db:seed",
+        "description": "Seed database with test data",
+        "confirm": true
+      },
+      "studio": {
+        "command": "npm run db:studio",
+        "description": "Open Prisma Studio",
+        "port": 5555
+      },
+      "validate": {
+        "command": "npx prisma validate",
+        "description": "Validate Prisma schema",
+        "autoRun": "on-schema-change"
+      }
+    },
+    "development": {
+      "dev": {
+        "command": "npm run dev",
+        "description": "Start development server",
+        "port": 3000,
+        "watch": true
+      },
+      "build": {
+        "command": "npm run build",
+        "description": "Production build",
+        "verify": true
+      },
+      "start": {
+        "command": "npm run start",
+        "description": "Start production server",
+        "port": 3000
+      },
+      "clean": {
+        "command": "npm run clean",
+        "description": "Clean build artifacts",
+        "targets": [".next", "out", "dist", "coverage"]
+      }
+    },
+    "deployment": {
+      "preview": {
+        "command": "vercel --target=preview",
+        "description": "Deploy to preview environment",
+        "url": "auto-generated"
+      },
+      "production": {
+        "command": "vercel --prod",
+        "description": "Deploy to production",
+        "confirm": true,
+        "preCheck": [
+          "test:e2e",
+          "build",
+          "lighthouse"
+        ]
+      }
+    },
+    "git": {
+      "status": {
+        "command": "git status --short",
+        "description": "Show git status"
+      },
+      "diff": {
+        "command": "git diff --stat",
+        "description": "Show changes summary"
+      },
+      "commit": {
+        "command": "git commit",
+        "description": "Commit with conventional commits",
+        "validate": "commitlint"
+      },
+      "push": {
+        "command": "git push origin genspark_ai_developer",
+        "description": "Push to development branch",
+        "confirm": true
+      }
+    },
+    "monitoring": {
+      "logs": {
+        "command": "tail -f logs/*.log",
+        "description": "Monitor application logs",
+        "filter": ["error", "warn"]
+      },
+      "health": {
+        "command": "curl http://localhost:3000/api/health",
+        "description": "Check application health",
+        "interval": 60
+      },
+      "metrics": {
+        "command": "npm run doctor",
+        "description": "System health check",
+        "report": true
+      }
+    }
+  },
+  "shortcuts": {
+    "q": "codeAnalysis.typeCheck",
+    "l": "codeAnalysis.lint",
+    "f": "codeAnalysis.format",
+    "t": "testing.unit",
+    "e": "testing.e2e",
+    "a": "testing.a11y",
+    "b": "development.build",
+    "d": "development.dev",
+    "s": "database.studio",
+    "m": "database.migrate",
+    "p": "deployment.preview",
+    "c": "git.commit",
+    "g": "git.push"
+  }
+}

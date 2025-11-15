@@ -1,95 +1,63 @@
-import { prisma } from './prisma';
-import ngeohash from 'ngeohash';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
-export interface SearchResult {
+export type SearchRow = {
   id: string;
   name: string;
-  address?: string | null;
-  category?: string | null;
-  popularity: number;
-  distance?: number;
-  distance_meters?: number;
-  geohash6?: string;
-  score?: number;
-}
+  address: string | null;
+  geohash6: string;
+  distance_meters: number;
+  popularity: number | null;
+  text_rank: number;
+  score: number;
+};
 
-export interface SearchOptions {
-  query?: string;
-  geohash5: string;
-  radius: number;
-  limit?: number;
-  lang?: string;
-}
-
-/**
- * Search for places near a given geohash with optional text filter
- * @param options - Search parameters
- * @returns Array of matching places with distances
- */
-export async function searchPlaces(options: SearchOptions): Promise<SearchResult[]> {
-  const { query = '', geohash5, radius, limit = 20, lang = 'ko' } = options;
+export async function searchPlaces(
+  lng: number,
+  lat: number,
+  radius: number,
+  q: string
+): Promise<SearchRow[]> {
+  const sql = Prisma.sql;
   
-  // Decode geohash to get center lat/lng
-  const decoded = ngeohash.decode(geohash5);
-  const centerLat = decoded.latitude;
-  const centerLng = decoded.longitude;
-  
-  // PostgreSQL/PostGIS query for spatial search
-  // Using ST_DWithin for efficient radius search with GIST index
-  const results = await prisma.$queryRaw<SearchResult[]>`
-    SELECT 
+  // Using raw SQL for PostGIS spatial queries and text search with ts_rank
+  const rows = await prisma.$queryRaw<SearchRow[]>(sql`
+    WITH params AS (
+      SELECT ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)::geography AS center,
+      ${radius}::int AS r
+    ),
+    base AS (
+      SELECT
+        "Place".id,
+        "Place".name,
+        "Place".address,
+        "Place".geohash6,
+        ST_Distance("Place".location, (SELECT center FROM params))::float8 AS distance_meters,
+        "Place".popularity,
+        "Place".search_tsv
+      FROM "Place"
+      WHERE ST_DWithin("Place".location, (SELECT center FROM params), (SELECT r FROM params))
+    ),
+    ranked AS (
+      SELECT *,
+        CASE WHEN ${q} = '' THEN 0
+        ELSE ts_rank(search_tsv, plainto_tsquery('simple', unaccent(${q})))
+        END AS text_rank
+      FROM base
+    )
+    SELECT
       id,
       name,
       address,
-      category,
+      geohash6,
+      distance_meters,
       popularity,
-      ST_Distance(
-        location,
-        ST_SetSRID(ST_MakePoint(${centerLng}, ${centerLat}), 4326)::geography
-      ) as distance
-    FROM "Place"
-    WHERE 
-      ST_DWithin(
-        location,
-        ST_SetSRID(ST_MakePoint(${centerLng}, ${centerLat}), 4326)::geography,
-        ${radius}
-      )
-      ${query ? prisma.$queryRaw`AND (name ILIKE ${'%' + query + '%'} OR address ILIKE ${'%' + query + '%'})` : prisma.$queryRaw``}
-    ORDER BY 
-      popularity DESC,
-      distance ASC
-    LIMIT ${limit}
-  `;
+      text_rank,
+      (0.70 * text_rank + 0.20 * (1 / (1 + distance_meters / 200.0)) + 0.10 * COALESCE(popularity, 0)) AS score
+    FROM ranked
+    ORDER BY score DESC
+    LIMIT 50
+  `);
   
-  return results;
-}
-
-/**
- * Search places by text only (no geospatial filter)
- * @param query - Search text
- * @param limit - Max results
- * @returns Array of matching places
- */
-export async function searchPlacesByText(query: string, limit = 20): Promise<SearchResult[]> {
-  const results = await prisma.place.findMany({
-    where: {
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { address: { contains: query, mode: 'insensitive' } }
-      ]
-    },
-    select: {
-      id: true,
-      name: true,
-      address: true,
-      category: true,
-      popularity: true
-    },
-    orderBy: {
-      popularity: 'desc'
-    },
-    take: limit
-  });
-  
-  return results as SearchResult[];
+  return rows;
 }

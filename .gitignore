@@ -1,41 +1,86 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+.yarn/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Build & Output
+.next/
+out/
+build/
+dist/
+coverage/
+.turbo/
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
+# Environment & Secrets
+.env*
+!.env.example
+.secrets/
+*.key
 *.pem
 
-# debug
+# Debug & Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+lerna-debug.log*
+debug-*
+*-debug.*
+logs/
 
-# env files (can opt-in for committing if needed)
-.env*
+# Testing
+test-results/
+playwright-report/
+.nyc_output/
 
-# vercel
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+prisma/*.db
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary Files
+*.tmp
+*.temp
+tmp/
+temp/
+cookies*.txt
+*.bak
+*.backup
+*.old
+
+# Deployment
 .vercel
+.netlify
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Backups & Archives
+backup/
+backups/
+_*_backup/
+*.zip
+*.tar.gz
+
+# Misc
+*.cache
+.eslintcache
+.prettiercache

@@ -73,8 +73,7 @@ model Voucher {
   user       User     @relation(fields: [userId], references: [id])
   offerId    String
   offer      Offer    @relation(fields: [offerId], references: [id])
-  status     String   @db.VarChar(16) @default("issued") // issued|used|expired|revoked
-  codeHash   String   @unique
+  status     String   @default("issued") // issued|used|expired
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   usedAt     DateTime?
@@ -82,7 +81,6 @@ model Voucher {
   @@unique([userId, offerId])
   // Covering index for wallet queries (userId + status + createdAt DESC)
   @@index([userId, status, createdAt(sort: Desc)])
-  @@index([userId, status])
   @@index([expiresAt])
   @@index([status, expiresAt])
 }

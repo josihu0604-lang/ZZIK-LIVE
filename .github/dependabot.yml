@@ -1,0 +1,69 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+    open-pull-requests-limit: 5
+    groups:
+      production:
+        patterns:
+          - '*'
+        exclude-patterns:
+          - '@types/*'
+          - 'eslint*'
+          - 'prettier*'
+          - '*test*'
+          - '*dev*'
+      development:
+        patterns:
+          - '@types/*'
+          - 'eslint*'
+          - 'prettier*'
+          - '*test*'
+          - '*dev*'
+    labels:
+      - 'dependencies'
+      - 'automated'
+    reviewers:
+      - '@zzik/devops'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+    labels:
+      - 'dependencies'
+      - 'ci/cd'
+      - 'automated'
+    reviewers:
+      - '@zzik/devops'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+
+  # Docker dependencies
+  - package-ecosystem: 'docker'
+    directory: '/db'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+    labels:
+      - 'dependencies'
+      - 'docker'
+      - 'automated'
+    reviewers:
+      - '@zzik/devops'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'

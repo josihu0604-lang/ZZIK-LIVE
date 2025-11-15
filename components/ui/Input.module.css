@@ -1,0 +1,147 @@
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  width: auto;
+  min-width: 280px;
+}
+
+.fullWidth {
+  width: 100%;
+  min-width: auto;
+}
+
+/* Label */
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Input Wrapper */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input Field */
+.input {
+  width: 100%;
+  min-height: var(--touch-min);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 16px; /* Prevents zoom on iOS */
+  font-family: var(--font-sans);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.input:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--border) 70%, var(--primary));
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--surface-2);
+}
+
+/* With Icons */
+.hasLeftIcon {
+  padding-left: calc(var(--sp-10) + var(--sp-2));
+}
+
+.hasRightIcon {
+  padding-right: calc(var(--sp-10) + var(--sp-2));
+}
+
+.leftIcon,
+.rightIcon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sp-10);
+  height: 100%;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.leftIcon {
+  left: 0;
+  padding-left: var(--sp-3);
+}
+
+.rightIcon {
+  right: 0;
+  padding-right: var(--sp-3);
+}
+
+/* Error State */
+.error {
+  border-color: var(--danger) !important;
+}
+
+.error:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 15%, transparent);
+}
+
+.hasError .label {
+  color: var(--danger);
+}
+
+.hasError .leftIcon,
+.hasError .rightIcon {
+  color: var(--danger);
+}
+
+/* Messages */
+.hint,
+.errorMessage {
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hint {
+  color: var(--muted);
+}
+
+.errorMessage {
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* Accessibility */
+.input:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 1px;
+}
+
+/* Autofill Styles */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}

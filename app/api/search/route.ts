@@ -1,6 +1,6 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { redis } from '@/lib/server/redis';
+import { redis } from '@/lib/redis';
 import { searchPlaces } from '@/lib/search';
 import ngeohash from 'ngeohash';
 import { sha256 } from '@/lib/hash';
@@ -89,12 +89,7 @@ export async function GET(req: NextRequest) {
   const { latitude: lat, longitude: lng } = ngeohash.decode(geohash5);
 
   const db0 = performance.now();
-  const rows = await searchPlaces({
-    query: q.trim(),
-    geohash5,
-    radius,
-    lang
-  });
+  const rows = await searchPlaces(lng, lat, radius, q.trim());
   const db1 = performance.now();
 
   const body = JSON.stringify({
@@ -103,9 +98,9 @@ export async function GET(req: NextRequest) {
       name: r.name,
       address: r.address,
       geohash6: r.geohash6,
-      distanceMeters: Math.round(r.distance_meters ?? r.distance ?? 0),
+      distanceMeters: Math.round(r.distance_meters),
       popularity: r.popularity ?? 0,
-      score: Number((r.score ?? 0).toFixed(6))
+      score: Number(r.score.toFixed(6))
     })),
     meta: { geohash5, radius, q, version: VERSION }
   });

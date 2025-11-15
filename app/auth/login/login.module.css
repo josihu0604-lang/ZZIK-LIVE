@@ -1,0 +1,326 @@
+/* Login Page Styles */
+.wrap {
+  min-height: 100dvh;
+  max-width: var(--safe-max);
+  margin: 0 auto;
+  padding: 0 var(--safe-x);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  background: var(--bg);
+  position: relative;
+}
+
+/* Skip button at top right */
+.skipTop {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 14px;
+  padding: 8px 12px;
+  z-index: 10;
+  transition: color var(--transition-base);
+}
+
+.skipTop:hover {
+  color: var(--text);
+}
+
+/* Header section */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* Social login section */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Social button base */
+.social {
+  height: 52px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0 20px;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.social:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.social:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Brand logos */
+.logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Brand-specific colors */
+.instagram {
+  color: #E1306C;
+  border-color: rgba(225, 48, 108, 0.18);
+}
+
+.instagram:hover {
+  background: rgba(225, 48, 108, 0.04);
+  border-color: rgba(225, 48, 108, 0.3);
+}
+
+.tiktok {
+  color: #010101;
+  border-color: rgba(1, 1, 1, 0.2);
+}
+
+.tiktok:hover {
+  background: rgba(1, 1, 1, 0.02);
+  border-color: rgba(1, 1, 1, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tiktok {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .tiktok:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.google {
+  color: #4285F4;
+  border-color: rgba(66, 133, 244, 0.2);
+}
+
+.google:hover {
+  background: rgba(66, 133, 244, 0.04);
+  border-color: rgba(66, 133, 244, 0.3);
+}
+
+/* Other methods section */
+.more {
+  margin-top: 4px;
+}
+
+.moreSummary {
+  cursor: pointer;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  list-style: none;
+  padding: 0 20px;
+  transition: all var(--transition-base);
+  user-select: none;
+}
+
+.moreSummary::-webkit-details-marker {
+  display: none;
+}
+
+.moreSummary:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.more[open] .moreSummary {
+  border-color: var(--primary);
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+/* More body animation */
+.moreBody {
+  padding: 12px 0;
+  animation: slideDown var(--transition-slow) ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.input {
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0 14px;
+  color: var(--text);
+  font-size: 16px;
+  transition: all var(--transition-base);
+}
+
+.input:hover {
+  border-color: var(--muted);
+}
+
+.input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.primary {
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  transition: all var(--transition-base);
+  margin-top: 8px;
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.primary:active {
+  transform: translateY(0);
+}
+
+.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.skipBottom {
+  background: none;
+  border: none;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 14px;
+  padding: 8px 16px;
+  transition: color var(--transition-base);
+}
+
+.skipBottom:hover {
+  color: var(--text);
+}
+
+/* Responsive adjustments */
+@media (max-width: 375px) {
+  .wrap {
+    padding: 0 16px;
+  }
+  
+  .social {
+    font-size: 15px;
+    height: 48px;
+  }
+  
+  .logo {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Accessibility: High contrast mode support */
+@media (prefers-contrast: high) {
+  .social {
+    border-width: 2px;
+  }
+  
+  .input {
+    border-width: 2px;
+  }
+  
+  .primary {
+    border: 2px solid transparent;
+  }
+}
+
+/* Loading state */
+.loading {
+  position: relative;
+  color: transparent;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,116 +1,176 @@
 'use client';
 
-import { useState } from 'react';
-import WalletSummary from '@/components/wallet/WalletSummary';
-import { WalletSummary as WalletSummaryType } from '@/types';
-import { Ticket, History, CreditCard, ChevronRight } from 'lucide-react';
-import { analytics } from '@/lib/analytics';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import AuthGate from '@/components/auth/AuthGate';
+import BottomTabBar from '@/components/navigation/BottomTabBar';
+import { LoadingState } from '@/components/states/LoadingState';
+import { track } from '@/lib/analytics';
+import { Icon } from '@/components/ui/Icon';
 
-const mockSummary: WalletSummaryType = {
-  points: 12500,
-  stamps: 8,
-  activeVouchers: 5,
-  expiringVouchers: 2,
-};
+interface WalletSummary {
+  points: number;
+  vouchers: number;
+  expiringSoon: number;
+  totalSaved: number;
+  expiringItems: Array<{
+    id: string;
+    name: string;
+    daysLeft: number;
+    type: 'voucher' | 'offer';
+  }>;
+}
 
 export default function WalletPage() {
-  const router = useRouter();
-  const [summary] = useState(mockSummary);
+  const [walletData, setWalletData] = useState<WalletSummary | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useState(() => {
-    analytics.walletView();
-  });
+  useEffect(() => {
+    // Load wallet data
+    const loadWallet = async () => {
+      // In production, fetch from API
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-  const handleSectionOpen = (
-    section: 'passes' | 'transactions' | 'payments'
-  ) => {
-    analytics.walletSectionOpen(section);
-    router.push(`/wallet/${section}`);
-  };
+      const data: WalletSummary = {
+        points: 1200,
+        vouchers: 3,
+        expiringSoon: 1,
+        totalSaved: 45000,
+        expiringItems: [
+          {
+            id: 'v1',
+            name: 'Seongsu Cafe 20% Off',
+            daysLeft: 2,
+            type: 'voucher',
+          },
+        ],
+      };
 
-  const sections = [
-    {
-      id: 'passes' as const,
-      icon: Ticket,
-      title: '보유 체험권',
-      description: `${summary.activeVouchers}개 사용 가능`,
-      badge: summary.expiringVouchers > 0 ? summary.expiringVouchers : undefined,
-    },
-    {
-      id: 'transactions' as const,
-      icon: History,
-      title: '거래내역',
-      description: '구매 및 사용 내역',
-    },
-    {
-      id: 'payments' as const,
-      icon: CreditCard,
-      title: '결제수단',
-      description: '카드 및 간편결제 관리',
-    },
-  ];
+      setWalletData(data);
+      setIsLoading(false);
+
+      track('wallet_view', {
+        vouchers: data.vouchers,
+        points: data.points,
+        expiring_soon: data.expiringSoon,
+      });
+    };
+
+    loadWallet();
+  }, []);
+
+  if (isLoading || !walletData) {
+    return (
+      <AuthGate>
+        <main style={{ flex: 1, display: 'grid', placeItems: 'center' }}>
+          <LoadingState label="Loading wallet..." />
+        </main>
+        <BottomTabBar />
+      </AuthGate>
+    );
+  }
 
   return (
-    <div className="p-4 space-y-[var(--sp-6)]">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
-          지갑
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          포인트, 스탬프, 체험권을 관리하세요
-        </p>
-      </div>
+    <AuthGate>
+      <main style={{ flex: 1, overflow: 'auto' }} aria-label="Wallet">
+        <section className="zzik-page">
+          <header className="zzik-col" style={{ marginBottom: '24px' }}>
+            <h1 className="h2">
+              <Icon name="wallet" size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              My Wallet
+            </h1>
+            <p className="body-small text-muted">Points and vouchers earned through triple verification</p>
+          </header>
 
-      {/* Summary Cards */}
-      <WalletSummary summary={summary} />
-
-      {/* Section Cards */}
-      <div className="space-y-[var(--sp-3)]">
-        {sections.map((section) => {
-          const Icon = section.icon;
-          return (
-            <button
-              key={section.id}
-              onClick={() => handleSectionOpen(section.id)}
-              className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-[var(--radius-lg)] p-[var(--sp-4)] shadow-[var(--elev-1)] hover:bg-[var(--bg-subtle)] transition-colors duration-[var(--dur-md)] active:scale-[0.98]"
-            >
-              <div className="flex items-center gap-[var(--sp-4)]">
-                <div className="h-12 w-12 rounded-full bg-[var(--brand)]/10 flex items-center justify-center flex-shrink-0">
-                  <Icon
-                    size={24}
-                    className="text-[var(--brand)]"
-                    strokeWidth={2}
-                  />
+          {/* Points and Vouchers Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px',
+              marginBottom: '24px',
+            }}
+          >
+            <div className="card" style={{ padding: '20px' }}>
+              <div className="zzik-col" style={{ gap: '4px' }}>
+                <div className="caption text-muted">Points</div>
+                <div className="display-medium" style={{ fontSize: '28px', fontVariantNumeric: 'tabular-nums' }}>
+                  {walletData.points.toLocaleString()}
                 </div>
-
-                <div className="flex-1 text-left">
-                  <div className="flex items-center gap-[var(--sp-2)]">
-                    <h3 className="font-semibold text-[var(--text-primary)]">
-                      {section.title}
-                    </h3>
-                    {section.badge && (
-                      <span className="px-2 py-0.5 bg-[var(--warning)]/12 text-[var(--warning)] text-xs font-medium rounded-full">
-                        {section.badge}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-[var(--text-secondary)] mt-1">
-                    {section.description}
-                  </p>
+                <div className="caption text-success">
+                  +120 today
                 </div>
-
-                <ChevronRight
-                  size={20}
-                  className="text-[var(--text-tertiary)] flex-shrink-0"
-                  strokeWidth={2}
-                />
               </div>
+            </div>
+
+            <div className="card" style={{ padding: '20px' }}>
+              <div className="zzik-col" style={{ gap: '4px' }}>
+                <div className="caption text-muted">Vouchers</div>
+                <div className="display-medium" style={{ fontSize: '28px' }}>
+                  {walletData.vouchers}
+                </div>
+                <div className="caption text-warning">
+                  {walletData.expiringSoon} expiring soon
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Total Saved */}
+          <div className="card" style={{ padding: '20px', marginBottom: '24px' }}>
+            <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div className="caption text-muted">Total Saved</div>
+                <div className="h3 text-primary">
+                  ₩{walletData.totalSaved.toLocaleString()}
+                </div>
+              </div>
+              <Icon name="dollar-sign" size={32} className="text-primary" />
+            </div>
+          </div>
+
+          {/* Expiring Soon */}
+          {walletData.expiringItems.length > 0 && (
+            <div>
+              <h2 className="h4" style={{ marginBottom: '12px' }}>
+                <Icon name="clock" size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                Expiring Soon
+              </h2>
+              <div className="grid" style={{ gap: '8px' }}>
+                {walletData.expiringItems.map((item) => (
+                  <div key={item.id} className="card" style={{ padding: '12px 16px' }}>
+                    <div className="row" style={{ justifyContent: 'space-between' }}>
+                      <div>
+                        <div className="body">{item.name}</div>
+                        <div className="caption text-muted">
+                          {item.type === 'voucher' ? 'Voucher' : 'Offer'}
+                        </div>
+                      </div>
+                      <div
+                        className={`caption font-semibold ${item.daysLeft <= 2 ? 'text-danger' : 'text-warning'}`}
+                      >
+                        D-{item.daysLeft}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <nav className="grid" style={{ gap: '12px', marginTop: '24px' }} role="navigation" aria-label="지갑 액션">
+            <button type="button" className="btn primary" aria-label="포인트 사용하기">
+              <Icon name="gift" size={18} style={{ marginRight: '8px' }} />
+              Use Points
             </button>
-          );
-        })}
-      </div>
-    </div>
+            <button type="button" className="btn ghost" aria-label="거래 내역 보기">
+              <Icon name="list" size={18} style={{ marginRight: '8px' }} />
+              View History
+            </button>
+          </nav>
+        </section>
+      </main>
+      <BottomTabBar />
+    </AuthGate>
   );
 }

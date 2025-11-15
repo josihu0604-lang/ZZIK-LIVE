@@ -1,26 +1,60 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import '../styles/tokens.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "ZZIK LIVE - 나노 크리에이터 × 로컬 비즈니스 매칭 플랫폼",
-  description: "GPS 기반 삼중 검증 시스템으로 나노 크리에이터와 로컬 비즈니스를 연결하는 혁신적인 마케팅 플랫폼",
+  title: 'ZZIK LIVE - 나노 크리에이터 × 로컬 비즈니스 매칭 플랫폼',
+  description:
+    'GPS+QR+영수증 삼중 검증 시스템으로 나노 크리에이터와 로컬 비즈니스를 연결하는 로컬 마케팅 플랫폼',
+  keywords: '로컬, 릴스, 지도, GPS, QR코드, 영수증, 할인, 쿠폰, 바우처, 나노 크리에이터',
+  authors: [{ name: 'ZZIK LIVE Team' }],
+  manifest: '/manifest.json',
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: 'https://zzik.live',
+    title: 'ZZIK LIVE',
+    description: '삼중 검증으로 허위 리뷰 차단, 진짜 로컬 경험',
+    siteName: 'ZZIK LIVE',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ZZIK LIVE',
+    description: '삼중 검증으로 허위 리뷰 차단',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover', // Safe-area support for notch
+  themeColor: '#0B0F14',
 };
 
 export default function RootLayout({
@@ -29,10 +63,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={[geistSans.variable, geistMono.variable, 'antialiased', 'zzik-app-shell'].join(
+          ' '
+        )}
       >
+        <a href="#main-content" className="skip-to-main">
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>

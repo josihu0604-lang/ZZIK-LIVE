@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: zzik_pg
+    environment:
+      POSTGRES_USER: zzik
+      POSTGRES_PASSWORD: zzik
+      POSTGRES_DB: zzik_live
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U zzik -d zzik_live']
+      interval: 5s
+      retries: 20
+      timeout: 3s
+      start_period: 10s
+
+volumes:
+  pg_data:
+    driver: local

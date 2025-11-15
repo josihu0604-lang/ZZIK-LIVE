@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { withIdempotency } from '@/lib/server/idempotency';
-import { redis } from '@/lib/server/redis';
+import { redis } from '@/lib/redis';
 
 // Mock Redis
 vi.mock('@/lib/redis', () => ({

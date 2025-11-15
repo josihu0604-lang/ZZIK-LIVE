@@ -1,10 +1,13 @@
 {
-  "name": "webapp",
-  "version": "0.1.0",
+  "name": "zzik-live",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.10",
+    "npm": ">=10"
+  },
   "scripts": {
     "dev": "next dev",
-    "dev:monitor": "./scripts/dev-server-monitor.sh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
@@ -35,6 +38,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
     "@next/bundle-analyzer": "16.0.3",
     "@playwright/test": "1.56.1",
     "@tailwindcss/postcss": "^4",

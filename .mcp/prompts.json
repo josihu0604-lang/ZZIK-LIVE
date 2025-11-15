@@ -1,0 +1,64 @@
+{
+  "prompts": {
+    "codeReview": {
+      "name": "Code Review - ZZIK LIVE Standards",
+      "description": "Review code against ZZIK LIVE quality standards",
+      "template": "Review the following code for:\n1. TypeScript strict mode compliance\n2. WCAG 2.1 AA accessibility\n3. Privacy: No raw coordinates (geohash5 only)\n4. Performance: LCP ≤ 1.5s target\n5. Security: Protected routes, API 401 checks\n6. Neo-minimal UI: Text-first, minimal icons\n\nCode:\n```\n{{code}}\n```\n\nProvide specific improvements with examples.",
+      "variables": ["code"]
+    },
+    "componentGeneration": {
+      "name": "Generate React Component",
+      "description": "Generate accessible, type-safe React component",
+      "template": "Generate a React component with these requirements:\n\nComponent: {{componentName}}\nPurpose: {{purpose}}\n\nRequirements:\n- Functional component with TypeScript\n- ARIA attributes for accessibility\n- Neo-minimal design tokens from globals.css\n- Client component if interactive ('use client')\n- Props interface with JSDoc comments\n- Error boundaries where needed\n\nDesign Tokens:\n- Colors: var(--text), var(--brand), var(--border)\n- Typography: .text-h1, .text-h2, .text-body\n- Focus: .focus-ring utility\n- No inline styles unless dynamic\n\nGenerate complete, production-ready code.",
+      "variables": ["componentName", "purpose"]
+    },
+    "apiEndpoint": {
+      "name": "Create API Endpoint",
+      "description": "Generate secure API route with validation",
+      "template": "Create a Next.js API route:\n\nEndpoint: {{endpoint}}\nMethod: {{method}}\nPurpose: {{purpose}}\n\nRequirements:\n1. Rate limiting (proxy.ts checks)\n2. Input validation with Zod\n3. Error handling with proper status codes\n4. Logging with request ID\n5. Privacy: geohash5 only, no raw coordinates\n6. Protected routes: Check zzik_session cookie\n7. TypeScript strict mode\n\nGenerate app/api/{{endpoint}}/route.ts with full implementation.",
+      "variables": ["endpoint", "method", "purpose"]
+    },
+    "testGeneration": {
+      "name": "Generate Tests",
+      "description": "Create comprehensive test suite",
+      "template": "Generate tests for:\n\nTarget: {{target}}\nType: {{type}}\n\nRequirements:\n1. Unit tests: Vitest with coverage\n2. E2E tests: Playwright with accessibility checks\n3. A11y tests: @axe-core/playwright\n4. Edge cases and error scenarios\n5. Mock external dependencies\n6. Clear test descriptions\n\nGenerate complete test file with all scenarios.",
+      "variables": ["target", "type"]
+    },
+    "bugFix": {
+      "name": "Debug and Fix Issue",
+      "description": "Analyze and fix bugs systematically",
+      "template": "Debug the following issue:\n\nIssue: {{issue}}\nError: {{error}}\nContext: {{context}}\n\nAnalysis Steps:\n1. Identify root cause\n2. Check TypeScript types\n3. Review console errors\n4. Check network requests\n5. Verify data flow\n\nProvide:\n- Root cause analysis\n- Fix with code changes\n- Test to prevent regression\n- Documentation update if needed",
+      "variables": ["issue", "error", "context"]
+    },
+    "refactoring": {
+      "name": "Refactor Code",
+      "description": "Improve code quality and maintainability",
+      "template": "Refactor the following code:\n\nTarget: {{target}}\nGoal: {{goal}}\n\nGuidelines:\n1. Preserve functionality\n2. Improve type safety\n3. Extract reusable utilities\n4. Remove duplication\n5. Update tests\n6. Maintain accessibility\n\nProvide:\n- Before/after comparison\n- Migration guide if breaking\n- Updated tests\n- Performance impact",
+      "variables": ["target", "goal"]
+    },
+    "accessibilityAudit": {
+      "name": "Accessibility Audit",
+      "description": "Review and improve accessibility",
+      "template": "Audit accessibility for:\n\nTarget: {{target}}\n\nWCAG 2.1 AA Checklist:\n1. Semantic HTML (h1-h6 hierarchy)\n2. ARIA attributes (role, aria-label, aria-*)\n3. Keyboard navigation (tab, arrow keys)\n4. Focus management (focus-ring, tabIndex)\n5. Color contrast (≥ 4.5:1 text, ≥ 3:1 large)\n6. Touch targets (≥ 44×44 CSS px)\n7. Screen reader support\n8. Form labels and error messages\n\nProvide:\n- Issues found with severity\n- Code fixes with examples\n- axe-core test coverage",
+      "variables": ["target"]
+    },
+    "performanceOptimization": {
+      "name": "Optimize Performance",
+      "description": "Improve page load and runtime performance",
+      "template": "Optimize performance for:\n\nTarget: {{target}}\nCurrent Metrics: {{metrics}}\n\nOptimization Areas:\n1. Bundle size (code splitting, tree shaking)\n2. Images (next/image, lazy loading)\n3. Fonts (font-display: swap)\n4. JavaScript (dynamic imports, defer)\n5. CSS (critical CSS, unused styles)\n6. Caching (headers, service worker)\n7. Database queries (indexing, N+1)\n\nProvide:\n- Specific optimizations\n- Before/after metrics\n- Implementation priority\n- Testing approach",
+      "variables": ["target", "metrics"]
+    },
+    "securityReview": {
+      "name": "Security Review",
+      "description": "Audit security vulnerabilities",
+      "template": "Security review for:\n\nTarget: {{target}}\n\nSecurity Checklist:\n1. Input validation (XSS, SQL injection)\n2. Authentication (session, tokens)\n3. Authorization (route guards, API checks)\n4. Privacy (geohash5, PII masking)\n5. CSRF protection (SameSite cookies)\n6. CSP headers (proxy.ts configuration)\n7. Rate limiting (API protection)\n8. Dependency vulnerabilities\n\nProvide:\n- Vulnerabilities found (CVSS score)\n- Remediation steps\n- Code examples\n- Testing verification",
+      "variables": ["target"]
+    },
+    "documentationGeneration": {
+      "name": "Generate Documentation",
+      "description": "Create comprehensive documentation",
+      "template": "Generate documentation for:\n\nTarget: {{target}}\nAudience: {{audience}}\n\nSections:\n1. Overview and purpose\n2. Installation/setup\n3. Usage examples\n4. API reference\n5. Configuration options\n6. Best practices\n7. Troubleshooting\n8. Contributing guidelines\n\nFormat: Markdown with code examples\nStyle: Clear, concise, beginner-friendly",
+      "variables": ["target", "audience"]
+    }
+  }
+}

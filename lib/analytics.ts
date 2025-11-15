@@ -1,174 +1,224 @@
-// Analytics/Tracking System for ZZIK LIVE
-// Implements event tracking with proper typing and batching
+/**
+ * Analytics module with privacy-preserving event tracking
+ * Aligns with Phase 5 DQ/Guard rails and Phase 6 Search 1.0 requirements
+ */
 
-import { AnalyticsEvent } from '@/types';
+// Event type definitions with strict typing for data quality
+type EventMap = {
+  map_view: {
+    geohash5: string; // NEVER raw lat/lng, only geohash5
+    zoom: number;
+    took_ms: number;
+  };
+  qr_scan_open: {
+    offer_id: string;
+    location_granted: boolean;
+  };
+  qr_scan_result: {
+    state: 'success' | 'already_used' | 'expired' | 'invalid';
+    took_ms: number;
+    retry_count: number;
+  };
+  wallet_view: {
+    vouchers: number;
+    points: number;
+    expiring_soon: number;
+  };
+  offers_view: {
+    offer_count: number;
+    active_count: number;
+  };
+  offer_click: {
+    offer_id: string;
+    status: string;
+  };
+  reel_click: {
+    reel_id: string;
+  };
+  auth_success: {
+    method: 'email' | 'phone';
+  };
+  permission_granted: {
+    type: 'location' | 'camera';
+  };
+  permission_denied: {
+    type: 'location' | 'camera';
+  };
+};
 
-class Analytics {
-  private queue: AnalyticsEvent[] = [];
-  private flushInterval: NodeJS.Timeout | null = null;
+// Event buffer for batching
+const eventBuffer: Array<{
+  name: keyof EventMap;
+  props: any;
+  timestamp: number;
+}> = [];
 
-  constructor() {
-    if (typeof window !== 'undefined') {
-      this.startFlushInterval();
-    }
-  }
+// Configuration aligned with Phase 5 requirements
+const BATCH_SIZE = 50;
+const BATCH_INTERVAL = 10000; // 10 seconds
+const MAX_BATCH_SIZE_KB = 100;
+const RETRY_ATTEMPTS = 3;
+const RETRY_BACKOFF_MS = [1000, 2000, 4000];
 
-  track(name: string, properties?: Record<string, any>) {
-    const event: AnalyticsEvent = {
+// Guard rail thresholds (Phase 5 requirements)
+const GUARDRAILS = {
+  maxLatencyP95: 2500, // 2.5s
+  minIngestRate: 0.97, // 97%
+  maxErrorRate: 0.003, // 0.3%
+};
+
+let batchTimer: NodeJS.Timeout | null = null;
+
+/**
+ * Track an analytics event with type-safe properties
+ * @param name - Event name from EventMap
+ * @param props - Event-specific properties
+ */
+export function track<T extends keyof EventMap>(name: T, props: EventMap[T]): void {
+  try {
+    // Privacy validation: ensure no raw coordinates
+    assertNoRawCoordinates(props);
+
+    // Add to buffer
+    eventBuffer.push({
       name,
-      properties: {
-        ...properties,
-        timestamp: new Date().toISOString(),
-        user_agent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
-      },
-      timestamp: new Date(),
-    };
+      props,
+      timestamp: Date.now(),
+    });
 
-    this.queue.push(event);
-
-    // Log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[Analytics]', name, properties);
+    // Start batch timer if not running
+    if (!batchTimer) {
+      batchTimer = setTimeout(flushEvents, BATCH_INTERVAL);
     }
 
-    // Flush if queue is large
-    if (this.queue.length >= 10) {
-      this.flush();
+    // Force flush if buffer is full
+    if (eventBuffer.length >= BATCH_SIZE) {
+      flushEvents();
     }
-  }
-
-  // Route tracking
-  routeView(path: string) {
-    this.track('route_view', { path });
-  }
-
-  // Map/Place events
-  mapView(geohash5: string, filters?: string[]) {
-    this.track('map_view', { geohash5, filters });
-  }
-
-  pinTap(placeId: string) {
-    this.track('pin_tap', { place_id: placeId });
-  }
-
-  placeSheetOpen(stage: 'peek' | 'half' | 'full') {
-    this.track('place_sheet_open', { stage });
-  }
-
-  // Reel events
-  reelViewStart(reelId: string) {
-    this.track('reel_view_start', { reel_id: reelId });
-  }
-
-  reelViewEnd(reelId: string, dwellMs: number) {
-    this.track('reel_view_end', { reel_id: reelId, dwell_ms: dwellMs });
-  }
-
-  reelAction(type: 'like' | 'share' | 'save' | 'navigate') {
-    this.track('reel_action', { type });
-  }
-
-  // Pass events
-  passView(passId: string) {
-    this.track('pass_view', { pass_id: passId });
-  }
-
-  purchaseClick(passId: string) {
-    this.track('purchase_click', { pass_id: passId });
-  }
-
-  // Offer events
-  offersView(tab: 'all' | 'new' | 'expiring') {
-    this.track('offers_view', { tab });
-  }
-
-  offerView(offerId: string) {
-    this.track('offer_view', { offer_id: offerId });
-  }
-
-  offerAccept(offerId: string) {
-    this.track('offer_accept', { offer_id: offerId });
-  }
-
-  offerDismiss(offerId: string) {
-    this.track('offer_dismiss', { offer_id: offerId });
-  }
-
-  // QR Scan events
-  qrScanStart() {
-    this.track('qr_scan_start');
-  }
-
-  qrScanResult(kind: 'voucher' | 'checkin' | 'membership' | 'unknown') {
-    this.track('qr_scan_result', { kind });
-  }
-
-  qrError(code: 'not_found' | 'timeout' | 'denied' | 'unavailable' | 'unknown') {
-    this.track('qr_error', { code });
-  }
-
-  // Wallet events
-  walletView() {
-    this.track('wallet_view');
-  }
-
-  walletSectionOpen(section: 'passes' | 'transactions' | 'payments') {
-    this.track('wallet_section_open', { sec: section });
-  }
-
-  voucherOpen(voucherId: string) {
-    this.track('voucher_open', { voucher_id: voucherId });
-  }
-
-  voucherUse(voucherId: string) {
-    this.track('voucher_use', { voucher_id: voucherId });
-  }
-
-  paymentAdd(type: 'card' | 'simple') {
-    this.track('payment_add', { type });
-  }
-
-  paymentRemove(paymentId: string) {
-    this.track('payment_remove', { payment_id: paymentId });
-  }
-
-  private startFlushInterval() {
-    this.flushInterval = setInterval(() => {
-      if (this.queue.length > 0) {
-        this.flush();
-      }
-    }, 5000); // Flush every 5 seconds
-  }
-
-  private async flush() {
-    if (this.queue.length === 0) return;
-
-    const events = [...this.queue];
-    this.queue = [];
-
-    try {
-      // Send to analytics endpoint
-      await fetch('/api/analytics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ events }),
-      });
-    } catch (error) {
-      console.error('[Analytics] Failed to flush events:', error);
-      // Re-add failed events to queue
-      this.queue.unshift(...events);
-    }
-  }
-
-  destroy() {
-    if (this.flushInterval) {
-      clearInterval(this.flushInterval);
-    }
-    this.flush();
+  } catch (error) {
+    console.error('[Analytics] Track error:', error);
+    // Don't throw - analytics should never break the app
   }
 }
 
-// Singleton instance
-export const analytics = new Analytics();
+/**
+ * Flush events to analytics endpoint
+ */
+async function flushEvents(): Promise<void> {
+  if (eventBuffer.length === 0) return;
+
+  // Clear timer
+  if (batchTimer) {
+    clearTimeout(batchTimer);
+    batchTimer = null;
+  }
+
+  // Extract events to send
+  const eventsToSend = eventBuffer.splice(0, BATCH_SIZE);
+
+  // Check batch size
+  const batchSize = JSON.stringify(eventsToSend).length / 1024;
+  if (batchSize > MAX_BATCH_SIZE_KB) {
+    console.warn(`[Analytics] Batch size ${batchSize}KB exceeds limit`);
+    // Split batch if too large
+    const halfSize = Math.floor(eventsToSend.length / 2);
+    eventBuffer.unshift(...eventsToSend.slice(halfSize));
+    eventsToSend.splice(halfSize);
+  }
+
+  // Send with retry logic
+  for (let attempt = 0; attempt < RETRY_ATTEMPTS; attempt++) {
+    try {
+      const startTime = Date.now();
+
+      // In production, replace with actual endpoint
+      if (process.env.NODE_ENV === 'production') {
+        const response = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Client-Version': process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
+          },
+          body: JSON.stringify({
+            events: eventsToSend,
+            context: {
+              user_agent: navigator.userAgent,
+              screen: {
+                width: window.screen.width,
+                height: window.screen.height,
+              },
+              viewport: {
+                width: window.innerWidth,
+                height: window.innerHeight,
+              },
+              timestamp: Date.now(),
+            },
+          }),
+        });
+
+        const latency = Date.now() - startTime;
+
+        // Check guard rails
+        if (latency > GUARDRAILS.maxLatencyP95) {
+          console.warn(`[Analytics] High latency: ${latency}ms`);
+        }
+
+        if (!response.ok) {
+          throw new Error(`Analytics API error: ${response.status}`);
+        }
+
+        // Success - exit retry loop
+        break;
+      } else {
+        // Development mode - just log
+        console.log('[Analytics] Events:', eventsToSend);
+        break;
+      }
+    } catch (error) {
+      console.error(`[Analytics] Send attempt ${attempt + 1} failed:`, error);
+
+      // If not last attempt, wait before retry
+      if (attempt < RETRY_ATTEMPTS - 1) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_BACKOFF_MS[attempt]));
+      } else {
+        // Final attempt failed - return events to buffer
+        eventBuffer.unshift(...eventsToSend);
+      }
+    }
+  }
+
+  // Schedule next batch if there are more events
+  if (eventBuffer.length > 0 && !batchTimer) {
+    batchTimer = setTimeout(flushEvents, BATCH_INTERVAL);
+  }
+}
+
+/**
+ * Privacy guard: Ensure no raw coordinates in event data
+ */
+function assertNoRawCoordinates(payload: any): void {
+  const banned = ['lat', 'lng', 'latitude', 'longitude', 'coords', 'position'];
+  const payloadStr = JSON.stringify(payload).toLowerCase();
+
+  for (const term of banned) {
+    if (payloadStr.includes(term)) {
+      throw new Error(`Privacy violation: Raw coordinates detected. Use geohash5 instead.`);
+    }
+  }
+}
+
+/**
+ * Flush events when page is hidden (tab switch, minimize, etc.)
+ */
+if (typeof window !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      flushEvents();
+    }
+  });
+
+  // Flush on page unload
+  window.addEventListener('beforeunload', () => {
+    flushEvents();
+  });
+}

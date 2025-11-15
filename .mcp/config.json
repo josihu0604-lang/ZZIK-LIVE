@@ -1,0 +1,210 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/config.json",
+  "version": "1.0.0",
+  "project": {
+    "name": "ZZIK-LIVE",
+    "type": "next.js",
+    "framework": "react",
+    "language": "typescript"
+  },
+  "context": {
+    "codebase": {
+      "root": "/home/user/webapp",
+      "include": [
+        "app/**/*.{ts,tsx,js,jsx}",
+        "components/**/*.{ts,tsx}",
+        "lib/**/*.{ts,js}",
+        "types/**/*.ts",
+        "prisma/**/*.prisma",
+        "tests/**/*.{ts,spec.ts}",
+        "*.config.{ts,js,mjs}",
+        "*.md"
+      ],
+      "exclude": [
+        "node_modules/**",
+        ".next/**",
+        "dist/**",
+        "out/**",
+        "coverage/**",
+        ".git/**",
+        "*.log"
+      ]
+    },
+    "documentation": {
+      "primary": [
+        "README.md",
+        "docs/ARCHITECTURE.md",
+        "docs/API.md",
+        "CONTRIBUTING.md"
+      ],
+      "specs": [
+        "docs/specs/*.md",
+        "VERIFICATION_GUIDE.md",
+        "OPERATIONS_GUIDE.md"
+      ]
+    },
+    "dependencies": {
+      "runtime": [
+        "next",
+        "react",
+        "react-dom",
+        "prisma",
+        "@prisma/client",
+        "tailwindcss",
+        "lucide-react"
+      ],
+      "dev": [
+        "typescript",
+        "eslint",
+        "prettier",
+        "playwright",
+        "vitest"
+      ]
+    }
+  },
+  "analysis": {
+    "quality": {
+      "typescript": {
+        "strict": true,
+        "noImplicitAny": true,
+        "checkJs": false
+      },
+      "eslint": {
+        "enabled": true,
+        "autofix": true
+      },
+      "prettier": {
+        "enabled": true,
+        "requireConfig": true
+      }
+    },
+    "testing": {
+      "unit": {
+        "framework": "vitest",
+        "coverage": {
+          "threshold": 70,
+          "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/test-*.js"]
+        }
+      },
+      "e2e": {
+        "framework": "playwright",
+        "browsers": ["chromium"],
+        "baseURL": "http://localhost:3000"
+      },
+      "a11y": {
+        "enabled": true,
+        "standard": "WCAG2.1AA",
+        "tools": ["@axe-core/playwright"]
+      }
+    },
+    "performance": {
+      "bundleAnalysis": true,
+      "lighthouse": {
+        "performance": 90,
+        "accessibility": 100,
+        "bestPractices": 90,
+        "seo": 90
+      }
+    }
+  },
+  "conventions": {
+    "naming": {
+      "components": "PascalCase",
+      "files": "kebab-case",
+      "functions": "camelCase",
+      "constants": "UPPER_SNAKE_CASE"
+    },
+    "structure": {
+      "components": "components/[category]/[ComponentName].tsx",
+      "pages": "app/[route]/page.tsx",
+      "api": "app/api/[endpoint]/route.ts",
+      "lib": "lib/[domain]/[function].ts",
+      "tests": "tests/[unit|e2e]/[name].spec.ts"
+    },
+    "imports": {
+      "order": [
+        "react",
+        "next",
+        "third-party",
+        "@/components",
+        "@/lib",
+        "@/types",
+        "relative"
+      ],
+      "alias": {
+        "@/": "./"
+      }
+    }
+  },
+  "security": {
+    "privacy": {
+      "geolocation": {
+        "precision": "geohash5",
+        "rawCoordinates": "forbidden"
+      },
+      "pii": {
+        "masking": true,
+        "logging": "prohibited"
+      }
+    },
+    "authentication": {
+      "providers": ["instagram", "tiktok", "google"],
+      "guestMode": true,
+      "protectedRoutes": ["/wallet", "/scan", "/offers/accept"]
+    },
+    "headers": {
+      "csp": true,
+      "hsts": true,
+      "xFrameOptions": "DENY"
+    }
+  },
+  "ai": {
+    "contextWindow": {
+      "maxTokens": 200000,
+      "prioritize": [
+        "current file",
+        "related components",
+        "type definitions",
+        "recent changes"
+      ]
+    },
+    "codeGeneration": {
+      "style": "functional",
+      "typescript": "strict",
+      "react": {
+        "hooks": true,
+        "functional": true,
+        "noClasses": true
+      }
+    },
+    "refactoring": {
+      "preserveTests": true,
+      "updateDocs": true,
+      "breakingChanges": "ask"
+    }
+  },
+  "workflows": {
+    "development": {
+      "server": "npm run dev",
+      "test": "npm test",
+      "lint": "npm run lint",
+      "format": "npm run format"
+    },
+    "quality": {
+      "preCommit": [
+        "lint-staged",
+        "type-check",
+        "test:unit"
+      ],
+      "preMerge": [
+        "test:e2e",
+        "build",
+        "lighthouse"
+      ]
+    },
+    "deployment": {
+      "staging": "vercel --target=preview",
+      "production": "vercel --prod"
+    }
+  }
+}
