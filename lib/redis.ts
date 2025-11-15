@@ -27,17 +27,17 @@ class NoopRedis {
   }
 
   // Event emitter methods for compatibility with Redis
-  on(_event: string, _listener: (...args: any[]) => void): this {
+  on(_event: string, _listener: (...args: unknown[]) => void): this {
     // noop - NoopRedis doesn't emit events
     return this;
   }
 
-  off(_event: string, _listener: (...args: any[]) => void): this {
+  off(_event: string, _listener: (...args: unknown[]) => void): this {
     // noop
     return this;
   }
 
-  once(_event: string, _listener: (...args: any[]) => void): this {
+  once(_event: string, _listener: (...args: unknown[]) => void): this {
     // noop
     return this;
   }

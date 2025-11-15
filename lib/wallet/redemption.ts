@@ -182,12 +182,12 @@ export async function redeemVoucher(params: RedeemVoucherParams): Promise<Redemp
     );
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Redemption error:', error);
 
     return {
       success: false,
-      message: error.message || 'Redemption failed',
+      message: error instanceof Error ? error.message : 'Redemption failed',
     };
   }
 }
@@ -293,12 +293,12 @@ export async function debitWallet(
     );
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Debit error:', error);
 
     return {
       success: false,
-      message: error.message || 'Debit failed',
+      message: error instanceof Error ? error.message : 'Debit failed',
     };
   }
 }

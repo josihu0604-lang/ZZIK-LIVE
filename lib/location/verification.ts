@@ -117,7 +117,7 @@ export async function verifyLocation(
       state: 'success',
       distance: Math.round(distance),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Location verification error:', error);
 
     return {

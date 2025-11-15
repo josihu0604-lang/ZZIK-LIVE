@@ -149,11 +149,12 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
 
           rafRef.current = requestAnimationFrame(scanWithJsQR);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Scanner initialization error:', error);
         setScanState('error');
-        setErr(error?.message || 'Camera access denied');
-        onError?.(error);
+        const errorMessage = error instanceof Error ? error.message : 'Camera access denied';
+        setErr(errorMessage);
+        onError?.(error instanceof Error ? error : new Error(String(error)));
       }
     };
 

@@ -110,11 +110,14 @@ export default function MapView({
         });
 
         // Handle geolocation - convert to geohash5 before callback
-        geolocateControl.on('geolocate', (e: any) => {
-          const geohash5 = encodeGeohash(e.coords.latitude, e.coords.longitude, 5);
-          // CRITICAL: Only pass geohash5, never raw coordinates
-          onLocationGranted?.(geohash5);
-        });
+        geolocateControl.on(
+          'geolocate',
+          (e: { coords: { latitude: number; longitude: number } }) => {
+            const geohash5 = encodeGeohash(e.coords.latitude, e.coords.longitude, 5);
+            // CRITICAL: Only pass geohash5, never raw coordinates
+            onLocationGranted?.(geohash5);
+          }
+        );
       } catch (error) {
         console.error('Failed to initialize map:', error);
       }

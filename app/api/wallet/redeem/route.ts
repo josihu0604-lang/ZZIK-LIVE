@@ -98,9 +98,9 @@ export async function POST(req: NextRequest) {
       );
 
       return withRateHeaders(res, rateMeta);
-    } catch (error: any) {
+    } catch (error: unknown) {
       log('error', 'wallet.redeem.failed', {
-        error: error?.message,
+        error: error instanceof Error ? error.message : String(error),
         request_id: requestId,
         user_id: userId,
         took_ms: Date.now() - started,
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
         JSON.stringify({
           success: false,
           error: 'Redemption failed',
-          message: error?.message,
+          message: error instanceof Error ? error.message : String(error),
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );

@@ -94,11 +94,11 @@ export function logCtx(level: Level, ctx: LogCtx): void {
   console.warn(JSON.stringify(payload));
 }
 
-export function sanitizeLocation(data: any): any {
+export function sanitizeLocation(data: unknown): unknown {
   if (!data) return data;
 
-  if (typeof data === 'object') {
-    const sanitized = { ...data };
+  if (typeof data === 'object' && data !== null) {
+    const sanitized = { ...(data as Record<string, unknown>) };
     // Remove raw coordinates
     delete sanitized.lat;
     delete sanitized.lng;

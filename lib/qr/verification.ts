@@ -177,7 +177,7 @@ export async function verifyQRToken(
       state: 'success',
       distance: Math.round(distance),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Log error and return failed state
     console.error('QR verification error:', error);
 

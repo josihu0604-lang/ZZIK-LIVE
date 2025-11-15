@@ -207,7 +207,7 @@ export async function verifyReceipt(
       ocrData: ocrResult,
       confidence: ocrResult.confidence,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Receipt verification error:', error);
 
     return {

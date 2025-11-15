@@ -164,9 +164,9 @@ async function setCellCache(
 /**
  * Throttle map events (pan/zoom)
  */
-export function throttleMapEvent<T extends (...args: any[]) => void>(fn: T, ms: number = 100): T {
+export function throttleMapEvent<T extends (...args: never[]) => void>(fn: T, ms: number = 100): T {
   let lastCall = 0;
-  return ((...args: any[]) => {
+  return ((...args: Parameters<T>) => {
     const now = Date.now();
     if (now - lastCall >= ms) {
       lastCall = now;

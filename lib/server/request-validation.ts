@@ -9,7 +9,7 @@ import { ZodSchema, z } from 'zod';
 export interface ValidationError {
   error: string;
   message: string;
-  details?: any;
+  details?: unknown;
 }
 
 /**

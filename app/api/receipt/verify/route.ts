@@ -105,9 +105,9 @@ export async function POST(req: NextRequest) {
       );
 
       return withRateHeaders(res, rateMeta);
-    } catch (error: any) {
+    } catch (error: unknown) {
       log('error', 'receipt.verify.failed', {
-        error: error?.message,
+        error: error instanceof Error ? error.message : String(error),
         request_id: requestId,
         took_ms: Date.now() - started,
       });

@@ -73,13 +73,16 @@ Sentry.init({
 
   // Transactions sampling
   tracesSampler: (samplingContext) => {
+    // Safely access transaction context
+    const transactionName = samplingContext.transactionContext?.name;
+
     // Don't sample health checks
-    if (samplingContext.transactionContext.name === 'GET /api/health') {
+    if (transactionName === 'GET /api/health') {
       return 0;
     }
 
     // Sample API routes at 50%
-    if (samplingContext.transactionContext.name?.startsWith('POST /api/')) {
+    if (transactionName?.startsWith('POST /api/')) {
       return 0.5;
     }
 

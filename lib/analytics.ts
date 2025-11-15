@@ -49,7 +49,7 @@ type EventMap = {
 // Event buffer for batching
 const eventBuffer: Array<{
   name: keyof EventMap;
-  props: any;
+  props: Record<string, unknown>;
   timestamp: number;
 }> = [];
 
@@ -195,7 +195,7 @@ async function flushEvents(): Promise<void> {
 /**
  * Privacy guard: Ensure no raw coordinates in event data
  */
-function assertNoRawCoordinates(payload: any): void {
+function assertNoRawCoordinates(payload: unknown): void {
   const banned = ['lat', 'lng', 'latitude', 'longitude', 'coords', 'position'];
   const payloadStr = JSON.stringify(payload).toLowerCase();
 

@@ -4,16 +4,25 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Map, QrCode, Wallet, Gift } from 'lucide-react';
+import { memo } from 'react';
 
-export default function BottomTabBar() {
+function BottomTabBar() {
   const pathname = usePathname();
   const active = (href: string): 'page' | undefined =>
     pathname?.startsWith(href) ? 'page' : undefined;
 
-  const Item = ({ href, Icon, label }: { href: string; Icon: any; label: string }) => (
+  const Item = ({
+    href,
+    Icon,
+    label,
+  }: {
+    href: string;
+    Icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+    label: string;
+  }) => (
     <Link
       href={href}
-      aria-current={active(href) as any}
+      aria-current={active(href)}
       className="text-body"
       style={{
         display: 'grid',
@@ -47,3 +56,5 @@ export default function BottomTabBar() {
     </nav>
   );
 }
+
+export default memo(BottomTabBar);
