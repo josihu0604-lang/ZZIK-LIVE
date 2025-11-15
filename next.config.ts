@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 
 // Bundle analyzer
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -22,7 +23,7 @@ const cspProd = [
   "default-src 'self'",
   "base-uri 'self'",
   "frame-ancestors 'none'", // Critical: Prevent clickjacking
-  `connect-src 'self' ${mapboxConnect.join(' ')} https://*.supabase.co`,
+  `connect-src 'self' ${mapboxConnect.join(' ')} https://*.supabase.co https://*.sentry.io`,
   "img-src 'self' https: data: blob:",
   "media-src 'self' https: blob:",
   "font-src 'self' data:",
@@ -39,7 +40,7 @@ const cspDev = [
   "default-src 'self'",
   "base-uri 'self'",
   "frame-ancestors 'none'",
-  `connect-src 'self' ${mapboxConnect.join(' ')} https://*.supabase.co ws: wss:`,
+  `connect-src 'self' ${mapboxConnect.join(' ')} https://*.supabase.co https://*.sentry.io ws: wss:`,
   "img-src 'self' https: data: blob:",
   "media-src 'self' https: blob:",
   "font-src 'self' data:",
@@ -56,6 +57,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: [process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'],
     },
+    instrumentationHook: true, // Enable instrumentation for Sentry
   },
   async headers() {
     return [
@@ -132,4 +134,23 @@ const nextConfig: NextConfig = {
   poweredByHeader: false, // Remove X-Powered-By header
 };
 
-export default withBundleAnalyzer(nextConfig);
+// Wrap config with Sentry and Bundle Analyzer
+const configWithSentry = withSentryConfig(
+  nextConfig,
+  {
+    // Sentry Webpack plugin options
+    silent: true, // Suppresses all logs
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+  },
+  {
+    // Sentry SDK options
+    widenClientFileUpload: true,
+    transpileClientSDK: true,
+    hideSourceMaps: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+  }
+);
+
+export default withBundleAnalyzer(configWithSentry);

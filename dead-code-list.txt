@@ -1,0 +1,295 @@
+next.config.ts:135 - default
+playwright.config.ts:7 - default
+proxy.ts:40 - proxy
+proxy.ts:171 - config
+tailwind.config.ts:15 - default
+vitest.config.ts:4 - default
+app/error.tsx:6 - default
+app/global-error.tsx:5 - default
+app/layout.tsx:60 - default
+app/layout.tsx:18 - metadata
+app/layout.tsx:52 - viewport
+app/loading.tsx:1 - default
+app/manifest.ts:3 - default
+app/not-found.tsx:4 - default
+app/page.tsx:6 - default
+app/robots.ts:3 - default
+app/sitemap.ts:3 - default
+components/AnimatedButton.tsx:194 - default
+components/AnimatedCard.tsx:140 - AnimatedCard (used in module)
+components/AnimatedCard.tsx:190 - StaggeredCards
+components/AnimatedCard.tsx:214 - ParallaxCard
+components/AnimatedCard.tsx:250 - RevealCard
+components/AnimatedCard.tsx:274 - default
+components/FeedbackWidget.tsx:327 - default
+components/MicroInteractions.tsx:6 - LikeButton (used in module)
+components/MicroInteractions.tsx:88 - StarRating (used in module)
+components/MicroInteractions.tsx:128 - CopyButton (used in module)
+components/MicroInteractions.tsx:168 - NotificationBell (used in module)
+components/MicroInteractions.tsx:207 - FloatingActionButton (used in module)
+components/MicroInteractions.tsx:235 - ProgressButton (used in module)
+components/MicroInteractions.tsx:289 - default
+components/Onboarding.tsx:240 - default
+components/PerformanceWidget.tsx:222 - default
+lib/a11y.ts:9 - createLiveRegion (used in module)
+lib/a11y.ts:39 - focusTrap
+lib/a11y.ts:95 - isActivationKey
+lib/a11y.ts:99 - preventDefaultForKeys
+lib/a11y.ts:109 - generateId
+lib/a11y.ts:117 - prefersReducedMotion
+lib/a11y.ts:125 - prefersHighContrast
+lib/a11y.ts:208 - announce (used in module)
+lib/a11y.ts:221 - cleanupAnnouncer
+lib/a11y.ts:82 - KeyCodes (used in module)
+lib/a11y.ts:133 - RovingTabindexManager
+lib/geohash.ts:170 - isWithinDistance
+lib/geohash.ts:178 - sanitizeLocation
+lib/media.ts:15 - createMediaQueryListener
+lib/media.ts:44 - prefersReducedMotion
+lib/media.ts:52 - prefersDarkMode
+lib/media.ts:60 - prefersHighContrast
+lib/media.ts:68 - getSafeAreaInset (used in module)
+lib/media.ts:78 - getAllSafeAreaInsets
+lib/media.ts:90 - getViewportSize
+lib/media.ts:101 - getDevicePixelRatio
+lib/media.ts:117 - isBreakpoint
+lib/media.ts:122 - getCurrentBreakpoint
+lib/media.ts:140 - getOrientation (used in module)
+lib/media.ts:146 - onOrientationChange
+lib/media.ts:5 - MediaQuery
+lib/media.ts:109 - breakpoints (used in module)
+lib/perf.ts:9 - throttle
+lib/perf.ts:28 - debounce
+lib/perf.ts:49 - requestIdleCallback (used in module)
+lib/perf.ts:59 - cancelIdleCallback (used in module)
+lib/perf.ts:70 - preconnect
+lib/perf.ts:82 - dnsPrefetch
+lib/perf.ts:94 - preloadResource
+lib/perf.ts:123 - observeIntersection
+lib/perf.ts:162 - measurePerformance
+lib/perf.ts:187 - isSlowConnection
+lib/perf.ts:201 - prefersReducedData
+lib/perf.ts:211 - getOptimalImageSize
+lib/perf.ts:225 - getSafeAreaInsets
+lib/perf.ts:241 - vibrate (used in module)
+lib/perf.ts:256 - isTouchDevice
+lib/perf.ts:269 - getDeviceType
+lib/privacy.ts:10 - toGeohash5 (used in module)
+lib/privacy.ts:61 - assertNoRawCoordinates
+lib/privacy.ts:103 - sanitizeUserInput
+lib/privacy.ts:125 - checkLocationPermission (used in module)
+lib/privacy.ts:141 - getAnonymizedLocation
+lib/privacy.ts:175 - getPrivacySettings (used in module)
+lib/privacy.ts:200 - updatePrivacySettings
+lib/privacy.ts:209 - clearPersonalData
+lib/privacy.ts:166 - PrivacySettings (used in module)
+lib/search.ts:4 - SearchRow (used in module)
+scripts/validate-env.ts:145 - validateEnvironment (used in module)
+scripts/validate-env.ts:145 - envSchema (used in module)
+types/index.ts:3 - TabName
+types/index.ts:6 - Pass (used in module)
+types/index.ts:22 - Voucher
+types/index.ts:33 - Place (used in module)
+types/index.ts:47 - MapPin
+types/index.ts:56 - Reel
+types/index.ts:68 - Offer
+types/index.ts:84 - Filter
+types/index.ts:91 - ScanResultKind (used in module)
+types/index.ts:93 - ScanResult
+types/index.ts:101 - ScanError
+types/index.ts:104 - WalletSummary
+types/index.ts:111 - Transaction
+types/index.ts:121 - PaymentMethod
+types/index.ts:132 - SheetState
+types/index.ts:135 - AnalyticsEvent
+.next/types/routes.d.ts:47 - ParamsOf
+.next/types/routes.d.ts:54 - PageRoutes (used in module)
+.next/types/routes.d.ts:54 - RedirectRoutes (used in module)
+.next/types/routes.d.ts:54 - RewriteRoutes (used in module)
+app/feed/page.tsx:9 - default
+app/onboarding/page.tsx:13 - default
+app/pass/page.tsx:199 - default
+app/splash/page.tsx:7 - default
+components/lists/VirtualList.tsx:16 - VirtualList
+components/lists/VirtualList.tsx:6 - VirtualListProps (used in module)
+components/map/cluster.worker.ts:13 - WorkerMessage (used in module)
+components/map/cluster.worker.ts:130 - Feature (used in module)
+components/map/cluster.worker.ts:132 - WorkerResponse
+components/map/MapView.tsx:20 - default
+components/map/useClusters.ts:43 - useClusters
+components/permissions/PermissionRequest.tsx:82 - CameraPermissionRequest
+components/states/ErrorState.tsx:1 - ErrorState
+components/states/OfflineState.tsx:1 - OfflineState
+components/ui/Badge.tsx:13 - Badge
+components/ui/Badge.tsx:6 - BadgeProps (used in module)
+components/ui/Button.tsx:6 - ButtonProps (used in module)
+components/ui/Chip.tsx:15 - Chip
+components/ui/Chip.tsx:6 - ChipProps (used in module)
+components/ui/Icon.tsx:104 - IconName (used in module)
+components/ui/Icon.tsx:373 - MapPin (used in module)
+components/ui/Icon.tsx:374 - Camera (used in module)
+components/ui/Icon.tsx:375 - Wallet (used in module)
+components/ui/Icon.tsx:376 - Gift (used in module)
+components/ui/Icon.tsx:377 - Search (used in module)
+components/ui/Icon.tsx:378 - QrCode (used in module)
+components/ui/Icon.tsx:379 - Home (used in module)
+components/ui/Icon.tsx:380 - Settings (used in module)
+components/ui/Icon.tsx:381 - User (used in module)
+components/ui/Icon.tsx:382 - Check (used in module)
+components/ui/Icon.tsx:383 - AlertCircle (used in module)
+components/ui/Icon.tsx:384 - Zap (used in module)
+components/ui/Icon.tsx:385 - Star (used in module)
+components/ui/Icon.tsx:386 - Heart (used in module)
+components/ui/Icon.tsx:387 - Trophy (used in module)
+components/ui/Icon.tsx:388 - Bell (used in module)
+components/ui/Icon.tsx:389 - Loader2 (used in module)
+components/ui/Icon.tsx:390 - ChevronRight (used in module)
+components/ui/Icon.tsx:391 - ChevronLeft (used in module)
+components/ui/Icon.tsx:392 - ChevronUp (used in module)
+components/ui/Icon.tsx:393 - ChevronDown (used in module)
+components/ui/Icon.tsx:394 - ArrowLeft (used in module)
+components/ui/Icon.tsx:395 - ArrowRight (used in module)
+components/ui/Icon.tsx:396 - X (used in module)
+components/ui/Icon.tsx:397 - Plus (used in module)
+components/ui/Icon.tsx:398 - Minus (used in module)
+components/ui/IconButton.tsx:6 - IconButtonProps (used in module)
+components/ui/IconButton.tsx:12 - IconButton (used in module)
+components/ui/Input.tsx:6 - InputProps (used in module)
+components/ui/Input.tsx:15 - Input (used in module)
+components/ui/Modal.tsx:18 - Modal
+components/ui/Modal.tsx:7 - ModalProps (used in module)
+components/ui/Sheet.tsx:17 - Sheet
+components/ui/Sheet.tsx:7 - SheetProps (used in module)
+components/ui/Skeleton.tsx:14 - Skeleton
+components/ui/Skeleton.tsx:6 - SkeletonProps (used in module)
+components/ui/Toast.tsx:27 - Toast
+components/ui/Toast.tsx:7 - ToastMessage (used in module)
+components/ui/Toast.tsx:15 - ToastProps (used in module)
+components/ui/VisuallyHidden.tsx:12 - VisuallyHidden
+components/ui/VisuallyHidden.tsx:5 - VisuallyHiddenProps (used in module)
+lib/analytics/client.ts:39 - track (used in module)
+lib/analytics/client.ts:131 - sanitize (used in module)
+lib/analytics/schema.ts:84 - isValidEvent
+lib/analytics/schema.ts:31 - MapView (used in module)
+lib/analytics/schema.ts:41 - PlaceInteraction (used in module)
+lib/analytics/schema.ts:51 - SearchEvent (used in module)
+lib/analytics/schema.ts:61 - QRScanEvent (used in module)
+lib/analytics/schema.ts:70 - WalletEvent (used in module)
+lib/auth/types.ts:1 - OAuthProviderType
+lib/auth/types.ts:2 - AuthMethod
+lib/auth/types.ts:4 - UserProfile
+lib/auth/types.ts:17 - SessionData
+lib/data/influencers-2025.ts:282 - getPostsByInfluencer
+lib/data/influencers-2025.ts:292 - getTrendingPosts
+lib/location/verification.ts:135 - batchVerifyLocations
+lib/location/verification.ts:188 - getVerificationHistory
+lib/location/verification.ts:13 - LocationVerificationState (used in module)
+lib/location/verification.ts:15 - LocationVerificationResult (used in module)
+lib/map/clustering.ts:23 - buildCluster
+lib/map/clustering.ts:53 - getClusters (used in module)
+lib/map/clustering.ts:64 - getClusterLeaves
+lib/map/clustering.ts:71 - getClusterExpansionZoom (used in module)
+lib/map/clustering.ts:7 - PointFeature (used in module)
+lib/map/clustering.ts:14 - ClusterConfig (used in module)
+lib/map/geohash.ts:32 - decodeGeohash (used in module)
+lib/map/geohash.ts:39 - distanceBetween
+lib/map/geohash.ts:7 - toGeohash5
+lib/map/nine-cell-prefetch.ts:27 - getNineCells (used in module)
+lib/map/nine-cell-prefetch.ts:68 - prefetchNineCells
+lib/map/nine-cell-prefetch.ts:167 - throttleMapEvent
+lib/map/nine-cell-prefetch.ts:8 - Cell
+lib/map/nine-cell-prefetch.ts:18 - PrefetchOptions (used in module)
+lib/receipt/verification.ts:226 - getReceiptHistory
+lib/receipt/verification.ts:247 - cleanupStaleReceipts
+lib/receipt/verification.ts:9 - ReceiptVerificationState (used in module)
+lib/receipt/verification.ts:11 - ReceiptVerificationResult (used in module)
+lib/receipt/verification.ts:23 - VerifyReceiptParams (used in module)
+lib/search/cache.ts:6 - SearchCacheKey (used in module)
+lib/search/cache.ts:18 - searchKey
+lib/search/cache.ts:24 - getCache
+lib/search/cache.ts:37 - setCache
+lib/search/cache.ts:44 - clearExpiredCache (used in module)
+lib/search/geo.ts:4 - centerOfGeoHash5
+lib/search/geo.ts:10 - geohash5Neighborhood
+lib/search/ranking.ts:14 - searchScore
+lib/search/ranking.ts:22 - proximityFromMeters
+lib/search/ranking.ts:31 - normalizePopularity
+lib/search/ranking.ts:40 - calculateAgeDecay
+lib/search/ranking.ts:3 - RankInput (used in module)
+lib/search/scoring.ts:42 - scoreSearchResults
+lib/search/scoring.ts:173 - generateSearchCacheKey
+lib/search/scoring.ts:8 - SearchResult (used in module)
+lib/search/scoring.ts:20 - SearchOptions (used in module)
+lib/search/scoring.ts:28 - ScoredResult (used in module)
+lib/search/validators.ts:4 - SearchQuerySchema (used in module)
+lib/search/validators.ts:13 - SearchQuery
+lib/server/db.ts:8 - prisma (used in module)
+lib/server/idempotency.ts:4 - IdempotencyResult (used in module)
+lib/server/logger.ts:73 - logCtx
+lib/server/logger.ts:97 - sanitizeLocation (used in module)
+lib/server/logger.ts:124 - REDACT_KEYS (used in module)
+lib/server/logger.ts:124 - sanitizeMeta (used in module)
+lib/server/rate-limit.ts:62 - checkAndConsume
+lib/server/rate-limit.ts:87 - addRateHeaders (used in module)
+lib/server/rate-limit.ts:5 - RateLimitResult (used in module)
+lib/server/redis.ts:24 - redis (used in module)
+lib/server/request-validation.ts:19 - safeParseJSON (used in module)
+lib/server/request-validation.ts:54 - validateRequest (used in module)
+lib/server/request-validation.ts:125 - createValidatedHandler
+lib/server/request-validation.ts:154 - validateQueryParams
+lib/server/request-validation.ts:229 - validateBodySize
+lib/server/request-validation.ts:254 - sanitizeString (used in module)
+lib/server/request-validation.ts:265 - sanitizeObject (used in module)
+lib/server/request-validation.ts:9 - ValidationError (used in module)
+lib/server/request-validation.ts:191 - CommonSchemas
+lib/wallet/redemption.ts:200 - getBalance
+lib/wallet/redemption.ts:216 - getTransactionHistory
+lib/wallet/redemption.ts:232 - debitWallet
+lib/wallet/redemption.ts:7 - RedeemVoucherParams (used in module)
+lib/wallet/redemption.ts:14 - RedemptionResult (used in module)
+.next/dev/types/routes.d.ts:47 - ParamsOf
+.next/dev/types/routes.d.ts:54 - PageRoutes (used in module)
+.next/dev/types/routes.d.ts:54 - RedirectRoutes (used in module)
+.next/dev/types/routes.d.ts:54 - RewriteRoutes (used in module)
+.next/dev/types/routes.d.ts:54 - AppRouteHandlerRoutes (used in module)
+app/(tabs)/explore/page.tsx:26 - default
+app/(tabs)/offers/page.tsx:22 - default
+app/(tabs)/scan/page.tsx:30 - default
+app/(tabs)/wallet/page.tsx:23 - default
+app/api/analytics/route.ts:3 - POST
+app/api/health/route.ts:7 - GET
+app/api/health/route.ts:2 - runtime
+app/api/offers/route.ts:15 - GET
+app/api/search/route.ts:19 - GET
+app/auth/login/page.tsx:9 - default
+app/auth/permissions/page.tsx:14 - default
+app/auth/verify-otp/page.tsx:191 - default
+app/api/auth/google/route.ts:4 - GET
+app/api/auth/instagram/route.ts:4 - GET
+app/api/auth/magic-link/route.ts:11 - POST
+app/api/auth/tiktok/route.ts:4 - GET
+app/api/location/verify/route.ts:15 - POST
+app/api/location/verify/route.ts:118 - GET
+app/api/location/verify/route.ts:122 - PUT
+app/api/location/verify/route.ts:126 - DELETE
+app/api/places/nearby/route.ts:25 - GET
+app/api/places/nearby/route.ts:2 - runtime
+app/api/qr/verify/route.ts:24 - POST
+app/api/qr/verify/route.ts:2 - runtime
+app/api/receipt/verify/route.ts:15 - POST
+app/api/receipt/verify/route.ts:128 - GET
+app/api/receipt/verify/route.ts:132 - PUT
+app/api/receipt/verify/route.ts:136 - DELETE
+app/api/receipts/ocr/route.ts:14 - POST
+app/api/receipts/ocr/route.ts:2 - runtime
+app/api/receipts/upload/route.ts:15 - POST
+app/api/receipts/upload/route.ts:2 - runtime
+app/api/verify/complete/route.ts:13 - POST
+app/api/verify/complete/route.ts:2 - runtime
+app/api/verify/location/route.ts:19 - POST
+app/api/verify/location/route.ts:2 - runtime
+app/api/wallet/redeem/route.ts:15 - POST
+app/api/wallet/redeem/route.ts:126 - GET
+app/api/wallet/redeem/route.ts:130 - PUT
+app/api/wallet/redeem/route.ts:134 - DELETE
+app/api/wallet/summary/route.ts:4 - GET
