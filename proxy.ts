@@ -8,31 +8,33 @@ const PUBLIC_PATHS = [
   '/splash',
   '/onboarding',
   '/auth',
-  '/feed',  // Allow guest access to feed
+  '/pass', // Allow guest access to browse/explore
+  '/explore', // Allow guest access to explore
+  '/feed', // Allow guest access to feed
   '/_next',
   '/favicon.ico',
+  '/manifest.webmanifest',
+  '/robots.txt',
+  '/sitemap.xml',
   '/api/health',
   '/api/analytics',
   '/api/auth',
+  '/api/places', // Public place queries
+  '/api/search', // Public search
 ];
 
 function isPublicPath(pathname: string): boolean {
   if (pathname === '/') return false;
-  return PUBLIC_PATHS.some(pub => pathname.startsWith(pub));
+  return PUBLIC_PATHS.some((pub) => pathname.startsWith(pub));
 }
 
 // Protected paths that require full authentication (no guest)
-const PROTECTED_PATHS = [
-  '/scan',
-  '/wallet',
-  '/offers',
-];
+const PROTECTED_PATHS = ['/scan', '/wallet', '/offers'];
 
 function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PATHS.some(path => 
-    pathname === path || 
-    pathname.startsWith(path + '/') ||
-    pathname.startsWith(path + '?')
+  return PROTECTED_PATHS.some(
+    (path) =>
+      pathname === path || pathname.startsWith(path + '/') || pathname.startsWith(path + '?')
   );
 }
 
@@ -54,9 +56,9 @@ export function proxy(req: NextRequest) {
   if (pathname.startsWith('/feed')) {
     const feedEnabled = process.env.FEATURE_FEED_LABS === 'true';
     if (!feedEnabled) {
-      return new NextResponse('Not Found', { 
+      return new NextResponse('Not Found', {
         status: 404,
-        headers: { 'Content-Type': 'text/plain' }
+        headers: { 'Content-Type': 'text/plain' },
       });
     }
   }
@@ -70,8 +72,8 @@ export function proxy(req: NextRequest) {
 
   // Protected API routes - require full authentication (no guest)
   const PROTECTED_API = [/^\/api\/wallet/, /^\/api\/qr/, /^\/api\/offers\/accept/];
-  const isProtectedAPI = PROTECTED_API.some(rx => rx.test(pathname));
-  
+  const isProtectedAPI = PROTECTED_API.some((rx) => rx.test(pathname));
+
   if (isProtectedAPI && !isAuthenticated) {
     return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
   }
