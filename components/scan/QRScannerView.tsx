@@ -42,7 +42,7 @@ export default function QRScannerView({
     } catch (error) {
       console.error('Camera permission denied:', error);
       setHasPermission(false);
-      onError('denied');
+      onError({ code: 'denied', message: 'Camera permission denied' });
     }
   };
 

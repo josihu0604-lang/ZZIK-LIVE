@@ -1,16 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { analytics } from '@/lib/analytics';
+import { useEffect, Suspense } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function RouteTracker() {
+function RouteTrackerInner() {
   const pathname = usePathname();
+  const search = useSearchParams();
 
   useEffect(() => {
-    // Track route views
-    analytics.routeView(pathname);
-  }, [pathname]);
+    // 여기에 분석/로그 전송 등 연결 (예: window.gtag?.('event', 'page_view', {...}))
+    // console.debug('[route]', pathname + (search?.toString() ? `?${search}` : ''));
+  }, [pathname, search]);
 
-  return null; // This component doesn't render anything
+  return null;
+}
+
+export default function RouteTracker() {
+  return (
+    <Suspense fallback={null}>
+      <RouteTrackerInner />
+    </Suspense>
+  );
 }
