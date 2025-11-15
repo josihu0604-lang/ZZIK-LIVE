@@ -116,6 +116,17 @@
   --z-modal-backdrop: 1040;
   --z-modal: 1050;
   --z-tooltip: 1070;
+  
+  /* ===== Aliases for Consistency ===== */
+  --surface: var(--bg-surface);
+  --primary: var(--brand);
+  --primary-dark: var(--brand-hover);
+  --muted: var(--text-muted);
+  --transition-base: var(--duration-base) var(--ease-out);
+  
+  /* ===== Safe Areas & Layout ===== */
+  --safe-x: max(16px, env(safe-area-inset-left));
+  --safe-max: 1280px;
 }
 
 /* ===== Dark Mode ===== */
@@ -266,6 +277,12 @@ body {
 }
 
 /* ===== Layout ===== */
+.zzik-app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .zzik-page {
   padding: var(--sp-4);
   max-width: 640px;
@@ -325,6 +342,23 @@ body {
   border-width: 0;
 }
 
+.skip-to-main {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--brand);
+  color: white;
+  padding: var(--sp-3) var(--sp-4);
+  text-decoration: none;
+  z-index: 9999;
+  border-radius: var(--radius);
+  margin: var(--sp-2);
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
 /* ===== Utility Classes ===== */
 .bg-subtle {
   background: var(--bg-subtle);
@@ -340,4 +374,102 @@ body {
 }
 .shadow {
   box-shadow: var(--shadow);
+}
+
+/* Container & Grid */
+.container {
+  width: 100%;
+  max-width: var(--safe-max);
+  margin: 0 auto;
+  padding: 0 var(--safe-x);
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gap-4 {
+  gap: var(--sp-4);
+}
+
+.gap-6 {
+  gap: var(--sp-6);
+}
+
+/* Spacing */
+.p-4 {
+  padding: var(--sp-4);
+}
+
+.mb-1 {
+  margin-bottom: var(--sp-1);
+}
+
+.mb-6 {
+  margin-bottom: var(--sp-6);
+}
+
+.pb-nav {
+  padding-bottom: 80px;
+}
+
+/* Typography Utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-2xl {
+  font-size: var(--text-2xl);
+}
+
+.font-bold {
+  font-weight: var(--font-bold);
+}
+
+.block {
+  display: block;
+}
+
+/* Heading shortcuts */
+.h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.sub {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: var(--sp-2) 0 0;
+}
+
+/* Responsive Utilities */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.col-span-full {
+  grid-column: 1 / -1;
 }
