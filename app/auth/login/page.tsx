@@ -11,10 +11,10 @@ export default function LoginPage() {
 
   return (
     <>
-      <main className="login-container">
-        <div className="login-content">
-          <header className="login-header">
-            <h1 className="text-h2">로그인</h1>
+      <main className="login-container page-full">
+        <div className="login-content container container-narrow mx-auto">
+          <header className="login-header mb-8">
+            <h1 className="text-h2 mb-3">로그인</h1>
             <p className="text-body text-secondary">
               나노 크리에이터 × 로컬 비즈니스. 신뢰는 검증으로부터.
             </p>
@@ -22,7 +22,7 @@ export default function LoginPage() {
 
           {/* ARIA-compliant tabs */}
           <nav
-            className="tab-nav"
+            className="tab-nav mb-6"
             role="tablist"
             aria-label="로그인 방식"
             aria-orientation="horizontal"
@@ -48,7 +48,7 @@ export default function LoginPage() {
           </nav>
 
           {/* Tab panels */}
-          <div className="tab-panels">
+          <div className="tab-panels mb-8">
             <TabPanel id="social" active={mode === 'social'}>
               <SocialButtons />
             </TabPanel>
@@ -61,7 +61,7 @@ export default function LoginPage() {
           </div>
 
           {/* Trust messaging */}
-          <div className="trust-message">
+          <div className="trust-message flex items-center gap-3 p-4 rounded-lg bg-subtle mb-8">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path
                 d="M8 1l2.5 5 5.5.8-4 3.9 1 5.8L8 13.5 2.5 16.5l1-5.8-4-3.9 5.5-.8L8 1z"
@@ -74,8 +74,8 @@ export default function LoginPage() {
           </div>
 
           {/* Footer links */}
-          <footer className="login-footer">
-            <div className="legal-links">
+          <footer className="login-footer flex justify-between items-center pt-6 border-t border-default">
+            <div className="legal-links flex items-center gap-2">
               <Link href="/legal/privacy" className="text-small text-muted">
                 개인정보
               </Link>

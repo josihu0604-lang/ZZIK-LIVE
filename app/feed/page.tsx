@@ -89,22 +89,30 @@ export default function FeedPage() {
         </button>
       </nav>
 
-      <div className={styles.stats}>
-        <div className={styles.statItem}>
-          <span className={styles.statValue}>{INFLUENCERS_2025.length}</span>
-          <span className={styles.statLabel}>크리에이터</span>
+      <div className={`${styles.stats} container mb-6 grid grid-cols-3 gap-4`}>
+        <div className={`${styles.statItem} text-center p-4 rounded-lg bg-subtle`}>
+          <span className={`${styles.statValue} block text-2xl font-bold mb-1`}>
+            {INFLUENCERS_2025.length}
+          </span>
+          <span className={`${styles.statLabel} text-small text-muted`}>크리에이터</span>
         </div>
-        <div className={styles.statItem}>
-          <span className={styles.statValue}>{FEED_POSTS_2025.length}</span>
-          <span className={styles.statLabel}>라이브 콘텐츠</span>
+        <div className={`${styles.statItem} text-center p-4 rounded-lg bg-subtle`}>
+          <span className={`${styles.statValue} block text-2xl font-bold mb-1`}>
+            {FEED_POSTS_2025.length}
+          </span>
+          <span className={`${styles.statLabel} text-small text-muted`}>라이브 콘텐츠</span>
         </div>
-        <div className={styles.statItem}>
-          <span className={styles.statValue}>{FEED_POSTS_2025.filter((p) => p.offer).length}</span>
-          <span className={styles.statLabel}>진행중 오퍼</span>
+        <div className={`${styles.statItem} text-center p-4 rounded-lg bg-subtle`}>
+          <span className={`${styles.statValue} block text-2xl font-bold mb-1`}>
+            {FEED_POSTS_2025.filter((p) => p.offer).length}
+          </span>
+          <span className={`${styles.statLabel} text-small text-muted`}>진행중 오퍼</span>
         </div>
       </div>
 
-      <div className={styles.grid}>
+      <div
+        className={`${styles.grid} container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-nav`}
+      >
         {filteredPosts.map((post) => {
           const influencer = getInfluencerById(post.influencerId);
           if (!influencer) return null;
