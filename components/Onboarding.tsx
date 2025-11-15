@@ -11,7 +11,7 @@ import {
   Zap,
   Heart
 } from 'lucide-react';
-import Button from './Button';
+import { Button } from './ui/Button';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -191,9 +191,9 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
                   <div className="flex gap-4">
                     <Button
                       variant="primary"
-                      size="large"
+                      size="lg"
                       onClick={onComplete}
-                      icon={Zap}
+
                       className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                     >
                       Get Started

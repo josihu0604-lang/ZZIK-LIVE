@@ -7,10 +7,10 @@ import { Map, QrCode, Wallet, Gift } from 'lucide-react';
 
 export default function BottomTabBar() {
   const pathname = usePathname();
-  const active = (href: string) => (pathname?.startsWith(href) ? 'page' : undefined);
+  const active = (href: string): "page" | undefined => (pathname?.startsWith(href) ? 'page' : undefined);
 
   const Item = ({ href, Icon, label }:{href:string; Icon:any; label:string}) => (
-    <Link href={href} aria-current={active(href)}
+    <Link href={href} aria-current={active(href) as any}
       className="text-body"
       style={{
         display:'grid', justifyItems:'center', gap:4, padding:'10px',

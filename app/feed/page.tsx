@@ -38,7 +38,6 @@ export default function FeedPage() {
 
   return (
     <main className={styles.main}>
-      {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className="h1">ZZIK LIVE</h1>
@@ -47,7 +46,7 @@ export default function FeedPage() {
         
         {isGuest && (
           <div className={styles.guestBanner} role="status" aria-live="polite">
-            <span>🎉 게스트 모드로 둘러보는 중</span>
+            <span>게스트 모드로 둘러보는 중</span>
             <button 
               type="button"
               className={styles.loginBtn}
@@ -60,7 +59,6 @@ export default function FeedPage() {
         )}
       </header>
 
-      {/* Filter Tabs */}
       <nav className={styles.filters} role="navigation" aria-label="피드 필터">
         <button
           type="button"
@@ -78,7 +76,7 @@ export default function FeedPage() {
           aria-pressed={filter === 'live'}
           aria-label="라이브 피드만 보기"
         >
-          🔴 LIVE
+          LIVE
         </button>
         <button
           type="button"
@@ -87,11 +85,10 @@ export default function FeedPage() {
           aria-pressed={filter === 'offers'}
           aria-label="할인 중인 피드만 보기"
         >
-          💰 할인중
+          할인중
         </button>
-      </div>
+      </nav>
 
-      {/* Stats Bar */}
       <div className={styles.stats}>
         <div className={styles.statItem}>
           <span className={styles.statValue}>{INFLUENCERS_2025.length}</span>
@@ -109,7 +106,6 @@ export default function FeedPage() {
         </div>
       </div>
 
-      {/* Feed Grid */}
       <div className={styles.grid}>
         {filteredPosts.map((post) => {
           const influencer = getInfluencerById(post.influencerId);

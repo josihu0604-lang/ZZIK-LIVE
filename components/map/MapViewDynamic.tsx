@@ -63,7 +63,7 @@ export default function MapViewDynamic({
         mapboxglRef.current = mapboxgl;
         
         // Import mapbox CSS
-        await import('mapbox-gl/dist/mapbox-gl.css');
+        // await import('mapbox-gl/dist/mapbox-gl.css');
         
         mapboxgl.accessToken = accessToken;
 

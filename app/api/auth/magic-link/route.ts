@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createRequestId, log } from '@/lib/server/logger';
-import { checkAndConsume, addRateHeaders } from '@/lib/server/rate-limit';
+import { checkRate, withRateHeaders } from '@/lib/server/rate-limit';
 import { nanoid } from 'nanoid';
 
 const MagicLinkSchema = z.object({
@@ -14,9 +14,10 @@ export async function POST(req: NextRequest) {
 
   try {
     // Rate limiting - 5 requests per minute per IP
-    const rateLimitResult = checkAndConsume(`magic-link:${clientIp}`, 5);
+    const rateMeta = await checkRate('magic-link', clientIp, 5, 60);
+    const allowed = rateMeta.remaining >= 0;
 
-    if (!rateLimitResult.ok) {
+    if (!allowed) {
       log('warn', 'Rate limit exceeded for magic link', {
         requestId,
         clientIp,
@@ -31,12 +32,7 @@ export async function POST(req: NextRequest) {
         { status: 429 }
       );
 
-      return addRateHeaders(
-        res,
-        5,
-        rateLimitResult.remaining,
-        rateLimitResult.reset_ms
-      );
+      return withRateHeaders(res, rateMeta);
     }
 
     const body = await req.json();
@@ -67,7 +63,7 @@ export async function POST(req: NextRequest) {
       email: email.slice(0, 3) + '***', // Partial masking for privacy
     });
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: 'Magic link sent to your email',
@@ -75,6 +71,8 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
+
+    return withRateHeaders(response, rateMeta);
   } catch (error) {
     if (error instanceof z.ZodError) {
       log('warn', 'Invalid request body', {

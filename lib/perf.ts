@@ -55,7 +55,8 @@ export function requestIdleCallback(
   }
 
   // Fallback to setTimeout
-  return window.setTimeout(callback, 1) as unknown as number;
+  // @ts-ignore
+  return (typeof window !== 'undefined' ? window.setTimeout(callback, 1) : 0) as unknown as number;
 }
 
 export function cancelIdleCallback(id: number): void {
@@ -280,4 +281,56 @@ export function getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
   if (width < 768) return 'mobile';
   if (width < 1024) return 'tablet';
   return 'desktop';
+}
+
+/**
+ * Performance metrics interface
+ */
+export interface PerformanceMetrics {
+  FCP?: number;
+  LCP?: number;
+  FID?: number;
+  CLS?: number;
+  TTFB?: number;
+  TTI?: number;
+  TBT?: number;
+  INP?: number;
+}
+
+/**
+ * Get performance metrics from browser Performance API
+ */
+export function getPerformanceMetrics(): PerformanceMetrics {
+  if (typeof window === 'undefined' || !window.performance) {
+    return {};
+  }
+
+  const metrics: PerformanceMetrics = {};
+
+  // Get navigation timing
+  const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+  if (navTiming) {
+    metrics.TTFB = navTiming.responseStart - navTiming.requestStart;
+  }
+
+  // Get paint timing
+  const paintEntries = performance.getEntriesByType('paint');
+  const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+  if (fcp) {
+    metrics.FCP = fcp.startTime;
+  }
+
+  // Get LCP if available
+  try {
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const lastEntry = entries[entries.length - 1] as any;
+      metrics.LCP = lastEntry.renderTime || lastEntry.loadTime;
+    });
+    observer.observe({ entryTypes: ['largest-contentful-paint'] });
+  } catch (e) {
+    // LCP not supported
+  }
+
+  return metrics;
 }

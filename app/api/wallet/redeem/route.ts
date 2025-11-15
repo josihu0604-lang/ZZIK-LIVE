@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { allowed, ...rateMeta } = await checkRate(`redeem:${userId}`, 10, 60);
+  const rateMeta = await checkRate('redeem', userId, 10, 60);
+  const allowed = rateMeta.remaining >= 0;
 
   if (!allowed) {
     log('warn', 'wallet.redeem.rate_limited', {
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
   // Idempotency key REQUIRED for financial transactions
   const idemKey = req.headers.get('idempotency-key') ?? '';
 
-  return withIdempotency(idemKey, async () => {
+  const idemResult = await withIdempotency(idemKey, async () => {
     try {
       const { voucherId, placeId } = body;
 
@@ -117,6 +118,8 @@ export async function POST(req: NextRequest) {
       return withRateHeaders(res, rateMeta);
     }
   });
+
+  return idemResult.value;
 }
 
 // Explicitly block other methods

@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
 
   // Rate limiting (20 requests per minute per IP)
   const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
-  const { allowed, ...rateMeta } = await checkRate(`location:${ip}`, 20, 60);
+  const rateMeta = await checkRate('location', ip, 20, 60);
+  const allowed = rateMeta.remaining >= 0;
 
   if (!allowed) {
     log('warn', 'location.verify.rate_limited', {
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
   // Idempotency key required
   const idemKey = req.headers.get('idempotency-key') ?? '';
 
-  return withIdempotency(idemKey, async () => {
+  const idemResult = await withIdempotency(idemKey, async () => {
     try {
       const body = await req.json();
       const { placeId, userGeohash5, userId } = body;
@@ -93,6 +94,8 @@ export async function POST(req: NextRequest) {
       return withRateHeaders(res, rateMeta);
     }
   });
+
+  return idemResult.value;
 }
 
 // Explicitly block other methods

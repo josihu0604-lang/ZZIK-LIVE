@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
-import { getPerformanceMetrics, PerformanceMetrics } from '../utils/performanceMonitor';
+import { getPerformanceMetrics, PerformanceMetrics } from '@/lib/perf';
 
 interface MetricThreshold {
   good: number;

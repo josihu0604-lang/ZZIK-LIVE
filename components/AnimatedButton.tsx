@@ -142,6 +142,17 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
       .filter(Boolean)
       .join(' ');
 
+    // Extract framer-motion conflicting props
+    const { 
+      onDrag, 
+      onDragStart, 
+      onDragEnd,
+      onAnimationStart,
+      onAnimationEnd,
+      onAnimationIteration,
+      ...restProps 
+    } = props;
+
     return (
       <motion.button
         ref={ref}
@@ -152,7 +163,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
         whileHover={!disabled && !loading ? "hover" : undefined}
         whileTap={!disabled && !loading ? "tap" : undefined}
         aria-busy={loading}
-        {...props}
+        {...restProps}
       >
         {!loading && Icon && iconPosition === 'left' && (
           <motion.span
