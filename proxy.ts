@@ -10,7 +10,7 @@ const PUBLIC_PATHS = [
   '/auth',
   '/pass', // Allow guest access to browse/explore
   '/explore', // Allow guest access to explore
-  '/feed', // Allow guest access to feed
+  '/content', // Allow guest access to content (renamed from feed)
   '/_next',
   '/favicon.ico',
   '/manifest.webmanifest',
@@ -52,16 +52,7 @@ export function proxy(req: NextRequest) {
   const guest = req.cookies.get('zzik_guest')?.value === '1';
   const isAuthenticated = !!(session || token || zl_auth);
 
-  // Block /feed route when FEATURE_FEED_LABS is not enabled
-  if (pathname.startsWith('/feed')) {
-    const feedEnabled = process.env.FEATURE_FEED_LABS === 'true';
-    if (!feedEnabled) {
-      return new NextResponse('Not Found', {
-        status: 404,
-        headers: { 'Content-Type': 'text/plain' },
-      });
-    }
-  }
+  // Content route is always available (renamed from feed)
 
   // Allow public paths for everyone
   if (isPublicPath(pathname)) {
@@ -98,7 +89,7 @@ export function proxy(req: NextRequest) {
 
   // Authenticated users trying to access auth pages
   if (isAuthenticated && pathname.startsWith('/auth/') && !pathname.includes('logout')) {
-    return NextResponse.redirect(new URL('/feed', req.url));
+    return NextResponse.redirect(new URL('/content', req.url));
   }
 
   // Create response with security headers
