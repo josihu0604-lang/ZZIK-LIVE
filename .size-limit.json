@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Client bundle (main)",
+    "path": ".next/static/**/*.js",
+    "limit": "500 KB"
+  },
+  {
+    "name": "Client bundle (pages)",
+    "path": ".next/static/chunks/pages/**/*.js",
+    "limit": "300 KB"
+  },
+  {
+    "name": "Shared chunks",
+    "path": ".next/static/chunks/*.js",
+    "limit": "200 KB"
+  }
+]
