@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createRequestId, log } from '@/lib/server/logger';
 import { checkRate, withRateHeaders } from '@/lib/server/rate-limit';
 import { nanoid } from 'nanoid';
+import { parseRequestJson } from '@/lib/api';
 
 const MagicLinkSchema = z.object({
   email: z.string().email().toLowerCase(),
@@ -35,21 +36,13 @@ export async function POST(req: NextRequest) {
       return withRateHeaders(res, rateMeta);
     }
 
-    // Safely parse JSON with error handling
-    let body;
-    try {
-      body = await req.json();
-    } catch (_parseError) {
+    // Parse JSON body
+    const result = await parseRequestJson<{ email: string }>(req);
+    if (!result.success) {
       log('warn', 'Invalid JSON payload', { requestId });
-      return NextResponse.json(
-        {
-          error: 'invalid_json',
-          message: 'Request body must be valid JSON',
-          requestId,
-        },
-        { status: 400 }
-      );
+      return result.error;
     }
+    const body = result.data!;
 
     const { email } = MagicLinkSchema.parse(body);
 

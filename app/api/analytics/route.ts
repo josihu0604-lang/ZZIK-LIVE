@@ -1,32 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { parseRequestJson, successResponse, errorResponse, commonErrors } from '@/lib/api';
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if request has a body
+    // Check content type
     const contentType = request.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
-      return NextResponse.json(
-        { success: false, error: 'Content-Type must be application/json' },
-        { status: 400 }
-      );
+      return errorResponse('INVALID_CONTENT_TYPE', 400, 'Content-Type must be application/json');
     }
 
-    // Safely parse JSON
-    let body;
-    try {
-      body = await request.json();
-    } catch (_parseError) {
-      return NextResponse.json({ success: false, error: 'Invalid JSON payload' }, { status: 400 });
+    // Parse JSON body
+    const result = await parseRequestJson<{ events: unknown }>(request);
+    if (!result.success) {
+      return result.error;
     }
 
-    const { events } = body;
+    const { events } = result.data!;
 
     // Validate events array
     if (!Array.isArray(events)) {
-      return NextResponse.json(
-        { success: false, error: 'Events must be an array' },
-        { status: 400 }
-      );
+      return errorResponse('INVALID_EVENTS', 400, 'Events must be an array');
     }
 
     // Log events in development
@@ -37,15 +30,11 @@ export async function POST(request: NextRequest) {
     // In production, send to analytics service
     // await sendToAnalyticsService(events);
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       received: events.length,
     });
   } catch (error) {
     console.error('[Analytics API] Error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to process events' },
-      { status: 500 }
-    );
+    return commonErrors.internalError();
   }
 }

@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { rateLimit } from '@/lib/server/rate-limit';
+import { parseRequestJsonOrDefault, errorResponse, commonErrors } from '@/lib/api';
 
 const schema = z.object({
   receiptId: z.string().min(1),
@@ -13,17 +14,11 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   // Parse request body
-  const body = await req.json().catch(() => ({}));
+  const body = await parseRequestJsonOrDefault(req, {});
   const parsed = schema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json(
-      {
-        error: 'INVALID_PARAMS',
-        details: parsed.error.flatten(),
-      },
-      { status: 422 }
-    );
+    return errorResponse('INVALID_PARAMS', 422, JSON.stringify(parsed.error.flatten()));
   }
 
   // Apply rate limiting
@@ -55,7 +50,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!receipt) {
-      return NextResponse.json({ error: 'RECEIPT_NOT_FOUND' }, { status: 404 });
+      return commonErrors.notFound('Receipt');
     }
 
     // Update OCR status
@@ -99,6 +94,6 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error('Receipt OCR error:', error);
-    return NextResponse.json({ error: 'INTERNAL_ERROR' }, { status: 500 });
+    return commonErrors.internalError();
   }
 }
