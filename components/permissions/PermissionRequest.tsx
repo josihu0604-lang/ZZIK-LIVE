@@ -42,7 +42,7 @@ export function LocationPermissionRequest({
           maximumAge: 0,
         }
       );
-    } catch (error) {
+    } catch (_error) {
       setError('브라우저가 위치 서비스를 지원하지 않습니다');
       setIsRequesting(false);
     }

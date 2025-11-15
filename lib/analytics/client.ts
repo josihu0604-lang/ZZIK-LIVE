@@ -2,7 +2,7 @@
 // Runtime privacy protection: sanitize before transmission
 
 import { nanoid } from 'nanoid';
-import type { AnalyticsEvent, EventBase } from './schema';
+import type { EventBase } from './schema';
 
 /**
  * Runtime sanitization: remove raw coordinates before transmission

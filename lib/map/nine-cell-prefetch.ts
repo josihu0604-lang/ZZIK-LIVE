@@ -3,7 +3,7 @@
  * Fetches center cell + 8 surrounding cells for smooth panning
  */
 
-import { getNeighbors, decode, encode } from '../geohash';
+import { getNeighbors as _getNeighbors } from '../geohash';
 
 export interface Cell {
   geohash6: string;

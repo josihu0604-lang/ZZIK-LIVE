@@ -25,7 +25,7 @@ export const redis = createRedisClient();
 
 // Health check
 redis.on('ready', () => {
-  console.log('✅ Redis connected successfully');
+  console.warn('✅ Redis connected successfully');
 });
 
 redis.on('error', (err) => {

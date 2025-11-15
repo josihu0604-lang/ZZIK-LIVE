@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRequestId, log } from '@/lib/server/logger';
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const requestId = createRequestId();
   const startTime = Date.now();
 

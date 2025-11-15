@@ -45,7 +45,7 @@ function calculateDistance(geohash1: string, geohash2: string): number {
  * Location verification record for idempotency tracking
  * Stored in dedicated table or Redis
  */
-interface LocationVerificationRecord {
+interface _LocationVerificationRecord {
   id: string;
   placeId: string;
   userGeohash5: string;
@@ -60,7 +60,7 @@ interface LocationVerificationRecord {
 /**
  * Generate idempotency key for location verification
  */
-function generateVerificationKey(placeId: string, userGeohash5: string, userId?: string): string {
+function _generateVerificationKey(placeId: string, userGeohash5: string, userId?: string): string {
   const data = `${placeId}:${userGeohash5}:${userId || 'anon'}`;
   return createHash('sha256').update(data).digest('hex');
 }
@@ -83,7 +83,7 @@ function generateVerificationKey(placeId: string, userGeohash5: string, userId?:
 export async function verifyLocation(
   placeId: string,
   userGeohash5: string,
-  userId?: string
+  _userId?: string
 ): Promise<LocationVerificationResult> {
   try {
     // Step 1: Look up place
@@ -185,7 +185,7 @@ export async function batchVerifyLocations(
  * @param limit - Maximum number of records to return
  * @returns Array of verification records
  */
-export async function getVerificationHistory(userId: string, limit: number = 50): Promise<any[]> {
+export async function getVerificationHistory(userId: string, _limit: number = 50): Promise<any[]> {
   // This would query a dedicated verification_logs table
   // For now, returning empty array as placeholder
   return [];

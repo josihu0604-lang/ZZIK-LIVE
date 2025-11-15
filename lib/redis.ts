@@ -66,6 +66,6 @@ if (redisUrl) {
   });
 
   redis.on('connect', () => {
-    console.log('Redis connected successfully');
+    console.warn('Redis connected successfully');
   });
 }

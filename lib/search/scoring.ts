@@ -89,7 +89,7 @@ function calculateTextRelevance(result: SearchResult, query: string): number {
   const tagTokens = result.tags?.map((t) => t.toLowerCase()) || [];
 
   let score = 0;
-  const k1 = 1.5; // Term frequency saturation
+  const _k1 = 1.5; // Term frequency saturation
   const b = 0.75; // Length normalization
 
   queryTokens.forEach((token) => {

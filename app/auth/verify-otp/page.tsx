@@ -89,7 +89,7 @@ function VerifyOTPForm() {
 
       // Navigate to main app
       router.replace('/(tabs)/explore');
-    } catch (error) {
+    } catch (_error) {
       setMessage('❌ 잘못된 인증 코드입니다. 다시 시도해주세요.');
       setCode(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();

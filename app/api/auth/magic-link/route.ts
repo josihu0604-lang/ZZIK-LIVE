@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     let body;
     try {
       body = await req.json();
-    } catch (parseError) {
+    } catch (_parseError) {
       log('warn', 'Invalid JSON payload', { requestId });
       return NextResponse.json(
         {
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
     const { email } = MagicLinkSchema.parse(body);
 
     // Generate magic link token
-    const token = nanoid(32);
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+    const _token = nanoid(32);
+    const _expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
     // TODO: Store token in database
     // await prisma.magicLinkToken.create({

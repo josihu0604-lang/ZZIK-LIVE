@@ -34,7 +34,7 @@ export default function ScanPage() {
   } | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
-  const handleQRCode = async (payload: string) => {
+  const handleQRCode = async (_payload: string) => {
     track('qr_scan_open', {
       offer_id: 'demo',
       location_granted: true,
@@ -83,7 +83,7 @@ export default function ScanPage() {
           retry_count: 0,
         });
       }
-    } catch (error) {
+    } catch (_error) {
       setScanResult({
         success: false,
         message: '⚠️ 검증 중 오류가 발생했습니다.',

@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { token, placeId, locGeohash5 } = parsed.data;
+  const { token, placeId, locGeohash5: _locGeohash5 } = parsed.data;
 
   // Execute verification with idempotency
   const exec = async (): Promise<VerifyResult> => {

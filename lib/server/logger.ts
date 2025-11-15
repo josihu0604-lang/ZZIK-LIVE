@@ -66,7 +66,7 @@ export function log(level: Level, msg: string, ctx: Record<string, unknown> = {}
 
   // Always use structured JSON logging
 
-  console.log(JSON.stringify(payload));
+  console.warn(JSON.stringify(payload));
 }
 
 // Structured logging with full context (backwards compatibility)
@@ -91,7 +91,7 @@ export function logCtx(level: Level, ctx: LogCtx): void {
 
   // Always use structured JSON logging
 
-  console.log(JSON.stringify(payload));
+  console.warn(JSON.stringify(payload));
 }
 
 export function sanitizeLocation(data: any): any {

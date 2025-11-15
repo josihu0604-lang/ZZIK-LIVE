@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic'; // Unused
 import { LocationPermissionRequest } from '../permissions/PermissionRequest';
 import { decode as decodeGeohash, encode as encodeGeohash } from '@/lib/geohash';
 import type { Map as MapboxMap } from 'mapbox-gl';

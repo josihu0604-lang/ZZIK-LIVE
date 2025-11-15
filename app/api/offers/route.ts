@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createRequestId, log } from '@/lib/server/logger';
-import { toGeohash6, expandNineCells } from '@/lib/map/geohash';
+import { expandNineCells } from '@/lib/map/geohash';
 
 const OffersQuerySchema = z.object({
   geohash5: z
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     if (query.geohash5) {
       // 위치 기반 검색 - geohash5를 geohash6로 확장
       const geohash6 = query.geohash5 + '0'; // Default expansion
-      const nearbyHashes = expandNineCells(geohash6);
+      const _nearbyHashes = expandNineCells(geohash6);
 
       // TODO: DB에서 가까운 오퍼 가져오기
       // const offers = await prisma.offer.findMany({

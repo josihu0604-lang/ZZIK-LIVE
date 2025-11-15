@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { CameraPermissionRequest } from '../permissions/PermissionRequest';
+// import { CameraPermissionRequest } from '../permissions/PermissionRequest'; // Unused
 
 interface QRScannerViewProps {
   onToken: (token: string) => void;
@@ -22,7 +22,7 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
   const [error, setError] = useState<string | null>(null);
   const [scanState, setScanState] = useState<ScanState>('idle');
   const [flashEnabled, setFlashEnabled] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
+  const [_retryCount, setRetryCount] = useState(0);
   const scanIntervalRef = useRef<NodeJS.Timeout>();
   const scanStartTimeRef = useRef<number>(0);
 
@@ -74,7 +74,7 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
                 const barcodes = await barcodeDetector.detect(videoRef.current);
                 if (barcodes.length > 0) {
                   const code = barcodes[0].rawValue;
-                  const tookMs = Date.now() - scanStartTimeRef.current;
+                  const _tookMs = Date.now() - scanStartTimeRef.current;
 
                   // Success haptic
                   vibrate([50, 100, 50]);
@@ -110,7 +110,7 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
     };
   }, [stream, onToken]);
 
-  const handleCameraGranted = async (mediaStream: MediaStream) => {
+  const _handleCameraGranted = async (mediaStream: MediaStream) => {
     setHasPermission(true);
     setStream(mediaStream);
 
@@ -120,7 +120,7 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
     }
   };
 
-  const handleCameraDenied = (err: Error) => {
+  const _handleCameraDenied = (err: Error) => {
     setHasPermission(false);
     setError('카메라 접근이 거부되었습니다');
     onError?.(err);

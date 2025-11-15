@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     let body;
     try {
       body = await request.json();
-    } catch (parseError) {
+    } catch (_parseError) {
       return NextResponse.json({ success: false, error: 'Invalid JSON payload' }, { status: 400 });
     }
 
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Log events in development
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Analytics API] Received events:', events);
+      console.warn('[Analytics API] Received events:', events);
     }
 
     // In production, send to analytics service
