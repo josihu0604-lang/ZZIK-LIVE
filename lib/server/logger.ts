@@ -61,12 +61,12 @@ export function createRequestId(): string {
 
 export function log(level: Level, msg: string, ctx: Record<string, unknown> = {}): void {
   const ts = new Date().toISOString();
-  const redacted = redact(ctx) as Record<string, unknown>;
-  const payload = { ts, level, msg, ...redacted };
+  const redactedCtx = redact(ctx) as Record<string, unknown>;
+  const payload = { ts, level, msg, ...redactedCtx };
 
   // Always use structured JSON logging
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(payload));
+
+  console.warn(JSON.stringify(payload));
 }
 
 // Structured logging with full context (backwards compatibility)
@@ -90,15 +90,15 @@ export function logCtx(level: Level, ctx: LogCtx): void {
   };
 
   // Always use structured JSON logging
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(payload));
+
+  console.warn(JSON.stringify(payload));
 }
 
-export function sanitizeLocation(data: any): any {
+export function sanitizeLocation(data: unknown): unknown {
   if (!data) return data;
 
-  if (typeof data === 'object') {
-    const sanitized = { ...data };
+  if (typeof data === 'object' && data !== null) {
+    const sanitized = { ...(data as Record<string, unknown>) };
     // Remove raw coordinates
     delete sanitized.lat;
     delete sanitized.lng;
