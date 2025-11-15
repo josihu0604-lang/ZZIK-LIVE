@@ -1,59 +1,50 @@
 import 'server-only';
-import { redis } from './redis';
+import { redis } from '@/lib/redis';
 
-interface IdempotencyResult<T> {
+export interface IdempotencyResult<T> {
   replay: boolean;
   value: T;
 }
 
 /**
- * Execute a function with idempotency support using Redis as cache
- * @param key - Unique key for this idempotent operation
- * @param fn - Function to execute
- * @param ttlSeconds - TTL for cached result in seconds (default: 24 hours)
- * @returns Object with replay flag and cached/computed value
+ * Wraps an async function with idempotency protection
+ * Ensures the same operation (identified by key) only executes once
+ * within the TTL window, returning cached results on replay
  */
 export async function withIdempotency<T>(
   key: string,
-  fn: () => Promise<T>,
-  ttlSeconds: number = 86400 // 24 hours default
+  exec: () => Promise<T>,
+  ttlSec: number = 60 * 60 * 24 // 24 hours default
 ): Promise<IdempotencyResult<T>> {
-  // Check if we have a cached result
-  const cached = await redis.get(`idem:${key}`);
-  
-  if (cached) {
-    try {
-      const parsed = JSON.parse(cached);
+  const cacheKey = `idem:${key}`;
+
+  try {
+    // Check for cached result
+    const cached = await (redis as any).get?.(cacheKey);
+    if (cached) {
       return {
         replay: true,
-        value: parsed as T
+        value: JSON.parse(cached) as T,
       };
-    } catch (e) {
-      console.error('Failed to parse cached idempotency value:', e);
-      // Continue to execute if cache parse fails
     }
+  } catch (err) {
+    console.error('Idempotency cache read error:', err);
+    // Continue execution on cache read error (fail-open)
   }
 
   // Execute the function
-  const result = await fn();
+  const value = await exec();
 
-  // Store the result with TTL
   try {
-    await redis.setex(`idem:${key}`, ttlSeconds, JSON.stringify(result));
-  } catch (e) {
-    console.error('Failed to cache idempotency result:', e);
-    // Continue even if caching fails
+    // Cache the result
+    await (redis as any).set?.(cacheKey, JSON.stringify(value), 'EX', ttlSec);
+  } catch (err) {
+    console.error('Idempotency cache write error:', err);
+    // Continue anyway on cache write error (fail-open)
   }
 
   return {
     replay: false,
-    value: result
+    value,
   };
-}
-
-/**
- * Clear idempotency cache for a specific key
- */
-export async function clearIdempotency(key: string): Promise<void> {
-  await redis.del(`idem:${key}`);
 }

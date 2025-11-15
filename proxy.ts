@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const PROTECTED_API = [/^\/api\/wallet/, /^\/api\/qr/, /^\/api\/offers\/accept/];
+
 // Next.js 16: Renamed from middleware() to proxy()
 // proxy.ts runs on Node.js runtime (Edge runtime deprecated for middleware)
 export function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
+  
+  // Protected API routes check
+  const isProtected = PROTECTED_API.some(rx => rx.test(pathname));
+  if (isProtected && !req.cookies.get('zzik_session')) {
+    return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
+  }
   
   // Block /feed route when FEATURE_FEED_LABS is not enabled
   if (pathname.startsWith('/feed')) {
@@ -36,13 +44,13 @@ export function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - api routes (API should handle their own security)
+     * Match all request paths including API routes for protection
+     * Exclude only:
      * - _next/static (static files)
      * - _next/image (image optimization)
      * - favicon.ico (favicon)
      * - public folder
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
   ],
 };
