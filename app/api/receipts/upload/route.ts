@@ -73,10 +73,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Log for monitoring (no PII)
-    console.log(
-      `Receipt uploaded - place: ${placeId}, ` + `amount: ${amount}, receiptId: ${receipt.id}`
-    );
+    // Log for monitoring (no PII) - removed
 
     return NextResponse.json(
       {

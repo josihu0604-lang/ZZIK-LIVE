@@ -102,9 +102,8 @@ export default function MapViewDynamic({
 
         // Map loaded event
         map.on('load', () => {
-          const tookMs = Date.now() - loadStartTime;
+          const _tookMs = Date.now() - loadStartTime;
           setIsMapLoaded(true);
-          console.log(`Map loaded in ${tookMs}ms`);
 
           // Add sample markers (would come from API in production)
           addSampleMarkers(map, mapboxgl);
@@ -122,7 +121,7 @@ export default function MapViewDynamic({
 
               // Add user marker
               if ((mapboxgl as any).Marker) {
-                const userMarker = new (mapboxgl as any).Marker({
+                const _userMarker = new (mapboxgl as any).Marker({
                   color: '#10B981',
                 })
                   .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -196,7 +195,7 @@ export default function MapViewDynamic({
 
       // Create marker with custom element
       if ((mapboxgl as any).Marker && (mapboxgl as any).Popup) {
-        const marker = new (mapboxgl as any).Marker(el)
+        const _marker = new (mapboxgl as any).Marker(el)
           .setLngLat([coords.longitude, coords.latitude])
           .setPopup(
             new (mapboxgl as any).Popup({ offset: 25 }).setHTML(`

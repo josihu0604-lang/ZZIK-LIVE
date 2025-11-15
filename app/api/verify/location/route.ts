@@ -97,11 +97,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Log for analytics (privacy-preserving)
-    console.log(
-      `Location verification - place: ${placeId}, ` +
-        `geohash5: ${userGeohash5}, distance: ${Math.round(distance)}m, ` +
-        `result: ${gpsOk ? 'OK' : 'TOO_FAR'}`
-    );
+    // Location verification - removed console.log
 
     // Optional: Log timestamp if provided
     if (ts) {

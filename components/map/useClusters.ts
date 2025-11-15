@@ -72,7 +72,6 @@ export function useClusters(points: Feature[], options: UseClusterOptions = {}):
 
         switch (response.type) {
           case 'built':
-            console.log(`Cluster index built with ${response.pointCount} points`);
             setReady(true);
             setLoading(false);
             break;

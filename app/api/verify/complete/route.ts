@@ -70,11 +70,7 @@ export async function POST(req: NextRequest) {
     const allowed = gpsOk && (qrOk || receiptOk);
 
     // Log verification result
-    console.log(
-      `Verification complete - place: ${placeId}, ` +
-        `gps: ${gpsOk}, qr: ${qrOk}, receipt: ${receiptOk}, ` +
-        `allowed: ${allowed}`
-    );
+    // Verification complete - removed console.log
 
     return NextResponse.json(
       {

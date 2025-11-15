@@ -37,7 +37,6 @@ export default function ExplorePage() {
 
   const handleLocationGranted = (geohash5: string) => {
     // Privacy-preserving: receives geohash5, not raw coordinates
-    console.log('Location granted with geohash5:', geohash5);
     track('map_view', {
       geohash5,
       zoom: 14,
@@ -100,7 +99,6 @@ export default function ExplorePage() {
             <ReelsCarousel
               items={sampleReels}
               onItemClick={(item) => {
-                console.log('Reel clicked:', item);
                 track('reel_click', { reel_id: item.id });
               }}
             />

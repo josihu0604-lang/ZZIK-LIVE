@@ -171,7 +171,6 @@ async function flushEvents(): Promise<void> {
         break;
       } else {
         // Development mode - just log
-        console.log('[Analytics] Events:', eventsToSend);
         break;
       }
     } catch (error) {

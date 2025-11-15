@@ -35,6 +35,8 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
+      // Prevent console usage except warn/error
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   }
 );

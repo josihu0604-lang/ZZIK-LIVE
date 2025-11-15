@@ -174,9 +174,8 @@ export function measurePerformance(name: string, fn: () => void): void {
 
   try {
     performance.measure(name, startMark, endMark);
-    const measure = performance.getEntriesByName(name)[0];
-    console.log(`[Perf] ${name}: ${measure.duration.toFixed(2)}ms`);
-  } catch (e) {
+    const _measure = performance.getEntriesByName(name)[0];
+  } catch (_e) {
     // Measurement failed
   }
 }
@@ -321,7 +320,7 @@ export function getPerformanceMetrics(): PerformanceMetrics {
       metrics.LCP = lastEntry.renderTime || lastEntry.loadTime;
     });
     observer.observe({ entryTypes: ['largest-contentful-paint'] });
-  } catch (e) {
+  } catch (_e) {
     // LCP not supported
   }
 

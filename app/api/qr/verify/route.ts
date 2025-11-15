@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
       ]);
 
       // Log geohash5 for analytics (privacy-preserving)
-      console.log(`QR verification success - place: ${placeId}, geohash5: ${locGeohash5}`);
+      // QR verification success
 
       return { state: 'ok' };
     } catch (error) {

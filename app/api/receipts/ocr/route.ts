@@ -82,11 +82,8 @@ export async function POST(req: NextRequest) {
           receiptOk: true,
         },
       });
-
-      console.log(`Receipt OCR success - receipt: ${receiptId}, ` + `place: ${receipt.placeId}`);
-    } else {
-      console.log(`Receipt OCR failed - receipt: ${receiptId}`);
     }
+    // OCR failed case - no action needed
 
     return NextResponse.json(
       {
