@@ -61,16 +61,17 @@ export async function validateRequest<T>(
   const parseResult = await safeParseJSON(request);
 
   if (!parseResult.success) {
+    const errorMessage = (parseResult as { success: false; error: string }).error;
     return {
       success: false,
       error: {
         error: 'invalid_json',
-        message: parseResult.error,
+        message: errorMessage,
       },
       response: NextResponse.json(
         {
           error: 'invalid_json',
-          message: parseResult.error,
+          message: errorMessage,
         },
         { status: 400 }
       ),
@@ -130,7 +131,8 @@ export function createValidatedHandler<T>(
     const validation = await validateRequest(request, schema);
 
     if (!validation.success) {
-      return validation.response;
+      return (validation as { success: false; error: ValidationError; response: NextResponse })
+        .response;
     }
 
     try {

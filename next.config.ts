@@ -57,7 +57,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: [process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'],
     },
-    instrumentationHook: true, // Enable instrumentation for Sentry
+    // instrumentationHook is now enabled by default in Next.js 16
   },
   async headers() {
     return [
@@ -135,22 +135,11 @@ const nextConfig: NextConfig = {
 };
 
 // Wrap config with Sentry and Bundle Analyzer
-const configWithSentry = withSentryConfig(
-  nextConfig,
-  {
-    // Sentry Webpack plugin options
-    silent: true, // Suppresses all logs
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_PROJECT,
-  },
-  {
-    // Sentry SDK options
-    widenClientFileUpload: true,
-    transpileClientSDK: true,
-    hideSourceMaps: true,
-    disableLogger: true,
-    automaticVercelMonitors: true,
-  }
-);
+// Using minimal config to avoid version-specific API issues
+const configWithSentry = withSentryConfig(nextConfig, {
+  silent: true,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+});
 
 export default withBundleAnalyzer(configWithSentry);
