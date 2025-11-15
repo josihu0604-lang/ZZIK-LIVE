@@ -95,8 +95,9 @@ export default function WalletPassesPage() {
     console.log('Use voucher:', voucherId);
   };
 
-  const daysUntilExpiry = (date: Date) => {
-    return Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const daysUntilExpiry = (date: Date | string) => {
+    const targetDate = typeof date === 'string' ? new Date(date) : date;
+    return Math.ceil((targetDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
   };
 
   return (
@@ -165,7 +166,10 @@ export default function WalletPassesPage() {
                   <div className="flex items-center gap-[var(--sp-1)] text-xs text-[var(--text-tertiary)] mb-4">
                     <Calendar size={14} strokeWidth={2} />
                     <span>
-                      {voucher.expiresAt.toLocaleDateString('ko-KR')} 까지
+                      {(typeof voucher.expiresAt === 'string' 
+                        ? new Date(voucher.expiresAt) 
+                        : voucher.expiresAt
+                      ).toLocaleDateString('ko-KR')} 까지
                     </span>
                   </div>
 

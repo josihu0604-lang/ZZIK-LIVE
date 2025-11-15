@@ -55,9 +55,9 @@ export default function ScanPage() {
     setShowScanner(false);
   };
 
-  const handleScanError = (code: ScanError) => {
-    console.error('Scan error:', code);
-    analytics.qrError(code);
+  const handleScanError = (error: ScanError) => {
+    console.error('Scan error:', error);
+    analytics.qrError((error.code || 'unknown') as 'not_found' | 'timeout' | 'denied' | 'unavailable' | 'unknown');
   };
 
   const handleClose = () => {

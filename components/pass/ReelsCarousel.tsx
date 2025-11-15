@@ -35,6 +35,8 @@ export default function ReelsCarousel({ items, onOpen }: ReelsCarouselProps) {
               fill
               className="object-cover"
               sizes="160px"
+              loading={index === 0 ? "eager" : "lazy"}
+              priority={index === 0}
             />
 
             {/* Gradient overlay */}

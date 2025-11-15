@@ -1,113 +1,63 @@
+// components/navigation/BottomTabBar.tsx
 'use client';
 
-import { TabName } from '@/types';
-import { Ticket, Gift, QrCode, Wallet } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Map, QrCode, Wallet, Gift } from 'lucide-react';
+import { memo } from 'react';
 
-interface BottomTabBarProps {
-  active?: TabName;
-  badges?: Partial<Record<'offers' | 'wallet', number>>;
-  onTabChange?: (tab: TabName) => void;
-}
-
-const tabs: Array<{
-  id: TabName;
-  label: string;
-  icon: typeof Ticket;
-  path: string;
-}> = [
-  { id: 'pass', label: '체험권', icon: Ticket, path: '/pass' },
-  { id: 'offers', label: '받은 오퍼', icon: Gift, path: '/offers' },
-  { id: 'scan', label: 'QR 스캔', icon: QrCode, path: '/scan' },
-  { id: 'wallet', label: '지갑', icon: Wallet, path: '/wallet' },
-];
-
-export default function BottomTabBar({
-  active,
-  badges,
-  onTabChange,
-}: BottomTabBarProps) {
-  const router = useRouter();
+function BottomTabBar() {
   const pathname = usePathname();
+  const active = (href: string): 'page' | undefined =>
+    pathname?.startsWith(href) ? 'page' : undefined;
 
-  // Determine active tab from pathname if not provided
-  const activeTab =
-    active ||
-    tabs.find((tab) => pathname.startsWith(tab.path))?.id ||
-    'pass';
-
-  const handleTabClick = (tab: TabName, path: string) => {
-    onTabChange?.(tab);
-    router.push(path);
-  };
+  const Item = ({
+    href,
+    Icon,
+    label,
+  }: {
+    href: string;
+    Icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+    label: string;
+  }) => (
+    <Link
+      href={href}
+      aria-current={active(href)}
+      className="text-body"
+      style={{
+        display: 'grid',
+        justifyItems: 'center',
+        gap: 4,
+        padding: '12px 10px',
+        minHeight: '48px',
+        color: active(href) ? 'var(--text)' : 'var(--text-muted)',
+        transition: 'all var(--duration-base)',
+        position: 'relative',
+      }}
+    >
+      <Icon size={24} strokeWidth={1.75} aria-hidden />
+      <span>{label}</span>
+    </Link>
+  );
 
   return (
     <nav
-      role="tablist"
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--bg-base)]/90 backdrop-blur-[2px] pb-[env(safe-area-inset-bottom)]"
-      aria-label="Main navigation"
+      aria-label="하단 내비게이션"
+      style={{
+        position: 'sticky',
+        bottom: 0,
+        background: '#fff',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4,1fr)',
+        borderTop: `1px solid var(--border)`,
+      }}
     >
-      <div className="flex items-center justify-around">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          const badge = badges?.[tab.id as 'offers' | 'wallet'];
-
-          return (
-            <button
-              key={tab.id}
-              role="tab"
-              aria-selected={isActive}
-              aria-controls={`${tab.id}-panel`}
-              onClick={() => handleTabClick(tab.id, tab.path)}
-              className="relative flex min-w-[72px] flex-col items-center gap-[var(--sp-1)] px-3 py-2 transition-colors duration-[var(--dur-md)]"
-            >
-              {/* Active indicator */}
-              {isActive && (
-                <div
-                  className="absolute left-0 right-0 top-0 h-0.5 bg-[var(--brand)] transition-opacity duration-[var(--dur-md)]"
-                  aria-hidden="true"
-                />
-              )}
-
-              {/* Icon with badge */}
-              <div className="relative">
-                <Icon
-                  size={24}
-                  className={
-                    isActive
-                      ? 'text-[var(--brand)]'
-                      : 'text-[var(--text-tertiary)]'
-                  }
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-
-                {badge && badge > 0 && (
-                  <span
-                    className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[var(--danger)] px-1 text-xs font-medium text-white animate-badge-pop"
-                    aria-label={`${badge} notifications`}
-                  >
-                    {badge > 99 ? '99+' : badge}
-                  </span>
-                )}
-              </div>
-
-              {/* Label */}
-              <span
-                className={`text-xs font-medium ${
-                  isActive
-                    ? 'text-[var(--brand)]'
-                    : 'text-[var(--text-tertiary)]'
-                }`}
-              >
-                {tab.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      <Item href="/pass" Icon={Map} label="탐색" />
+      <Item href="/offers" Icon={Gift} label="오퍼" />
+      <Item href="/scan" Icon={QrCode} label="스캔" />
+      <Item href="/wallet" Icon={Wallet} label="지갑" />
     </nav>
   );
 }
+
+export default memo(BottomTabBar);
