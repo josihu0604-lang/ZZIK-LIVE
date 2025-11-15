@@ -38,6 +38,7 @@ const ReelsCarousel = dynamic(() => import('@/components/reels/ReelsCarousel'), 
 
 export default function ExplorePage() {
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+  const hasMapboxToken = !!mapboxToken;
 
   useEffect(() => {
     // Track page view with geohash5 (not raw coordinates)
@@ -96,7 +97,34 @@ export default function ExplorePage() {
 
           {/* Map View */}
           <div style={{ marginBottom: '24px' }}>
-            <MapView accessToken={mapboxToken} onLocationGranted={handleLocationGranted} />
+            {hasMapboxToken ? (
+              <MapView accessToken={mapboxToken} onLocationGranted={handleLocationGranted} />
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  height: '400px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  borderRadius: 'var(--radius-lg)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 'var(--sp-6)',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+              >
+                <Icon name="map-pin" size={48} />
+                <h3 style={{ margin: 'var(--sp-4) 0 var(--sp-2) 0', fontSize: '20px' }}>
+                  지도 기능 준비 중
+                </h3>
+                <p style={{ margin: 0, opacity: 0.9, maxWidth: '400px' }}>
+                  현재 MapBox 토큰이 설정되지 않았습니다. 개발 환경에서는 주변 장소 목록으로
+                  대체됩니다.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* LIVE Reels Carousel */}

@@ -96,7 +96,7 @@ function PassContent() {
               icon="🗺️"
               title="지도 탐색"
               description="주변의 실시간 콘텐츠를 둘러보세요"
-              onClick={() => router.push('/(tabs)/explore')}
+              onClick={() => router.push('/explore')}
               available={true}
             />
 
@@ -122,7 +122,7 @@ function PassContent() {
               icon="🎁"
               title="오퍼"
               description="특별 혜택과 프로모션 확인"
-              onClick={() => router.push('/(tabs)/offers')}
+              onClick={() => router.push('/offers')}
               available={true}
             />
           </div>
