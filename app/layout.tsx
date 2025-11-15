@@ -1,18 +1,36 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import '../styles/tokens.css';
 
+// Geist for Latin characters - Modern, clean design
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', '-apple-system', 'sans-serif'],
+  adjustFontFallback: true, // Better CLS prevention
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
   display: 'swap',
+  preload: true,
+  fallback: ['monospace'],
+  adjustFontFallback: true,
+});
+
+// Noto Sans KR for Korean characters - Optimized for readability
+const notoSansKR = Noto_Sans_KR({
+  variable: '--font-noto-kr',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  preload: true,
+  fallback: ['sans-serif'],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -65,9 +83,13 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={[geistSans.variable, geistMono.variable, 'antialiased', 'zzik-app-shell'].join(
-          ' '
-        )}
+        className={[
+          geistSans.variable,
+          geistMono.variable,
+          notoSansKR.variable,
+          'antialiased',
+          'zzik-app-shell',
+        ].join(' ')}
       >
         <a href="#main-content" className="skip-to-main">
           Skip to main content

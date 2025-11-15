@@ -1,100 +1,176 @@
-/* Typography Scale System - WCAG AA Compliant */
-/* Geist 폰트 + System UI Fallback */
+/* Typography Scale System v2.0 - WCAG AA Compliant */
+/* Optimized for Korean + Latin text with variable fonts */
 
-/* 기본 폰트 스택 */
+/* 기본 폰트 스택 - 한글 최적화 */
 :root {
-  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'Geist Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+  /* Korean + Latin hybrid stack */
+  --font-sans: var(--font-noto-kr), var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  
+  /* Monospace for code */
+  --font-mono: var(--font-geist-mono), 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', 'D2Coding', monospace;
+  
+  /* Font rendering optimization */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
-/* Heading Scales */
+/* Heading Scales - Optimized for Korean readability */
 .h1 {
-  font: 700 32px/1.2 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3; /* Increased for Korean characters */
   letter-spacing: -0.01em;
+  color: var(--text);
   margin-bottom: var(--sp-4);
+  word-break: keep-all; /* Korean word wrapping */
+  overflow-wrap: break-word;
 }
 
 .h2 {
-  font: 600 24px/1.3 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
   letter-spacing: -0.008em;
+  color: var(--text);
   margin-bottom: var(--sp-3);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .h3 {
-  font: 600 20px/1.4 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
   letter-spacing: -0.006em;
+  color: var(--text);
   margin-bottom: var(--sp-3);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .h4 {
-  font: 600 18px/1.4 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
   letter-spacing: -0.004em;
+  color: var(--text);
   margin-bottom: var(--sp-2);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .h5 {
-  font: 500 16px/1.45 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
   color: var(--text);
   margin-bottom: var(--sp-2);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .h6 {
-  font: 500 14px/1.5 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
   color: var(--text);
   margin-bottom: var(--sp-2);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
-/* Body Text */
+/* Body Text - Korean optimized line heights */
 .body {
-  font: 400 16px/1.5 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7; /* Better for mixed Korean/Latin */
   color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .body-lg {
-  font: 400 18px/1.55 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
   color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
+.body-small,
 .small {
-  font: 400 14px/1.4 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
   color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .caption {
-  font: 400 12px/1.4 var(--font-sans);
-  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-muted);
   letter-spacing: 0.004em;
+  word-break: keep-all;
 }
 
 .overline {
-  font: 600 11px/1.5 var(--font-sans);
-  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-muted);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 /* Label */
 .label {
-  font: 500 14px/1.4 var(--font-sans);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--text);
   letter-spacing: 0.002em;
+  word-break: keep-all;
 }
 
-/* Display Text */
+/* Display Text - Large headings */
 .display {
-  font: 800 48px/1.1 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
   letter-spacing: -0.02em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .display-sm {
-  font: 700 40px/1.15 var(--font-sans);
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.25;
   letter-spacing: -0.015em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* 숫자 탭룰러 */
@@ -106,7 +182,9 @@
 .mono {
   font-family: var(--font-mono);
   font-size: 14px;
-  line-height: 1.4;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
 }
 
 /* 포커스 아웃라인 (전역) */
@@ -128,12 +206,111 @@ input[type="radio"] {
 }
 
 /* Text Color Utilities */
-.text-primary { color: var(--primary); }
-.text-muted { color: var(--muted); }
-.text-danger { color: var(--danger); }
+.text-primary { color: var(--text); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+.text-brand { color: var(--brand); }
+.text-danger { color: var(--error); }
 .text-warning { color: var(--warning); }
 .text-success { color: var(--success); }
 .text-info { color: var(--info); }
+
+/* Typography Aliases - For backward compatibility and consistency */
+.text-h1,
+.typo-h1,
+.typo-heading-1 {
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-h2,
+.typo-h2,
+.typo-heading-2 {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.008em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-h3,
+.typo-h3,
+.typo-heading-3 {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.006em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-h4,
+.typo-h4,
+.typo-heading-4 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.004em;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-body,
+.typo-body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-body-lg,
+.typo-body-large {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.text-small,
+.typo-small {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.typo-caption {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-muted);
+  letter-spacing: 0.004em;
+  word-break: keep-all;
+}
 
 /* Font Weight */
 .font-normal { font-weight: 400; }
@@ -194,14 +371,44 @@ input[type="radio"] {
   white-space: normal;
 }
 
-/* Responsive Typography */
+/* Responsive Typography - Mobile optimization */
 @media (max-width: 640px) {
-  .h1 { font-size: 28px; }
-  .h2 { font-size: 22px; }
-  .h3 { font-size: 18px; }
-  .h4 { font-size: 16px; }
-  .display { font-size: 40px; }
-  .display-sm { font-size: 32px; }
+  .h1 { 
+    font-size: 28px;
+    line-height: 1.35;
+  }
+  .h2 { 
+    font-size: 22px;
+    line-height: 1.45;
+  }
+  .h3 { 
+    font-size: 18px;
+    line-height: 1.55;
+  }
+  .h4 { 
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .body,
+  .body-lg {
+    line-height: 1.8; /* Extra breathing room on mobile */
+  }
+  .display { 
+    font-size: 40px;
+    line-height: 1.25;
+  }
+  .display-sm { 
+    font-size: 32px;
+    line-height: 1.3;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .h1 { font-size: 30px; }
+  .h2 { font-size: 23px; }
+  .display { font-size: 44px; }
+  .display-sm { font-size: 36px; }
 }
 
 /* 모션 감소 선호 사용자 */
