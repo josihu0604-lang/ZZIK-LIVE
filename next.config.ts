@@ -60,11 +60,7 @@ const nextConfig: NextConfig = {
     // instrumentationHook is now enabled by default in Next.js 16
   },
   // Allow cross-origin requests in development (sandbox environments)
-  ...(process.env.NODE_ENV === 'development' && {
-    devIndicators: {
-      appIsrStatus: false,
-    },
-  }),
+  // devIndicators 설정 제거 (Next.js 16에서 지원 안됨)
   async headers() {
     return [
       {
