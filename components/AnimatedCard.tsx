@@ -14,127 +14,127 @@ interface AnimatedCardProps {
 
 const cardVariants: Record<string, Variants> = {
   fadeIn: {
-    hidden: { 
-      opacity: 0 
+    hidden: {
+      opacity: 0,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       transition: {
         duration: 0.5,
-        ease: 'easeOut'
-      }
+        ease: 'easeOut',
+      },
     },
     hover: {
       scale: 1.02,
       transition: {
-        duration: 0.2
-      }
-    }
+        duration: 0.2,
+      },
+    },
   },
   slideUp: {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      y: 50 
+      y: 50,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+        ease: [0.25, 0.1, 0.25, 1],
+      },
     },
     hover: {
       y: -5,
       transition: {
-        duration: 0.2
-      }
-    }
+        duration: 0.2,
+      },
+    },
   },
   slideIn: {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      x: -50 
+      x: -50,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       x: 0,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+        ease: [0.25, 0.1, 0.25, 1],
+      },
     },
     hover: {
       x: 5,
       transition: {
-        duration: 0.2
-      }
-    }
+        duration: 0.2,
+      },
+    },
   },
   scale: {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      scale: 0.8 
+      scale: 0.8,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+        ease: [0.25, 0.1, 0.25, 1],
+      },
     },
     hover: {
       scale: 1.05,
       transition: {
-        duration: 0.2
-      }
-    }
+        duration: 0.2,
+      },
+    },
   },
   flip: {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      rotateY: 90 
+      rotateY: 90,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       rotateY: 0,
       transition: {
         duration: 0.6,
-        ease: 'easeOut'
-      }
+        ease: 'easeOut',
+      },
     },
     hover: {
       rotateY: 10,
       transition: {
-        duration: 0.3
-      }
-    }
+        duration: 0.3,
+      },
+    },
   },
   '3d': {
-    hidden: { 
+    hidden: {
       opacity: 0,
       rotateX: -30,
-      z: -100
+      z: -100,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       rotateX: 0,
       z: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+        ease: [0.25, 0.1, 0.25, 1],
+      },
     },
     hover: {
       z: 50,
       rotateX: -5,
       scale: 1.02,
       transition: {
-        duration: 0.3
-      }
-    }
-  }
+        duration: 0.3,
+      },
+    },
+  },
 };
 
 export const AnimatedCard: React.FC<AnimatedCardProps> = ({
@@ -144,7 +144,7 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
   animationType = 'fadeIn',
   delay = 0,
   interactive = false,
-  className = ''
+  className = '',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const currentVariants = cardVariants[animationType];
@@ -157,7 +157,7 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
     padding === 'small' && styles.smallPadding,
     padding === 'medium' && styles.mediumPadding,
     padding === 'large' && styles.largePadding,
-    className
+    className,
   ]
     .filter(Boolean)
     .join(' ');
@@ -168,13 +168,13 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
       variants={currentVariants}
       initial="hidden"
       animate="visible"
-      whileHover={interactive ? "hover" : undefined}
+      whileHover={interactive ? 'hover' : undefined}
       transition={{ delay }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       style={{
         perspective: animationType === '3d' ? 1000 : undefined,
-        transformStyle: animationType === '3d' ? 'preserve-3d' : undefined
+        transformStyle: animationType === '3d' ? 'preserve-3d' : undefined,
       }}
     >
       {children}
@@ -187,26 +187,19 @@ interface StaggeredCardsProps {
   staggerDelay?: number;
 }
 
-export const StaggeredCards: React.FC<StaggeredCardsProps> = ({
-  children,
-  staggerDelay = 0.1
-}) => {
+export const StaggeredCards: React.FC<StaggeredCardsProps> = ({ children, staggerDelay = 0.1 }) => {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: staggerDelay
-      }
-    }
+        staggerChildren: staggerDelay,
+      },
+    },
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
       {children}
     </motion.div>
   );
@@ -221,7 +214,7 @@ interface ParallaxCardProps {
 export const ParallaxCard: React.FC<ParallaxCardProps> = ({
   children,
   offset = 100,
-  className = ''
+  className = '',
 }) => {
   const [scrollY, setScrollY] = useState(0);
 
@@ -235,12 +228,12 @@ export const ParallaxCard: React.FC<ParallaxCardProps> = ({
     <motion.div
       className={`${styles.card} ${styles.elevated} ${className}`}
       style={{
-        y: scrollY * 0.5
+        y: scrollY * 0.5,
       }}
       transition={{
         type: 'spring',
         stiffness: 100,
-        damping: 30
+        damping: 30,
       }}
     >
       {children}
@@ -257,19 +250,19 @@ interface RevealCardProps {
 export const RevealCard: React.FC<RevealCardProps> = ({
   children,
   threshold = 0.1,
-  className = ''
+  className = '',
 }) => {
   return (
     <motion.div
       className={`${styles.card} ${styles.elevated} ${className}`}
       initial={{ opacity: 0, y: 50 }}
-      whileInView={{ 
-        opacity: 1, 
+      whileInView={{
+        opacity: 1,
         y: 0,
         transition: {
           duration: 0.6,
-          ease: [0.25, 0.1, 0.25, 1]
-        }
+          ease: [0.25, 0.1, 0.25, 1],
+        },
       }}
       viewport={{ once: true, amount: threshold }}
     >

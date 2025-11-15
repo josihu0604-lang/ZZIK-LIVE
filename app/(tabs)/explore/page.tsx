@@ -70,7 +70,9 @@ export default function ExplorePage() {
         <section className="zzik-page">
           <header className="zzik-col" style={{ marginBottom: '16px' }}>
             <h1 className="h2">
-              <span style={{ marginRight: '8px', verticalAlign: 'middle', display: 'inline-block' }}>
+              <span
+                style={{ marginRight: '8px', verticalAlign: 'middle', display: 'inline-block' }}
+              >
                 <Icon name="map-pin" size={24} />
               </span>
               Nearby LIVE Experiences
@@ -88,7 +90,9 @@ export default function ExplorePage() {
           {/* LIVE Reels Carousel */}
           <div>
             <h2 className="h4" style={{ marginBottom: '12px' }}>
-              <span style={{ marginRight: '8px', verticalAlign: 'middle', display: 'inline-block' }}>
+              <span
+                style={{ marginRight: '8px', verticalAlign: 'middle', display: 'inline-block' }}
+              >
                 <Icon name="trending-up" size={20} />
               </span>
               Popular LIVE Reels

@@ -21,10 +21,10 @@ export async function POST(req: NextRequest) {
   const { userId } = body;
 
   if (!userId) {
-    return new NextResponse(
-      JSON.stringify({ error: 'Missing userId' }),
-      { status: 422, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new NextResponse(JSON.stringify({ error: 'Missing userId' }), {
+      status: 422,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const rateMeta = await checkRate('redeem', userId, 10, 60);

@@ -16,7 +16,9 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
     // 민감 경로 보호
     const protectedPath =
-      pathname?.startsWith('/wallet') || pathname?.startsWith('/scan') || pathname?.startsWith('/offers/accept');
+      pathname?.startsWith('/wallet') ||
+      pathname?.startsWith('/scan') ||
+      pathname?.startsWith('/offers/accept');
 
     if (protectedPath && !authed) {
       router.replace(`/auth/login?next=${encodeURIComponent(pathname ?? '/')}`);
@@ -25,7 +27,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
     // 둘러보기 진입 시 쿠키(1일) 설정 - 보안 플래그 강화
     if (!authed && guest) {
-      const attrs = `path=/; max-age=${60*60*24}; samesite=lax${location.protocol==='https:' ? '; secure' : ''}`;
+      const attrs = `path=/; max-age=${60 * 60 * 24}; samesite=lax${location.protocol === 'https:' ? '; secure' : ''}`;
       document.cookie = `zzik_guest=1; ${attrs}`;
     }
     setReady(true);

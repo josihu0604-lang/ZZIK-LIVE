@@ -16,98 +16,98 @@ interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 const buttonVariants: Record<string, Variants> = {
   scale: {
     initial: { scale: 1 },
-    hover: { 
+    hover: {
       scale: 1.05,
       transition: {
         duration: 0.2,
-        ease: 'easeInOut'
-      }
+        ease: 'easeInOut',
+      },
     },
-    tap: { 
+    tap: {
       scale: 0.95,
       transition: {
-        duration: 0.1
-      }
-    }
+        duration: 0.1,
+      },
+    },
   },
   rotate: {
     initial: { rotate: 0 },
-    hover: { 
+    hover: {
       rotate: [0, -5, 5, -5, 0],
       transition: {
         duration: 0.5,
-        ease: 'easeInOut'
-      }
+        ease: 'easeInOut',
+      },
     },
-    tap: { 
+    tap: {
       rotate: 0,
-      scale: 0.95
-    }
+      scale: 0.95,
+    },
   },
   slide: {
     initial: { x: 0 },
-    hover: { 
+    hover: {
       x: [0, -5, 5, 0],
       transition: {
         duration: 0.3,
-        ease: 'easeInOut'
-      }
+        ease: 'easeInOut',
+      },
     },
-    tap: { 
+    tap: {
       x: 0,
-      scale: 0.95
-    }
+      scale: 0.95,
+    },
   },
   glow: {
-    initial: { 
-      boxShadow: '0 0 0 rgba(79, 70, 229, 0)'
+    initial: {
+      boxShadow: '0 0 0 rgba(79, 70, 229, 0)',
     },
-    hover: { 
+    hover: {
       boxShadow: [
         '0 0 0 rgba(79, 70, 229, 0)',
         '0 0 20px rgba(79, 70, 229, 0.5)',
         '0 0 40px rgba(79, 70, 229, 0.3)',
-        '0 0 20px rgba(79, 70, 229, 0.5)'
+        '0 0 20px rgba(79, 70, 229, 0.5)',
       ],
       transition: {
         duration: 1.5,
         repeat: Infinity,
-        ease: 'easeInOut'
-      }
+        ease: 'easeInOut',
+      },
     },
-    tap: { 
-      scale: 0.95
-    }
+    tap: {
+      scale: 0.95,
+    },
   },
   morph: {
-    initial: { 
+    initial: {
       borderRadius: '8px',
-      scale: 1
+      scale: 1,
     },
-    hover: { 
+    hover: {
       borderRadius: ['8px', '20px', '8px'],
       scale: [1, 1.05, 1.02],
       transition: {
         duration: 0.4,
-        ease: 'easeInOut'
-      }
+        ease: 'easeInOut',
+      },
     },
-    tap: { 
+    tap: {
       scale: 0.95,
-      borderRadius: '12px'
-    }
-  }
+      borderRadius: '12px',
+    },
+  },
 };
 
 const iconVariants: Variants = {
   initial: { rotate: 0 },
-  hover: { 
+  hover: {
     rotate: 360,
     transition: {
       duration: 0.5,
-      ease: 'easeInOut'
-    }
-  }
+      ease: 'easeInOut',
+    },
+  },
 };
 
 const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
@@ -137,20 +137,20 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
       loading && styles.loading,
       fullWidth && styles.fullWidth,
       isIconOnly && styles.iconOnly,
-      className
+      className,
     ]
       .filter(Boolean)
       .join(' ');
 
     // Extract framer-motion conflicting props
-    const { 
-      onDrag, 
-      onDragStart, 
+    const {
+      onDrag,
+      onDragStart,
       onDragEnd,
       onAnimationStart,
       onAnimationEnd,
       onAnimationIteration,
-      ...restProps 
+      ...restProps
     } = props;
 
     return (
@@ -160,8 +160,8 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
         disabled={disabled || loading}
         variants={currentVariants}
         initial="initial"
-        whileHover={!disabled && !loading ? "hover" : undefined}
-        whileTap={!disabled && !loading ? "tap" : undefined}
+        whileHover={!disabled && !loading ? 'hover' : undefined}
+        whileTap={!disabled && !loading ? 'tap' : undefined}
         aria-busy={loading}
         {...restProps}
       >
@@ -169,7 +169,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
           <motion.span
             variants={iconVariants}
             initial="initial"
-            whileHover={!disabled ? "hover" : undefined}
+            whileHover={!disabled ? 'hover' : undefined}
           >
             <Icon className={styles.icon} aria-hidden="true" />
           </motion.span>
@@ -179,7 +179,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
           <motion.span
             variants={iconVariants}
             initial="initial"
-            whileHover={!disabled ? "hover" : undefined}
+            whileHover={!disabled ? 'hover' : undefined}
           >
             <Icon className={styles.icon} aria-hidden="true" />
           </motion.span>

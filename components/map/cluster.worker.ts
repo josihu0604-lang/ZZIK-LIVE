@@ -11,7 +11,11 @@ let index: Supercluster<any, any> | null = null;
 
 // Worker message types
 export type WorkerMessage =
-  | { type: 'init'; points: GeoJSON.Feature<GeoJSON.Point>[]; options?: Supercluster.Options<any, any> }
+  | {
+      type: 'init';
+      points: GeoJSON.Feature<GeoJSON.Point>[];
+      options?: Supercluster.Options<any, any>;
+    }
   | { type: 'query'; bbox: [number, number, number, number]; zoom: number }
   | { type: 'getLeaves'; clusterId: number; limit?: number; offset?: number }
   | { type: 'getChildren'; clusterId: number }
@@ -24,7 +28,7 @@ self.onmessage = (e: MessageEvent<WorkerMessage>) => {
     switch (type) {
       case 'init': {
         const { points, options } = e.data;
-        
+
         // Initialize Supercluster with provided options or defaults
         index = new Supercluster<any, any>({
           radius: 60,

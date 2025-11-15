@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Heart, Star, ThumbsUp, Bookmark, Bell, Share2, Copy, Check } from 'lucide-react';
 
 // Like Button with heart animation
-export const LikeButton: React.FC<{ 
+export const LikeButton: React.FC<{
   initialLiked?: boolean;
   count?: number;
   onLike?: (liked: boolean) => void;
@@ -16,7 +16,7 @@ export const LikeButton: React.FC<{
     setLiked(newLikedState);
     setShowParticles(newLikedState);
     onLike?.(newLikedState);
-    
+
     if (newLikedState) {
       setTimeout(() => setShowParticles(false), 1000);
     }
@@ -29,10 +29,14 @@ export const LikeButton: React.FC<{
       aria-label={liked ? 'Unlike' : 'Like'}
     >
       <motion.div
-        animate={liked ? {
-          scale: [1, 1.2, 0.9, 1.1, 1],
-          rotate: [0, -10, 10, -10, 0]
-        } : {}}
+        animate={
+          liked
+            ? {
+                scale: [1, 1.2, 0.9, 1.1, 1],
+                rotate: [0, -10, 10, -10, 0],
+              }
+            : {}
+        }
         transition={{ duration: 0.4 }}
       >
         <Heart
@@ -42,7 +46,7 @@ export const LikeButton: React.FC<{
           }`}
         />
       </motion.div>
-      
+
       {count > 0 && (
         <AnimatePresence mode="wait">
           <motion.span
@@ -67,9 +71,9 @@ export const LikeButton: React.FC<{
               className="absolute top-1/2 left-1/2 w-1 h-1 bg-red-500 rounded-full"
               initial={{ x: 0, y: 0 }}
               animate={{
-                x: Math.cos(i * 60 * Math.PI / 180) * 30,
-                y: Math.sin(i * 60 * Math.PI / 180) * 30,
-                opacity: [1, 0]
+                x: Math.cos((i * 60 * Math.PI) / 180) * 30,
+                y: Math.sin((i * 60 * Math.PI) / 180) * 30,
+                opacity: [1, 0],
               }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             />
@@ -110,9 +114,7 @@ export const StarRating: React.FC<{
             <Star
               size={24}
               className={`transition-colors ${
-                filled 
-                  ? 'fill-yellow-500 text-yellow-500' 
-                  : 'text-gray-300 dark:text-gray-600'
+                filled ? 'fill-yellow-500 text-yellow-500' : 'text-gray-300 dark:text-gray-600'
               }`}
             />
           </motion.button>
@@ -148,28 +150,16 @@ export const CopyButton: React.FC<{
     >
       <AnimatePresence mode="wait">
         {copied ? (
-          <motion.div
-            key="check"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-          >
+          <motion.div key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
             <Check size={16} className="text-green-500" />
           </motion.div>
         ) : (
-          <motion.div
-            key="copy"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-          >
+          <motion.div key="copy" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
             <Copy size={16} className="text-gray-600 dark:text-gray-400" />
           </motion.div>
         )}
       </AnimatePresence>
-      <span className="text-sm font-medium">
-        {copied ? 'Copied!' : 'Copy'}
-      </span>
+      <span className="text-sm font-medium">{copied ? 'Copied!' : 'Copy'}</span>
     </motion.button>
   );
 };
@@ -185,7 +175,7 @@ export const NotificationBell: React.FC<{
     if (count > 0) {
       controls.start({
         rotate: [0, -15, 15, -15, 15, -10, 10, -5, 5, 0],
-        transition: { duration: 0.5 }
+        transition: { duration: 0.5 },
       });
     }
   }, [count, controls]);
@@ -199,7 +189,7 @@ export const NotificationBell: React.FC<{
       whileTap={{ scale: 0.9 }}
     >
       <Bell size={24} className="text-gray-600 dark:text-gray-400" />
-      
+
       {count > 0 && (
         <motion.span
           initial={{ scale: 0 }}
@@ -223,7 +213,7 @@ export const FloatingActionButton: React.FC<{
     'bottom-right': 'bottom-6 right-6',
     'bottom-left': 'bottom-6 left-6',
     'top-right': 'top-6 right-6',
-    'top-left': 'top-6 left-6'
+    'top-left': 'top-6 left-6',
   };
 
   return (
@@ -252,10 +242,10 @@ export const ProgressButton: React.FC<{
   const handleClick = async () => {
     setLoading(true);
     setProgress(0);
-    
+
     // Simulate progress
     const interval = setInterval(() => {
-      setProgress(prev => {
+      setProgress((prev) => {
         if (prev >= 90) {
           clearInterval(interval);
           return 90;
@@ -291,9 +281,7 @@ export const ProgressButton: React.FC<{
           transition={{ duration: 0.2 }}
         />
       )}
-      <span className="relative z-10">
-        {loading ? `${progress}%` : children}
-      </span>
+      <span className="relative z-10">{loading ? `${progress}%` : children}</span>
     </motion.button>
   );
 };
@@ -304,5 +292,5 @@ export default {
   CopyButton,
   NotificationBell,
   FloatingActionButton,
-  ProgressButton
+  ProgressButton,
 };

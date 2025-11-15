@@ -34,7 +34,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       styles[size],
       fullWidth && styles.fullWidth,
       loading && styles.loading,
-      className
+      className,
     ]
       .filter(Boolean)
       .join(' ');
@@ -42,13 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isDisabled = disabled || loading;
 
     return (
-      <button
-        ref={ref}
-        className={classes}
-        disabled={isDisabled}
-        aria-busy={loading}
-        {...props}
-      >
+      <button ref={ref} className={classes} disabled={isDisabled} aria-busy={loading} {...props}>
         {loading && (
           <span className={styles.spinner} aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

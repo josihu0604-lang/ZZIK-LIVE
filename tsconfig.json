@@ -39,9 +39,7 @@
     "app/api/_disabled", 
     "db/seed", 
     "tests",
-    "components/map/**",
     "components/qr/**",
-    "lib/qr/**",
-    "lib/receipt/**"
+    "lib/qr/**"
   ]
 }

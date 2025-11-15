@@ -21,7 +21,7 @@ export function Sheet({
   children,
   className = '',
   closeOnBackdrop = true,
-  closeOnEscape = true
+  closeOnEscape = true,
 }: SheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -66,7 +66,7 @@ export function Sheet({
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         const focusable = Array.from(focusableElements);
-        
+
         if (focusable.length === 0) return;
 
         const first = focusable[0];

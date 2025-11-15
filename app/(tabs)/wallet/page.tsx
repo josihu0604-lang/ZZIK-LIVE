@@ -75,10 +75,16 @@ export default function WalletPage() {
         <section className="zzik-page">
           <header className="zzik-col" style={{ marginBottom: '24px' }}>
             <h1 className="h2">
-              <Icon name="wallet" size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              <Icon
+                name="wallet"
+                size={24}
+                style={{ marginRight: '8px', verticalAlign: 'middle' }}
+              />
               My Wallet
             </h1>
-            <p className="body-small text-muted">Points and vouchers earned through triple verification</p>
+            <p className="body-small text-muted">
+              Points and vouchers earned through triple verification
+            </p>
           </header>
 
           {/* Points and Vouchers Grid */}
@@ -93,12 +99,13 @@ export default function WalletPage() {
             <div className="card" style={{ padding: '20px' }}>
               <div className="zzik-col" style={{ gap: '4px' }}>
                 <div className="caption text-muted">Points</div>
-                <div className="display-medium" style={{ fontSize: '28px', fontVariantNumeric: 'tabular-nums' }}>
+                <div
+                  className="display-medium"
+                  style={{ fontSize: '28px', fontVariantNumeric: 'tabular-nums' }}
+                >
                   {walletData.points.toLocaleString()}
                 </div>
-                <div className="caption text-success">
-                  +120 today
-                </div>
+                <div className="caption text-success">+120 today</div>
               </div>
             </div>
 
@@ -108,9 +115,7 @@ export default function WalletPage() {
                 <div className="display-medium" style={{ fontSize: '28px' }}>
                   {walletData.vouchers}
                 </div>
-                <div className="caption text-warning">
-                  {walletData.expiringSoon} expiring soon
-                </div>
+                <div className="caption text-warning">{walletData.expiringSoon} expiring soon</div>
               </div>
             </div>
           </div>
@@ -120,9 +125,7 @@ export default function WalletPage() {
             <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <div className="caption text-muted">Total Saved</div>
-                <div className="h3 text-primary">
-                  ₩{walletData.totalSaved.toLocaleString()}
-                </div>
+                <div className="h3 text-primary">₩{walletData.totalSaved.toLocaleString()}</div>
               </div>
               <Icon name="dollar-sign" size={32} className="text-primary" />
             </div>
@@ -132,7 +135,11 @@ export default function WalletPage() {
           {walletData.expiringItems.length > 0 && (
             <div>
               <h2 className="h4" style={{ marginBottom: '12px' }}>
-                <Icon name="clock" size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                <Icon
+                  name="clock"
+                  size={20}
+                  style={{ marginRight: '8px', verticalAlign: 'middle' }}
+                />
                 Expiring Soon
               </h2>
               <div className="grid" style={{ gap: '8px' }}>
@@ -158,7 +165,12 @@ export default function WalletPage() {
           )}
 
           {/* Action Buttons */}
-          <nav className="grid" style={{ gap: '12px', marginTop: '24px' }} role="navigation" aria-label="지갑 액션">
+          <nav
+            className="grid"
+            style={{ gap: '12px', marginTop: '24px' }}
+            role="navigation"
+            aria-label="지갑 액션"
+          >
             <button type="button" className="btn primary" aria-label="포인트 사용하기">
               <Icon name="gift" size={18} style={{ marginRight: '8px' }} />
               Use Points

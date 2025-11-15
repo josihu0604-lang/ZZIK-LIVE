@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function VerifyOTPPage() {
+function VerifyOTPForm() {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const [message, setMessage] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
@@ -120,7 +120,12 @@ export default function VerifyOTPPage() {
         </div>
 
         {/* OTP Input */}
-        <div className="row" style={{ justifyContent: 'center', gap: '8px' }} role="group" aria-label="OTP 6자리 입력 필드">
+        <div
+          className="row"
+          style={{ justifyContent: 'center', gap: '8px' }}
+          role="group"
+          aria-label="OTP 6자리 입력 필드"
+        >
           {code.map((digit, index) => (
             <input
               key={index}
@@ -180,5 +185,26 @@ export default function VerifyOTPPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function VerifyOTPPage() {
+  return (
+    <Suspense
+      fallback={
+        <main
+          id="main-content"
+          className="zzik-page"
+          style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}
+          role="main"
+        >
+          <div style={{ textAlign: 'center' }}>
+            <p className="muted typo-body">로딩 중...</p>
+          </div>
+        </main>
+      }
+    >
+      <VerifyOTPForm />
+    </Suspense>
   );
 }

@@ -23,19 +23,19 @@ export async function rateLimit(
   // Hash the identifier for privacy (e.g., IP address)
   const ident = sha256(identRaw || 'unknown');
   const key = `rl:${name}:${ident}`;
-  
+
   let used = 1;
   let ttl = windowSec;
-  
+
   try {
     // Increment counter
     used = (await (redis as any).incr?.(key)) ?? 1;
-    
+
     // Set expiry on first request
     if (used === 1) {
       await (redis as any).expire?.(key, windowSec);
     }
-    
+
     // Get remaining TTL
     ttl = (await (redis as any).ttl?.(key)) ?? windowSec;
   } catch (err) {
@@ -43,15 +43,15 @@ export async function rateLimit(
     // Fail-open: allow request on Redis error
     used = 0;
   }
-  
+
   const remaining = Math.max(0, limit - used);
-  
+
   return {
     key,
     limit,
     used,
     remaining,
-    reset: ttl
+    reset: ttl,
   };
 }
 
@@ -93,10 +93,7 @@ export function addRateHeaders(headers: Headers, result: RateLimitResult): void 
 /**
  * Add rate limit headers and return response
  */
-export function withRateHeaders(
-  response: Response,
-  result: RateLimitResult
-): Response {
+export function withRateHeaders(response: Response, result: RateLimitResult): Response {
   const headers = new Headers(response.headers);
   addRateHeaders(headers, result);
   return new Response(response.body, {

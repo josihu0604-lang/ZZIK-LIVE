@@ -61,10 +61,11 @@ export function createRequestId(): string {
 
 export function log(level: Level, msg: string, ctx: Record<string, unknown> = {}): void {
   const ts = new Date().toISOString();
-  const payload = { ts, level, msg, ...redact(ctx) };
+  const redactedCtx = redact(ctx) as Record<string, unknown>;
+  const payload = { ts, level, msg, ...redactedCtx };
 
   // Always use structured JSON logging
-   
+
   console.log(JSON.stringify(payload));
 }
 
@@ -89,7 +90,7 @@ export function logCtx(level: Level, ctx: LogCtx): void {
   };
 
   // Always use structured JSON logging
-   
+
   console.log(JSON.stringify(payload));
 }
 

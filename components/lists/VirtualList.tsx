@@ -20,7 +20,7 @@ export function VirtualList<T>({
   overscan = 3,
   className = '',
   onEndReached,
-  endReachedThreshold = 200
+  endReachedThreshold = 200,
 }: VirtualListProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -37,15 +37,21 @@ export function VirtualList<T>({
   const visibleItems = items.slice(startIndex, endIndex + 1);
 
   // Handle scroll
-  const handleScroll = useCallback((e: Event) => {
-    const target = e.target as HTMLDivElement;
-    setScrollTop(target.scrollTop);
+  const handleScroll = useCallback(
+    (e: Event) => {
+      const target = e.target as HTMLDivElement;
+      setScrollTop(target.scrollTop);
 
-    // Check if end reached
-    if (onEndReached && target.scrollHeight - target.scrollTop - target.clientHeight < endReachedThreshold) {
-      onEndReached();
-    }
-  }, [onEndReached, endReachedThreshold]);
+      // Check if end reached
+      if (
+        onEndReached &&
+        target.scrollHeight - target.scrollTop - target.clientHeight < endReachedThreshold
+      ) {
+        onEndReached();
+      }
+    },
+    [onEndReached, endReachedThreshold]
+  );
 
   // Update container height
   useEffect(() => {
@@ -83,15 +89,11 @@ export function VirtualList<T>({
           className={styles.content}
           style={{
             transform: `translateY(${startIndex * rowHeight}px)`,
-            willChange: 'transform'
+            willChange: 'transform',
           }}
         >
           {visibleItems.map((item, i) => (
-            <div
-              key={startIndex + i}
-              className={styles.row}
-              style={{ height: rowHeight }}
-            >
+            <div key={startIndex + i} className={styles.row} style={{ height: rowHeight }}>
               {renderItem(item, startIndex + i)}
             </div>
           ))}

@@ -35,21 +35,18 @@ interface UseClusterResult {
 /**
  * React hook for Web Worker-based map clustering
  * Offloads Supercluster computation to prevent main thread blocking
- * 
+ *
  * @param points - GeoJSON points to cluster
  * @param options - Clustering options
  * @returns Cluster state and methods
  */
-export function useClusters(
-  points: Feature[],
-  options: UseClusterOptions = {}
-): UseClusterResult {
+export function useClusters(points: Feature[], options: UseClusterOptions = {}): UseClusterResult {
   const workerRef = useRef<Worker | null>(null);
   const [ready, setReady] = useState(false);
   const [clusters, setClusters] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  
+
   // Initialize worker and build index
   useEffect(() => {
     if (!points || points.length === 0) {
@@ -63,32 +60,31 @@ export function useClusters(
 
     // Create worker
     try {
-      const worker = new Worker(
-        new URL('./cluster.worker.ts', import.meta.url),
-        { type: 'module' }
-      );
-      
+      const worker = new Worker(new URL('./cluster.worker.ts', import.meta.url), {
+        type: 'module',
+      });
+
       workerRef.current = worker;
 
       // Handle worker messages
       worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
         const response = e.data;
-        
+
         switch (response.type) {
           case 'built':
             console.log(`Cluster index built with ${response.pointCount} points`);
             setReady(true);
             setLoading(false);
             break;
-            
+
           case 'clusters':
             setClusters(response.clusters);
             break;
-            
+
           case 'expanded':
             // Handle expanded leaves if needed
             break;
-            
+
           case 'error':
             console.error('Worker error:', response.message);
             setError(response.message);
@@ -113,7 +109,7 @@ export function useClusters(
           minPoints: options.minPoints || 2,
         },
       };
-      
+
       worker.postMessage(buildMessage);
     } catch (err: any) {
       console.error('Failed to create worker:', err);
@@ -144,7 +140,7 @@ export function useClusters(
         bbox,
         zoom,
       };
-      
+
       workerRef.current.postMessage(queryMessage);
     },
     [ready]
@@ -176,7 +172,7 @@ export function useClusters(
           clusterId,
           clusterZoom,
         };
-        
+
         workerRef.current.postMessage(expandMessage);
       });
     },

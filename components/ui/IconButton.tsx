@@ -10,32 +10,13 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  (
-    {
-      size = 'md',
-      variant = 'default',
-      children,
-      className = '',
-      ...props
-    },
-    ref
-  ) => {
-    const classes = [
-      styles.iconButton,
-      styles[size],
-      styles[variant],
-      className
-    ]
+  ({ size = 'md', variant = 'default', children, className = '', ...props }, ref) => {
+    const classes = [styles.iconButton, styles[size], styles[variant], className]
       .filter(Boolean)
       .join(' ');
 
     return (
-      <button
-        ref={ref}
-        className={classes}
-        type="button"
-        {...props}
-      >
+      <button ref={ref} className={classes} type="button" {...props}>
         {children}
       </button>
     );

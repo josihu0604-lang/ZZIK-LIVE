@@ -25,7 +25,7 @@ export interface RedemptionResult {
 
 /**
  * Redeem voucher with strong idempotency and transactional guarantees
- * 
+ *
  * Flow:
  * 1. Start SERIALIZABLE transaction
  * 2. Lock voucher record for update
@@ -37,15 +37,13 @@ export interface RedemptionResult {
  * 8. Create new ledger entry (credit)
  * 9. Update voucher status to 'used'
  * 10. Commit transaction
- * 
+ *
  * If any step fails, entire transaction is rolled back
- * 
+ *
  * @param params - Redemption parameters
  * @returns Redemption result with new balance
  */
-export async function redeemVoucher(
-  params: RedeemVoucherParams
-): Promise<RedemptionResult> {
+export async function redeemVoucher(params: RedeemVoucherParams): Promise<RedemptionResult> {
   const { userId, voucherId, placeId, requestId } = params;
 
   try {

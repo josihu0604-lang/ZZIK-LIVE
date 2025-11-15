@@ -6,21 +6,21 @@
 /**
  * Creates a live region for screen reader announcements
  */
-export function createLiveRegion(options: {
-  politeness?: 'polite' | 'assertive';
-  atomic?: boolean;
-} = {}) {
-  const {
-    politeness = 'polite',
-    atomic = true
-  } = options;
+export function createLiveRegion(
+  options: {
+    politeness?: 'polite' | 'assertive';
+    atomic?: boolean;
+  } = {}
+) {
+  const { politeness = 'polite', atomic = true } = options;
 
   const el = document.createElement('div');
   el.setAttribute('aria-live', politeness);
   el.setAttribute('aria-atomic', atomic ? 'true' : 'false');
   el.className = 'sr-only';
-  el.style.cssText = 'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
-  
+  el.style.cssText =
+    'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
+
   document.body.appendChild(el);
 
   return {
@@ -29,7 +29,7 @@ export function createLiveRegion(options: {
     },
     destroy: () => {
       el.remove();
-    }
+    },
   };
 }
 
@@ -38,11 +38,11 @@ export function createLiveRegion(options: {
  */
 export function focusTrap(container: HTMLElement) {
   const focusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
-  
+
   function getFocusableElements() {
-    return Array.from(
-      container.querySelectorAll<HTMLElement>(focusableSelector)
-    ).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
+    );
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -96,10 +96,7 @@ export function isActivationKey(event: KeyboardEvent): boolean {
   return event.key === KeyCodes.ENTER || event.key === KeyCodes.SPACE;
 }
 
-export function preventDefaultForKeys(
-  event: KeyboardEvent,
-  keys: string[]
-): void {
+export function preventDefaultForKeys(event: KeyboardEvent, keys: string[]): void {
   if (keys.includes(event.key)) {
     event.preventDefault();
   }
@@ -137,14 +134,15 @@ export class RovingTabindexManager {
   private elements: HTMLElement[] = [];
   private currentIndex = 0;
 
-  constructor(private container: HTMLElement, private itemSelector: string) {
+  constructor(
+    private container: HTMLElement,
+    private itemSelector: string
+  ) {
     this.update();
   }
 
   update() {
-    this.elements = Array.from(
-      this.container.querySelectorAll<HTMLElement>(this.itemSelector)
-    );
+    this.elements = Array.from(this.container.querySelectorAll<HTMLElement>(this.itemSelector));
     this.updateTabindices();
   }
 

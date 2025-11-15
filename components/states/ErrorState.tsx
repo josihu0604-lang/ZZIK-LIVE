@@ -15,7 +15,13 @@ export function ErrorState({
         </span>
         <span className="typo-caption muted">{description}</span>
         {onRetry && (
-          <button type="button" className="btn ghost" onClick={onRetry} style={{ marginTop: '16px' }} aria-label="다시 시도하기">
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={onRetry}
+            style={{ marginTop: '16px' }}
+            aria-label="다시 시도하기"
+          >
             다시 시도
           </button>
         )}

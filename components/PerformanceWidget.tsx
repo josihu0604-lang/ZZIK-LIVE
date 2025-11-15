@@ -15,7 +15,7 @@ const thresholds: Record<string, MetricThreshold> = {
   TTFB: { good: 800, needsImprovement: 1800 },
   TTI: { good: 3800, needsImprovement: 7300 },
   TBT: { good: 200, needsImprovement: 600 },
-  INP: { good: 200, needsImprovement: 500 }
+  INP: { good: 200, needsImprovement: 500 },
 };
 
 const metricDescriptions: Record<string, string> = {
@@ -26,7 +26,7 @@ const metricDescriptions: Record<string, string> = {
   TTFB: 'Time to First Byte - Server response time',
   TTI: 'Time to Interactive - Time until page is fully interactive',
   TBT: 'Total Blocking Time - Sum of blocking time',
-  INP: 'Interaction to Next Paint - Responsiveness to user input'
+  INP: 'Interaction to Next Paint - Responsiveness to user input',
 };
 
 const PerformanceWidget: React.FC = () => {
@@ -36,8 +36,10 @@ const PerformanceWidget: React.FC = () => {
 
   useEffect(() => {
     // Only show in development or if explicitly enabled
-    if (process.env.NODE_ENV === 'development' || 
-        localStorage.getItem('showPerformanceWidget') === 'true') {
+    if (
+      process.env.NODE_ENV === 'development' ||
+      localStorage.getItem('showPerformanceWidget') === 'true'
+    ) {
       setIsVisible(true);
     }
 
@@ -55,11 +57,14 @@ const PerformanceWidget: React.FC = () => {
 
   if (!isVisible || !metrics) return null;
 
-  const getMetricStatus = (key: string, value: number | null): 'good' | 'needs-improvement' | 'poor' | 'unknown' => {
+  const getMetricStatus = (
+    key: string,
+    value: number | null
+  ): 'good' | 'needs-improvement' | 'poor' | 'unknown' => {
     if (value === null) return 'unknown';
     const threshold = thresholds[key];
     if (!threshold) return 'unknown';
-    
+
     if (value <= threshold.good) return 'good';
     if (value <= threshold.needsImprovement) return 'needs-improvement';
     return 'poor';
@@ -119,7 +124,8 @@ const PerformanceWidget: React.FC = () => {
   };
 
   const overallScore = calculateOverallScore();
-  const scoreStatus = overallScore >= 90 ? 'good' : overallScore >= 50 ? 'needs-improvement' : 'poor';
+  const scoreStatus =
+    overallScore >= 90 ? 'good' : overallScore >= 50 ? 'needs-improvement' : 'poor';
 
   return (
     <div className={`fixed bottom-4 right-4 z-50 ${isMinimized ? 'w-auto' : 'w-96'}`}>
@@ -129,11 +135,15 @@ const PerformanceWidget: React.FC = () => {
           <div className="flex items-center gap-2">
             <Activity size={20} className="text-blue-500" />
             <span className="font-semibold text-sm">Performance Monitor</span>
-            <span className={`text-xs font-bold px-2 py-1 rounded ${
-              scoreStatus === 'good' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
-              scoreStatus === 'needs-improvement' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
-              'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-            }`}>
+            <span
+              className={`text-xs font-bold px-2 py-1 rounded ${
+                scoreStatus === 'good'
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                  : scoreStatus === 'needs-improvement'
+                    ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                    : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+              }`}
+            >
               {overallScore}
             </span>
           </div>
@@ -144,11 +154,7 @@ const PerformanceWidget: React.FC = () => {
               aria-label={isMinimized ? 'Expand' : 'Minimize'}
             >
               <svg width="16" height="16" viewBox="0 0 16 16" className="fill-current">
-                {isMinimized ? (
-                  <path d="M3 5h10l-5 6z" />
-                ) : (
-                  <path d="M3 11h10l-5-6z" />
-                )}
+                {isMinimized ? <path d="M3 5h10l-5 6z" /> : <path d="M3 11h10l-5-6z" />}
               </svg>
             </button>
             <button
@@ -168,7 +174,10 @@ const PerformanceWidget: React.FC = () => {
               {Object.entries(metrics).map(([key, value]) => {
                 const status = getMetricStatus(key, value);
                 return (
-                  <div key={key} className="flex items-start gap-2 p-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <div
+                    key={key}
+                    className="flex items-start gap-2 p-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
                     {getStatusIcon(status)}
                     <div className="flex-1">
                       <div className="flex items-center justify-between">

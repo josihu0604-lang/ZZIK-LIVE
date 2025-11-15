@@ -2,9 +2,9 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 
-export default function PassPage() {
+function PassContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isGuest, setIsGuest] = useState(false);
@@ -50,9 +50,7 @@ export default function PassPage() {
             </div>
             <h1 className="text-h2">ZZIK LIVE Pass</h1>
             <p className="text-body text-secondary">
-              {isGuest
-                ? '게스트 모드로 둘러보는 중입니다'
-                : '지도 기반 실시간 경험을 탐색하세요'}
+              {isGuest ? '게스트 모드로 둘러보는 중입니다' : '지도 기반 실시간 경험을 탐색하세요'}
             </p>
           </header>
 
@@ -60,16 +58,33 @@ export default function PassPage() {
             <div className="guest-notice">
               <div className="notice-icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="10" cy="10" r="8" stroke="var(--warning)" strokeWidth="2" fill="none" />
-                  <path d="M10 6v5M10 13v1" stroke="var(--warning)" strokeWidth="2" strokeLinecap="round" />
+                  <circle
+                    cx="10"
+                    cy="10"
+                    r="8"
+                    stroke="var(--warning)"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M10 6v5M10 13v1"
+                    stroke="var(--warning)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </div>
               <div className="notice-content">
                 <h3 className="text-small">게스트 모드 안내</h3>
                 <p className="text-xs text-muted">
-                  현재 제한된 기능만 사용 가능합니다. 스캔, 지갑 등 주요 기능을 이용하려면 로그인이 필요합니다.
+                  현재 제한된 기능만 사용 가능합니다. 스캔, 지갑 등 주요 기능을 이용하려면 로그인이
+                  필요합니다.
                 </p>
-                <button type="button" onClick={() => router.push('/auth/login')} className="btn-primary notice-cta">
+                <button
+                  type="button"
+                  onClick={() => router.push('/auth/login')}
+                  className="btn-primary notice-cta"
+                >
                   로그인하기
                 </button>
               </div>
@@ -143,8 +158,8 @@ export default function PassPage() {
           display: flex;
           gap: var(--sp-3);
           padding: var(--sp-4);
-          background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-          border: 1px solid #F59E0B;
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          border: 1px solid #f59e0b;
           border-radius: var(--radius-lg);
           margin-bottom: var(--sp-6);
         }
@@ -181,6 +196,22 @@ export default function PassPage() {
   );
 }
 
+export default function PassPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="pass-container">
+          <div className="pass-content">
+            <p className="text-body text-secondary">로딩 중...</p>
+          </div>
+        </main>
+      }
+    >
+      <PassContent />
+    </Suspense>
+  );
+}
+
 function FeatureCard({
   icon,
   title,
@@ -198,7 +229,14 @@ function FeatureCard({
 }) {
   return (
     <>
-      <button type="button" onClick={onClick} className={`feature-card ${locked ? 'locked' : ''}`} disabled={!available && locked} role="button" aria-label={`${title} - ${description}`}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={`feature-card ${locked ? 'locked' : ''}`}
+        disabled={!available && locked}
+        role="button"
+        aria-label={`${title} - ${description}`}
+      >
         <div className="feature-icon">{icon}</div>
         <div className="feature-content">
           <h3 className="text-lg feature-title">
@@ -208,8 +246,21 @@ function FeatureCard({
           <p className="text-small text-muted feature-description">{description}</p>
         </div>
         {!locked && (
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="arrow-icon" aria-hidden="true">
-            <path d="M7 4l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="arrow-icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M7 4l6 6-6 6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </button>

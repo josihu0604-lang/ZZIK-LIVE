@@ -15,14 +15,16 @@ export interface ToastMessage {
 export interface ToastProps {
   messages: ToastMessage[];
   onRemove: (id: string) => void;
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
+  position?:
+    | 'top-right'
+    | 'top-left'
+    | 'bottom-right'
+    | 'bottom-left'
+    | 'top-center'
+    | 'bottom-center';
 }
 
-export function Toast({
-  messages,
-  onRemove,
-  position = 'top-right'
-}: ToastProps) {
+export function Toast({ messages, onRemove, position = 'top-right' }: ToastProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function Toast({
   if (!mounted) return null;
 
   const toasts = (
-    <div 
+    <div
       className={`${styles.container} ${styles[position]}`}
       role="region"
       aria-live="polite"
@@ -56,13 +58,9 @@ export function Toast({
           className={`${styles.toast} ${styles[message.type || 'info']}`}
           role="alert"
         >
-          <div className={styles.iconWrapper}>
-            {getIcon(message.type || 'info')}
-          </div>
+          <div className={styles.iconWrapper}>{getIcon(message.type || 'info')}</div>
           <div className={styles.content}>
-            {message.title && (
-              <div className={styles.title}>{message.title}</div>
-            )}
+            {message.title && <div className={styles.title}>{message.title}</div>}
             <div className={styles.message}>{message.message}</div>
           </div>
           <button

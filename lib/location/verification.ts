@@ -67,14 +67,14 @@ function generateVerificationKey(placeId: string, userGeohash5: string, userId?:
 
 /**
  * Verify user location against place location with idempotent 4-state management
- * 
+ *
  * Flow:
  * 1. Check if verification already exists (idempotency)
  * 2. Create verification record in 'pending' state
  * 3. Atomically transition to 'processing'
  * 4. Verify distance (≤ 100m)
  * 5. Atomically transition to 'success' or 'failed'
- * 
+ *
  * @param placeId - Place ID to verify against
  * @param userGeohash5 - User's current location (5-char geohash)
  * @param userId - User ID for audit trail (optional)
@@ -185,10 +185,7 @@ export async function batchVerifyLocations(
  * @param limit - Maximum number of records to return
  * @returns Array of verification records
  */
-export async function getVerificationHistory(
-  userId: string,
-  limit: number = 50
-): Promise<any[]> {
+export async function getVerificationHistory(userId: string, limit: number = 50): Promise<any[]> {
   // This would query a dedicated verification_logs table
   // For now, returning empty array as placeholder
   return [];

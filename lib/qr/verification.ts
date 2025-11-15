@@ -50,14 +50,14 @@ export function hashToken(token: string): string {
 
 /**
  * Verify QR token with idempotent 4-state management
- * 
+ *
  * Flow:
  * 1. Check if token exists and is in valid state
  * 2. Atomically transition to 'processing' state
  * 3. Verify distance (≤ 50m)
  * 4. Verify TTL not expired
  * 5. Atomically transition to 'success' or 'failed'
- * 
+ *
  * @param token - QR token string (will be hashed)
  * @param userGeohash5 - User's current location (5-char geohash)
  * @param userId - User ID for audit trail
@@ -72,57 +72,60 @@ export async function verifyQRToken(
 
   try {
     // Step 1: Find and lock token for processing
-    const qrToken = await prisma.$transaction(async (tx) => {
-      // Find token
-      const found = await tx.qRToken.findUnique({
-        where: { codeHash: tokenHash },
-        include: { place: true },
-      });
-
-      if (!found) {
-        return null;
-      }
-
-      // Check if already processed (idempotency)
-      if (found.status === 'success') {
-        return { ...found, alreadyProcessed: true };
-      }
-
-      if (found.status === 'failed' || found.status === 'expired') {
-        return { ...found, alreadyProcessed: true };
-      }
-
-      // Check if token is expired by TTL
-      const now = new Date();
-      const expiryTime = new Date(found.createdAt.getTime() + found.ttlSec * 1000);
-      if (now > expiryTime) {
-        // Mark as expired
-        const expired = await tx.qRToken.update({
-          where: { id: found.id },
-          data: {
-            status: 'expired',
-            failReason: 'Token expired due to TTL',
-          },
+    const qrToken = await prisma.$transaction(
+      async (tx) => {
+        // Find token
+        const found = await tx.qRToken.findUnique({
+          where: { codeHash: tokenHash },
           include: { place: true },
         });
-        return { ...expired, alreadyProcessed: true };
+
+        if (!found) {
+          return null;
+        }
+
+        // Check if already processed (idempotency)
+        if (found.status === 'success') {
+          return { ...found, alreadyProcessed: true };
+        }
+
+        if (found.status === 'failed' || found.status === 'expired') {
+          return { ...found, alreadyProcessed: true };
+        }
+
+        // Check if token is expired by TTL
+        const now = new Date();
+        const expiryTime = new Date(found.createdAt.getTime() + found.ttlSec * 1000);
+        if (now > expiryTime) {
+          // Mark as expired
+          const expired = await tx.qRToken.update({
+            where: { id: found.id },
+            data: {
+              status: 'expired',
+              failReason: 'Token expired due to TTL',
+            },
+            include: { place: true },
+          });
+          return { ...expired, alreadyProcessed: true };
+        }
+
+        // Atomically transition to 'processing' state
+        const processing = await tx.qRToken.update({
+          where: {
+            id: found.id,
+            status: 'pending', // Only update if still pending (prevents race conditions)
+          },
+          data: { status: 'processing' },
+          include: { place: true },
+        });
+
+        return processing;
+      },
+      {
+        timeout: 10000, // 10 second timeout
+        isolationLevel: 'Serializable', // Strongest isolation for idempotency
       }
-
-      // Atomically transition to 'processing' state
-      const processing = await tx.qRToken.update({
-        where: { 
-          id: found.id,
-          status: 'pending' // Only update if still pending (prevents race conditions)
-        },
-        data: { status: 'processing' },
-        include: { place: true },
-      });
-
-      return processing;
-    }, {
-      timeout: 10000, // 10 second timeout
-      isolationLevel: 'Serializable', // Strongest isolation for idempotency
-    });
+    );
 
     if (!qrToken) {
       return {

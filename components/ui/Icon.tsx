@@ -101,14 +101,14 @@ import {
   Shield,
 } from 'lucide-react';
 
-export type IconName = 
-  | 'map' 
+export type IconName =
+  | 'map'
   | 'map-pin'
-  | 'camera' 
-  | 'wallet' 
-  | 'gift' 
-  | 'search' 
-  | 'x' 
+  | 'camera'
+  | 'wallet'
+  | 'gift'
+  | 'search'
+  | 'x'
   | 'chevron-right'
   | 'chevron-left'
   | 'chevron-up'
@@ -203,105 +203,105 @@ export type IconName =
   | 'shield';
 
 const REGISTRY: Record<IconName, any> = {
-  'map': MapIcon,
+  map: MapIcon,
   'map-pin': MapPin,
-  'camera': Camera,
-  'wallet': Wallet,
-  'gift': Gift,
-  'search': Search,
-  'x': X,
+  camera: Camera,
+  wallet: Wallet,
+  gift: Gift,
+  search: Search,
+  x: X,
   'chevron-right': ChevronRight,
   'chevron-left': ChevronLeft,
   'chevron-up': ChevronUp,
   'chevron-down': ChevronDown,
-  'home': Home,
+  home: Home,
   'qr-code': QrCode,
-  'menu': Menu,
-  'settings': Settings,
-  'user': User,
+  menu: Menu,
+  settings: Settings,
+  user: User,
   'log-out': LogOut,
-  'check': Check,
+  check: Check,
   'alert-circle': AlertCircle,
-  'info': Info,
-  'zap': Zap,
+  info: Info,
+  zap: Zap,
   'trending-up': TrendingUp,
-  'star': Star,
-  'heart': Heart,
-  'share': Share2,
-  'download': Download,
-  'upload': Upload,
-  'loader': Loader2,
-  'eye': Eye,
+  star: Star,
+  heart: Heart,
+  share: Share2,
+  download: Download,
+  upload: Upload,
+  loader: Loader2,
+  eye: Eye,
   'eye-off': EyeOff,
-  'lock': Lock,
-  'unlock': Unlock,
-  'navigation': Navigation,
-  'target': Target,
-  'calendar': Calendar,
-  'clock': Clock,
+  lock: Lock,
+  unlock: Unlock,
+  navigation: Navigation,
+  target: Target,
+  calendar: Calendar,
+  clock: Clock,
   'dollar-sign': DollarSign,
   'credit-card': CreditCard,
-  'receipt': Receipt,
+  receipt: Receipt,
   'shopping-bag': ShoppingBag,
-  'store': Store,
-  'coffee': Coffee,
-  'utensils': Utensils,
-  'film': Film,
-  'music': Music,
-  'gamepad': Gamepad,
-  'sparkles': Sparkles,
-  'trophy': Trophy,
-  'award': Award,
-  'medal': Medal,
-  'flag': Flag,
-  'bookmark': Bookmark,
-  'bell': Bell,
+  store: Store,
+  coffee: Coffee,
+  utensils: Utensils,
+  film: Film,
+  music: Music,
+  gamepad: Gamepad,
+  sparkles: Sparkles,
+  trophy: Trophy,
+  award: Award,
+  medal: Medal,
+  flag: Flag,
+  bookmark: Bookmark,
+  bell: Bell,
   'bell-off': BellOff,
   'message-circle': MessageCircle,
-  'send': Send,
-  'plus': Plus,
-  'minus': Minus,
+  send: Send,
+  plus: Plus,
+  minus: Minus,
   'more-horizontal': MoreHorizontal,
   'more-vertical': MoreVertical,
-  'filter': Filter,
+  filter: Filter,
   'sort-asc': SortAsc,
   'sort-desc': SortDesc,
-  'grid': Grid,
-  'list': List,
-  'layers': Layers,
-  'maximize': Maximize,
-  'minimize': Minimize,
-  'refresh': RefreshCw,
-  'rotate': RotateCw,
+  grid: Grid,
+  list: List,
+  layers: Layers,
+  maximize: Maximize,
+  minimize: Minimize,
+  refresh: RefreshCw,
+  rotate: RotateCw,
   'arrow-left': ArrowLeft,
   'arrow-right': ArrowRight,
   'arrow-up': ArrowUp,
   'arrow-down': ArrowDown,
   'external-link': ExternalLink,
-  'link': Link2,
-  'copy': Copy,
-  'clipboard': Clipboard,
+  link: Link2,
+  copy: Copy,
+  clipboard: Clipboard,
   'file-text': FileText,
-  'image': Image,
-  'video': Video,
-  'mic': Mic,
+  image: Image,
+  video: Video,
+  mic: Mic,
   'mic-off': MicOff,
-  'volume': Volume2,
+  volume: Volume2,
   'volume-x': VolumeX,
-  'wifi': Wifi,
+  wifi: Wifi,
   'wifi-off': WifiOff,
-  'battery': Battery,
+  battery: Battery,
   'battery-low': BatteryLow,
-  'sun': Sun,
-  'moon': Moon,
-  'cloud': Cloud,
+  sun: Sun,
+  moon: Moon,
+  cloud: Cloud,
   'cloud-rain': CloudRain,
-  'wind': Wind,
-  'thermometer': Thermometer,
-  'droplets': Droplets,
-  'flashlight': Flashlight,
+  wind: Wind,
+  thermometer: Thermometer,
+  droplets: Droplets,
+  flashlight: Flashlight,
   'flashlight-off': FlashlightOff,
-  'shield': Shield,
+  shield: Shield,
 };
 
 interface IconProps {
@@ -318,23 +318,23 @@ interface IconProps {
 /**
  * Unified Icon component using lucide-react
  * Replaces all emoji usage with consistent SVG icons
- * 
+ *
  * @example
  * <Icon name="map-pin" size={20} />
  * <Icon name="camera" size={24} className="text-primary" />
  */
-export function Icon({ 
-  name, 
-  size = 20, 
-  strokeWidth = 2, 
-  className, 
+export function Icon({
+  name,
+  size = 20,
+  strokeWidth = 2,
+  className,
   color,
   style,
   'aria-hidden': ariaHidden = true,
   'aria-label': ariaLabel,
 }: IconProps) {
   const Component = REGISTRY[name];
-  
+
   if (!Component) {
     console.warn(`Icon "${name}" not found in registry`);
     return null;
@@ -344,9 +344,9 @@ export function Icon({
   if (style) {
     return (
       <span style={style}>
-        <Component 
-          size={size} 
-          strokeWidth={strokeWidth} 
+        <Component
+          size={size}
+          strokeWidth={strokeWidth}
           className={className}
           color={color}
           aria-hidden={ariaHidden}
@@ -357,9 +357,9 @@ export function Icon({
   }
 
   return (
-    <Component 
-      size={size} 
-      strokeWidth={strokeWidth} 
+    <Component
+      size={size}
+      strokeWidth={strokeWidth}
       className={className}
       color={color}
       aria-hidden={ariaHidden}

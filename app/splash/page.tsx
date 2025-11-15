@@ -31,9 +31,7 @@ export default function Splash() {
             <h1 className="text-h1">ZZIK LIVE</h1>
             <div className="brand-indicator" />
           </div>
-          <p className="text-body text-muted splash-tagline">
-            지도로 증명되는 LIVE 체험
-          </p>
+          <p className="text-body text-muted splash-tagline">지도로 증명되는 LIVE 체험</p>
         </div>
       </main>
       <style jsx>{`
@@ -80,12 +78,20 @@ export default function Splash() {
           }
         }
         @keyframes expandWidth {
-          from { width: 0; }
-          to { width: 32px; }
+          from {
+            width: 0;
+          }
+          to {
+            width: 32px;
+          }
         }
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
       `}</style>
     </>

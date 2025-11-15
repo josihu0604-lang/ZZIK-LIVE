@@ -16,20 +16,15 @@ export function Skeleton({
   width,
   height,
   animation = true,
-  className = ''
+  className = '',
 }: SkeletonProps) {
-  const classes = [
-    styles.skeleton,
-    styles[variant],
-    animation && styles.animate,
-    className
-  ]
+  const classes = [styles.skeleton, styles[variant], animation && styles.animate, className]
     .filter(Boolean)
     .join(' ');
 
   const style: React.CSSProperties = {
     width: width ? (typeof width === 'number' ? `${width}px` : width) : undefined,
-    height: height ? (typeof height === 'number' ? `${height}px` : height) : undefined
+    height: height ? (typeof height === 'number' ? `${height}px` : height) : undefined,
   };
 
   return <div className={classes} style={style} aria-hidden="true" />;

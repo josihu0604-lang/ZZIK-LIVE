@@ -12,7 +12,7 @@ export interface ReceiptVerificationResult {
   state: ReceiptVerificationState;
   message?: string;
   ocrData?: {
-    total?: number;
+    amount?: number; // Changed from total to match Prisma schema
     items?: Array<{ name: string; price: number }>;
     date?: string;
     merchantName?: string;
@@ -23,24 +23,24 @@ export interface ReceiptVerificationResult {
 export interface VerifyReceiptParams {
   userId: string;
   placeId: string;
-  mediaUrl: string;
+  fileKey: string; // Changed from mediaUrl to match Prisma schema
   expectedTotal?: number;
 }
 
 /**
  * Generate hash for receipt deduplication
- * Based on mediaUrl to prevent duplicate submissions
+ * Based on fileKey to prevent duplicate submissions
  */
-function generateReceiptHash(mediaUrl: string): string {
-  return createHash('sha256').update(mediaUrl).digest('hex');
+function generateReceiptHash(fileKey: string): string {
+  return createHash('sha256').update(fileKey).digest('hex');
 }
 
 /**
  * Mock OCR function - replace with actual OCR service
  * In production, this would call Google Vision API, AWS Textract, etc.
  */
-async function performOCR(mediaUrl: string): Promise<{
-  total?: number;
+async function performOCR(fileKey: string): Promise<{
+  amount?: number; // Changed from total to match Prisma schema
   items?: Array<{ name: string; price: number }>;
   date?: string;
   merchantName?: string;
@@ -51,13 +51,13 @@ async function performOCR(mediaUrl: string): Promise<{
 
   // Mock OCR result
   // In production, this would:
-  // 1. Download image from mediaUrl
+  // 1. Download image from fileKey
   // 2. Send to OCR service
   // 3. Parse structured data from OCR response
-  // 4. Validate fields (total, date, merchant name)
-  
+  // 4. Validate fields (amount, date, merchant name)
+
   return {
-    total: 15000, // Mock total in KRW
+    amount: 15000, // Mock amount in KRW
     items: [
       { name: '아메리카노', price: 4500 },
       { name: '카페라떼', price: 5000 },
@@ -71,7 +71,7 @@ async function performOCR(mediaUrl: string): Promise<{
 
 /**
  * Verify receipt with idempotent 4-state management and OCR caching
- * 
+ *
  * Flow:
  * 1. Check if receipt already exists (deduplication by mediaUrl hash)
  * 2. Create receipt record in 'pending' state
@@ -79,15 +79,15 @@ async function performOCR(mediaUrl: string): Promise<{
  * 4. Perform OCR (if not cached)
  * 5. Validate OCR results against expected values
  * 6. Atomically transition to 'completed' or 'failed'
- * 
+ *
  * @param params - Receipt verification parameters
  * @returns Verification result with OCR data
  */
 export async function verifyReceipt(
   params: VerifyReceiptParams
 ): Promise<ReceiptVerificationResult> {
-  const { userId, placeId, mediaUrl, expectedTotal } = params;
-  const mediaHash = generateReceiptHash(mediaUrl);
+  const { userId, placeId, fileKey, expectedTotal } = params;
+  const fileHash = generateReceiptHash(fileKey);
 
   try {
     // Step 1: Check for existing receipt (idempotency)
@@ -95,7 +95,7 @@ export async function verifyReceipt(
       where: {
         userId,
         placeId,
-        mediaUrl,
+        fileKey, // Changed from mediaUrl
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -111,15 +111,15 @@ export async function verifyReceipt(
 
     // Step 2: Create or update receipt record
     let receipt = existing;
-    
+
     if (!receipt) {
       // Create new receipt
       receipt = await prisma.receipt.create({
         data: {
           userId,
           placeId,
-          mediaUrl,
-          total: 0, // Will be updated after OCR
+          fileKey, // Changed from mediaUrl
+          amount: 0, // Changed from total, will be updated after OCR
           paidAt: new Date(), // Will be updated from OCR date
           ocrStatus: 'pending',
         },
@@ -135,7 +135,7 @@ export async function verifyReceipt(
     // Step 4: Perform OCR
     let ocrResult;
     try {
-      ocrResult = await performOCR(mediaUrl);
+      ocrResult = await performOCR(fileKey); // Changed from mediaUrl
     } catch (ocrError: any) {
       // OCR failed
       await prisma.receipt.update({
@@ -155,13 +155,13 @@ export async function verifyReceipt(
     // Step 5: Validate OCR results
     const validationErrors: string[] = [];
 
-    if (!ocrResult.total || ocrResult.total <= 0) {
-      validationErrors.push('Invalid or missing total amount');
+    if (!ocrResult.amount || ocrResult.amount <= 0) {
+      validationErrors.push('Invalid or missing amount'); // Changed from total
     }
 
-    if (expectedTotal && Math.abs(ocrResult.total - expectedTotal) > 1000) {
+    if (expectedTotal && Math.abs(ocrResult.amount - expectedTotal) > 1000) {
       validationErrors.push(
-        `Total mismatch: OCR=${ocrResult.total}, Expected=${expectedTotal}`
+        `Amount mismatch: OCR=${ocrResult.amount}, Expected=${expectedTotal}` // Changed from total
       );
     }
 
@@ -196,7 +196,7 @@ export async function verifyReceipt(
       where: { id: receipt.id },
       data: {
         ocrStatus: 'completed',
-        total: ocrResult.total,
+        amount: ocrResult.amount, // Changed from total
         paidAt: ocrResult.date ? new Date(ocrResult.date) : new Date(),
         ocrData: ocrResult,
       },

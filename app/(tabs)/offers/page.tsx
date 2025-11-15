@@ -154,11 +154,26 @@ export default function OffersPage() {
                     </div>
                   </div>
 
-                  <div className="row" style={{ marginTop: '12px', gap: '8px' }} role="group" aria-label="오퍼 액션">
-                    <button type="button" className="btn ghost" style={{ flex: 1 }} aria-label="매장으로 길찾기">
+                  <div
+                    className="row"
+                    style={{ marginTop: '12px', gap: '8px' }}
+                    role="group"
+                    aria-label="오퍼 액션"
+                  >
+                    <button
+                      type="button"
+                      className="btn ghost"
+                      style={{ flex: 1 }}
+                      aria-label="매장으로 길찾기"
+                    >
                       🗺️ 길찾기
                     </button>
-                    <Link href="/(tabs)/scan" className="btn" style={{ flex: 1 }} aria-label="QR 코드 스캔하기">
+                    <Link
+                      href="/(tabs)/scan"
+                      className="btn"
+                      style={{ flex: 1 }}
+                      aria-label="QR 코드 스캔하기"
+                    >
                       📷 QR 스캔
                     </Link>
                   </div>

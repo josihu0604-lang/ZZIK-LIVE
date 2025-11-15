@@ -17,7 +17,7 @@ export default function FeedPage() {
     setIsGuest(guestCookie);
   }, []);
 
-  const filteredPosts = FEED_POSTS_2025.filter(post => {
+  const filteredPosts = FEED_POSTS_2025.filter((post) => {
     if (filter === 'live') return post.type === 'live';
     if (filter === 'offers') return !!post.offer;
     return true;
@@ -43,11 +43,11 @@ export default function FeedPage() {
           <h1 className="h1">ZZIK LIVE</h1>
           <p className="sub">실시간 나노 크리에이터 콘텐츠</p>
         </div>
-        
+
         {isGuest && (
           <div className={styles.guestBanner} role="status" aria-live="polite">
             <span>게스트 모드로 둘러보는 중</span>
-            <button 
+            <button
               type="button"
               className={styles.loginBtn}
               onClick={() => router.push('/auth/login')}
@@ -99,9 +99,7 @@ export default function FeedPage() {
           <span className={styles.statLabel}>라이브 콘텐츠</span>
         </div>
         <div className={styles.statItem}>
-          <span className={styles.statValue}>
-            {FEED_POSTS_2025.filter(p => p.offer).length}
-          </span>
+          <span className={styles.statValue}>{FEED_POSTS_2025.filter((p) => p.offer).length}</span>
           <span className={styles.statLabel}>진행중 오퍼</span>
         </div>
       </div>

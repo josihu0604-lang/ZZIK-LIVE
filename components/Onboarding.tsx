@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectCoverflow, Autoplay } from 'swiper/modules';
-import { 
-  MapPin, 
-  Users, 
-  Shield, 
-  Bell, 
-  ChevronRight,
-  CheckCircle2,
-  Zap,
-  Heart
-} from 'lucide-react';
+import { MapPin, Users, Shield, Bell, ChevronRight, CheckCircle2, Zap, Heart } from 'lucide-react';
 import { Button } from './ui/Button';
 
 // Import Swiper styles
@@ -38,25 +29,19 @@ const slides: OnboardingSlide[] = [
     id: 'welcome',
     icon: MapPin,
     title: 'Welcome to ZZIK LIVE',
-    description: 'Your personal safety companion for real-time location sharing and emergency assistance.',
+    description:
+      'Your personal safety companion for real-time location sharing and emergency assistance.',
     color: 'from-blue-500 to-purple-600',
-    features: [
-      'Real-time location sharing',
-      'Emergency SOS alerts',
-      'Community support'
-    ]
+    features: ['Real-time location sharing', 'Emergency SOS alerts', 'Community support'],
   },
   {
     id: 'location',
     icon: MapPin,
     title: 'Share Your Location',
-    description: 'Keep your loved ones informed about your whereabouts with secure, real-time location sharing.',
+    description:
+      'Keep your loved ones informed about your whereabouts with secure, real-time location sharing.',
     color: 'from-green-500 to-teal-600',
-    features: [
-      'Privacy-first approach',
-      'Temporary sharing options',
-      'Custom safety zones'
-    ]
+    features: ['Privacy-first approach', 'Temporary sharing options', 'Custom safety zones'],
   },
   {
     id: 'community',
@@ -64,11 +49,7 @@ const slides: OnboardingSlide[] = [
     title: 'Join Safety Communities',
     description: 'Connect with local safety groups and stay informed about incidents in your area.',
     color: 'from-orange-500 to-red-600',
-    features: [
-      'Local incident reports',
-      'Community alerts',
-      'Neighborhood watch'
-    ]
+    features: ['Local incident reports', 'Community alerts', 'Neighborhood watch'],
   },
   {
     id: 'emergency',
@@ -76,11 +57,7 @@ const slides: OnboardingSlide[] = [
     title: 'Emergency Assistance',
     description: 'Get help instantly with one-touch emergency features and automated alerts.',
     color: 'from-red-500 to-pink-600',
-    features: [
-      'One-touch SOS',
-      'Automatic location sharing',
-      'Emergency contacts'
-    ]
+    features: ['One-touch SOS', 'Automatic location sharing', 'Emergency contacts'],
   },
   {
     id: 'notifications',
@@ -88,12 +65,8 @@ const slides: OnboardingSlide[] = [
     title: 'Smart Notifications',
     description: 'Receive intelligent alerts about safety concerns and updates from your network.',
     color: 'from-purple-500 to-indigo-600',
-    features: [
-      'Customizable alerts',
-      'Quiet hours',
-      'Priority notifications'
-    ]
-  }
+    features: ['Customizable alerts', 'Quiet hours', 'Priority notifications'],
+  },
 ];
 
 const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
@@ -104,7 +77,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
     setCurrentSlide(swiper.activeIndex);
     const slideId = slides[swiper.activeIndex]?.id;
     if (slideId) {
-      setCompletedSlides(prev => new Set([...prev, slideId]));
+      setCompletedSlides((prev) => new Set([...prev, slideId]));
     }
   };
 
@@ -115,7 +88,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
     <div className="fixed inset-0 z-50 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* Progress bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gray-700">
-        <div 
+        <div
           className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-500"
           style={{ width: `${progress}%` }}
         />
@@ -137,9 +110,9 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
         spaceBetween={50}
         slidesPerView={1}
         navigation
-        pagination={{ 
+        pagination={{
           clickable: true,
-          dynamicBullets: true
+          dynamicBullets: true,
         }}
         effect="coverflow"
         coverflowEffect={{
@@ -147,7 +120,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
           stretch: 0,
           depth: 100,
           modifier: 1,
-          slideShadows: true
+          slideShadows: true,
         }}
         onSlideChange={handleSlideChange}
         className="h-full w-full"
@@ -159,8 +132,12 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
               <div className="h-full flex flex-col items-center justify-center px-8 md:px-16">
                 {/* Icon with animated background */}
                 <div className="relative mb-8">
-                  <div className={`absolute inset-0 bg-gradient-to-r ${slide.color} rounded-full blur-3xl opacity-50 animate-pulse`} />
-                  <div className={`relative bg-gradient-to-r ${slide.color} p-6 rounded-3xl shadow-2xl`}>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-r ${slide.color} rounded-full blur-3xl opacity-50 animate-pulse`}
+                  />
+                  <div
+                    className={`relative bg-gradient-to-r ${slide.color} p-6 rounded-3xl shadow-2xl`}
+                  >
                     <Icon size={64} className="text-white" />
                   </div>
                 </div>
@@ -169,7 +146,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
                   {slide.title}
                 </h1>
-                
+
                 <p className="text-lg md:text-xl text-gray-300 mb-8 text-center max-w-2xl">
                   {slide.description}
                 </p>
@@ -193,7 +170,6 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
                       variant="primary"
                       size="lg"
                       onClick={onComplete}
-
                       className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                     >
                       Get Started
@@ -212,8 +188,8 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
           <div
             key={slide.id}
             className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentSlide 
-                ? 'w-8 bg-white' 
+              index === currentSlide
+                ? 'w-8 bg-white'
                 : completedSlides.has(slide.id)
                   ? 'w-2 bg-white/60'
                   : 'w-2 bg-white/30'
@@ -230,19 +206,29 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete, onSkip }) => {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
-        
+
         @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(20px);
+          }
         }
-        
+
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }
-        
+
         .animate-float-delayed {
           animation: float-delayed 8s ease-in-out infinite;
         }

@@ -36,19 +36,19 @@ export async function POST(req: NextRequest) {
   const idemResult = await withIdempotency(idemKey, async () => {
     try {
       const body = await req.json();
-      const { userId, placeId, mediaUrl, expectedTotal } = body;
+      const { userId, placeId, fileKey, expectedTotal } = body; // Changed mediaUrl to fileKey
 
       // Validation
-      if (!userId || !placeId || !mediaUrl) {
+      if (!userId || !placeId || !fileKey) {
         log('warn', 'receipt.verify.invalid_payload', {
           request_id: requestId,
           took_ms: Date.now() - started,
         });
 
         const res = new NextResponse(
-          JSON.stringify({ 
-            state: 'failed', 
-            message: 'Missing required fields: userId, placeId, mediaUrl' 
+          JSON.stringify({
+            state: 'failed',
+            message: 'Missing required fields: userId, placeId, fileKey', // Changed mediaUrl to fileKey
           }),
           { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       const result = await verifyReceipt({
         userId,
         placeId,
-        mediaUrl,
+        fileKey, // Changed mediaUrl to fileKey
         expectedTotal,
       });
 

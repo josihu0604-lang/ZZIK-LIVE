@@ -10,7 +10,7 @@ const schema = z.object({
   geohash6: z.string().min(6).max(12),
   radius: z.coerce.number().int().min(50).max(3000).default(1000),
   limit: z.coerce.number().int().min(1).max(50).default(20),
-  cursor: z.string().nullish()
+  cursor: z.string().nullish(),
 });
 
 interface PlaceResult {
@@ -24,24 +24,24 @@ interface PlaceResult {
 
 export async function GET(req: NextRequest) {
   const t0 = performance.now();
-  
+
   // Parse query parameters
   const searchParams = req.nextUrl.searchParams;
   const params = Object.fromEntries(searchParams);
-  
+
   const parsed = schema.safeParse(params);
   if (!parsed.success) {
     return NextResponse.json(
-      { 
-        error: 'INVALID_PARAMS', 
-        details: parsed.error.flatten() 
-      }, 
+      {
+        error: 'INVALID_PARAMS',
+        details: parsed.error.flatten(),
+      },
       { status: 422 }
     );
   }
 
   const { geohash6, radius, limit, cursor } = parsed.data;
-  
+
   // Decode geohash to coordinates
   const { latitude: lat, longitude: lng } = ngeohash.decode(geohash6);
 
@@ -79,47 +79,43 @@ export async function GET(req: NextRequest) {
     `);
 
     // Prepare response
-    const items = rows.map(r => ({
+    const items = rows.map((r) => ({
       id: r.id,
       name: r.name,
       geohash6: r.geohash6,
       distanceMeters: Math.round(r.distance_m),
       ...(r.address && { address: r.address }),
-      ...(r.category && { category: r.category })
+      ...(r.category && { category: r.category }),
     }));
 
     // Generate next cursor if there are results
     const last = rows.at(-1);
-    const nextCursor = last && rows.length === limit 
-      ? `${Math.round(last.distance_m)}|${last.id}` 
-      : null;
+    const nextCursor =
+      last && rows.length === limit ? `${Math.round(last.distance_m)}|${last.id}` : null;
 
     const t1 = performance.now();
     const duration = (t1 - t0).toFixed(1);
 
     return NextResponse.json(
-      { 
-        items, 
+      {
+        items,
         nextCursor,
         meta: {
           center: { lat, lng },
           radius,
           limit,
-          count: items.length
-        }
-      }, 
+          count: items.length,
+        },
+      },
       {
-        headers: { 
+        headers: {
           'Server-Timing': `db;dur=${duration}`,
-          'Cache-Control': 'public, max-age=60, s-maxage=120'
-        }
+          'Cache-Control': 'public, max-age=60, s-maxage=120',
+        },
       }
     );
   } catch (error) {
     console.error('Error in nearby places query:', error);
-    return NextResponse.json(
-      { error: 'INTERNAL_SERVER_ERROR' }, 
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'INTERNAL_SERVER_ERROR' }, { status: 500 });
   }
 }

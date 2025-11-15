@@ -90,7 +90,7 @@ describe('searchPlaces', () => {
     await searchPlaces(lng, lat, radius, query);
 
     expect(prisma.$queryRaw).toHaveBeenCalledTimes(1);
-    
+
     // Check that the SQL template was called with correct parameters
     const callArg = vi.mocked(prisma.$queryRaw).mock.calls[0][0];
     expect(callArg).toBeDefined();
@@ -126,6 +126,8 @@ describe('searchPlaces', () => {
     const dbError = new Error('Database connection failed');
     vi.mocked(prisma.$queryRaw).mockRejectedValue(dbError);
 
-    await expect(searchPlaces(126.978, 37.5665, 1000, 'test')).rejects.toThrow('Database connection failed');
+    await expect(searchPlaces(126.978, 37.5665, 1000, 'test')).rejects.toThrow(
+      'Database connection failed'
+    );
   });
 });

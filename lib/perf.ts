@@ -14,7 +14,7 @@ export function throttle<T extends (...args: any[]) => any>(
 
   return function throttled(...args: Parameters<T>) {
     const now = Date.now();
-    
+
     if (now - lastTime >= wait) {
       lastTime = now;
       fn(...args);
@@ -46,10 +46,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Request Idle Callback wrapper with fallback
  */
-export function requestIdleCallback(
-  callback: () => void,
-  options?: { timeout?: number }
-): number {
+export function requestIdleCallback(callback: () => void, options?: { timeout?: number }): number {
   if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
     return window.requestIdleCallback(callback, options);
   }
@@ -195,11 +192,7 @@ export function isSlowConnection(): boolean {
   const conn = (navigator as any).connection;
   if (!conn) return false;
 
-  return (
-    conn.saveData ||
-    conn.effectiveType === 'slow-2g' ||
-    conn.effectiveType === '2g'
-  );
+  return conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g';
 }
 
 /**
@@ -233,7 +226,7 @@ export function getSafeAreaInsets() {
   if (typeof window === 'undefined') return { top: 0, right: 0, bottom: 0, left: 0 };
 
   const style = getComputedStyle(document.documentElement);
-  
+
   return {
     top: parseInt(style.getPropertyValue('--safe-top') || '0'),
     right: parseInt(style.getPropertyValue('--safe-right') || '0'),
@@ -315,7 +308,7 @@ export function getPerformanceMetrics(): PerformanceMetrics {
 
   // Get paint timing
   const paintEntries = performance.getEntriesByType('paint');
-  const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+  const fcp = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
   if (fcp) {
     metrics.FCP = fcp.startTime;
   }

@@ -23,7 +23,7 @@ export function Modal({
   className = '',
   closeOnBackdrop = true,
   closeOnEscape = true,
-  size = 'md'
+  size = 'md',
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -65,7 +65,7 @@ export function Modal({
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         const focusable = Array.from(focusableElements);
-        
+
         if (focusable.length === 0) return;
 
         const first = focusable[0];

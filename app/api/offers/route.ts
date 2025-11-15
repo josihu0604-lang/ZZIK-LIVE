@@ -4,7 +4,10 @@ import { createRequestId, log } from '@/lib/server/logger';
 import { toGeohash6, expandNineCells } from '@/lib/map/geohash';
 
 const OffersQuerySchema = z.object({
-  geohash5: z.string().regex(/^[0-9a-z]{5}$/i).optional(),
+  geohash5: z
+    .string()
+    .regex(/^[0-9a-z]{5}$/i)
+    .optional(),
   radius: z.coerce.number().min(100).max(50000).default(5000), // meters
   limit: z.coerce.number().min(1).max(100).default(20),
 });

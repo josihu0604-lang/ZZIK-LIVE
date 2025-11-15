@@ -8,6 +8,7 @@ export default defineConfig({
     include: ['tests/unit/**/*.{test,spec}.ts'],
     exclude: ['tests/e2e/**', 'node_modules/**', '.next/**'],
     coverage: {
+      provider: 'v8', // Add required provider field
       reporter: ['text', 'html'],
       thresholds: {
         lines: 80,

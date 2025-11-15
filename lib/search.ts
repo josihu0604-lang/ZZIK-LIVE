@@ -19,7 +19,7 @@ export async function searchPlaces(
   q: string
 ): Promise<SearchRow[]> {
   const sql = Prisma.sql;
-  
+
   // Using raw SQL for PostGIS spatial queries and text search with ts_rank
   const rows = await prisma.$queryRaw<SearchRow[]>(sql`
     WITH params AS (
@@ -58,6 +58,6 @@ export async function searchPlaces(
     ORDER BY score DESC
     LIMIT 50
   `);
-  
+
   return rows;
 }

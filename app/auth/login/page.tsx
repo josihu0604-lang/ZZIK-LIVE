@@ -21,7 +21,12 @@ export default function LoginPage() {
           </header>
 
           {/* ARIA-compliant tabs */}
-          <nav className="tab-nav" role="tablist" aria-label="로그인 방식" aria-orientation="horizontal">
+          <nav
+            className="tab-nav"
+            role="tablist"
+            aria-label="로그인 방식"
+            aria-orientation="horizontal"
+          >
             <TabButton
               id="social"
               label="소셜"
@@ -58,7 +63,10 @@ export default function LoginPage() {
           {/* Trust messaging */}
           <div className="trust-message">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M8 1l2.5 5 5.5.8-4 3.9 1 5.8L8 13.5 2.5 16.5l1-5.8-4-3.9 5.5-.8L8 1z" fill="var(--brand)" />
+              <path
+                d="M8 1l2.5 5 5.5.8-4 3.9 1 5.8L8 13.5 2.5 16.5l1-5.8-4-3.9 5.5-.8L8 1z"
+                fill="var(--brand)"
+              />
             </svg>
             <p className="text-small text-muted">
               위치는 geohash5 수준으로 보호되며, GPS·QR·영수증 삼중 검증으로 신뢰를 보장합니다.
@@ -68,9 +76,13 @@ export default function LoginPage() {
           {/* Footer links */}
           <footer className="login-footer">
             <div className="legal-links">
-              <Link href="/legal/privacy" className="text-small text-muted">개인정보</Link>
+              <Link href="/legal/privacy" className="text-small text-muted">
+                개인정보
+              </Link>
               <span className="text-muted">·</span>
-              <Link href="/legal/terms" className="text-small text-muted">약관</Link>
+              <Link href="/legal/terms" className="text-small text-muted">
+                약관
+              </Link>
             </div>
             <Link
               href="/pass?guest=1"
@@ -161,7 +173,12 @@ export default function LoginPage() {
   );
 }
 
-function TabButton({ id, label, active, onClick }: {
+function TabButton({
+  id,
+  label,
+  active,
+  onClick,
+}: {
   id: string;
   label: string;
   active: boolean;
@@ -204,18 +221,17 @@ function TabButton({ id, label, active, onClick }: {
   );
 }
 
-function TabPanel({ id, active, children }: {
+function TabPanel({
+  id,
+  active,
+  children,
+}: {
   id: string;
   active: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <section
-      id={`panel-${id}`}
-      role="tabpanel"
-      aria-labelledby={`tab-${id}`}
-      hidden={!active}
-    >
+    <section id={`panel-${id}`} role="tabpanel" aria-labelledby={`tab-${id}`} hidden={!active}>
       {active ? children : null}
     </section>
   );
@@ -239,7 +255,11 @@ function SocialButtons() {
   );
 }
 
-function OAuthButton({ provider, label, href }: {
+function OAuthButton({
+  provider,
+  label,
+  href,
+}: {
   provider: 'instagram' | 'tiktok' | 'google';
   label: string;
   href: string;
@@ -285,10 +305,22 @@ function BrandIcon({ provider }: { provider: 'instagram' | 'tiktok' | 'google' }
   if (provider === 'google') {
     return (
       <svg {...common} viewBox="0 0 24 24" role="img" aria-label="Google">
-        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.4h6.4a5.5 5.5 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.6-5.1 3.6-8.7z" />
-        <path fill="#34A853" d="M12 24c3.3 0 6-1.1 7.9-3l-3.9-3c-1 .7-2.4 1.2-4 1.2-3 0-5.6-2-6.5-4.8H1.4v3.1C3.3 21.4 7.3 24 12 24z" />
-        <path fill="#FBBC05" d="M5.5 14.4A7.9 7.9 0 0 1 4.9 12c0-.8.1-1.6.3-2.4V6.5H1.4A12 12 0 0 0 0 12c0 1.9.5 3.7 1.4 5.3l4.1-2.9z" />
-        <path fill="#EA4335" d="M12 4.7c1.8 0 3.4.6 4.7 1.8l3.5-3.5A12 12 0 0 0 12 0 12 12 0 0 0 1.4 6.5l4.1 3C6.3 6.7 8.9 4.7 12 4.7z" />
+        <path
+          fill="#4285F4"
+          d="M23.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.4h6.4a5.5 5.5 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.6-5.1 3.6-8.7z"
+        />
+        <path
+          fill="#34A853"
+          d="M12 24c3.3 0 6-1.1 7.9-3l-3.9-3c-1 .7-2.4 1.2-4 1.2-3 0-5.6-2-6.5-4.8H1.4v3.1C3.3 21.4 7.3 24 12 24z"
+        />
+        <path
+          fill="#FBBC05"
+          d="M5.5 14.4A7.9 7.9 0 0 1 4.9 12c0-.8.1-1.6.3-2.4V6.5H1.4A12 12 0 0 0 0 12c0 1.9.5 3.7 1.4 5.3l4.1-2.9z"
+        />
+        <path
+          fill="#EA4335"
+          d="M12 4.7c1.8 0 3.4.6 4.7 1.8l3.5-3.5A12 12 0 0 0 12 0 12 12 0 0 0 1.4 6.5l4.1 3C6.3 6.7 8.9 4.7 12 4.7z"
+        />
       </svg>
     );
   }

@@ -13,13 +13,9 @@ export function VisuallyHidden({
   children,
   as: Component = 'span',
   focusable = false,
-  className = ''
+  className = '',
 }: VisuallyHiddenProps) {
   const classes = focusable ? 'sr-only-focusable' : 'sr-only';
 
-  return React.createElement(
-    Component,
-    { className: `${classes} ${className}`.trim() },
-    children
-  );
+  return React.createElement(Component, { className: `${classes} ${className}`.trim() }, children);
 }

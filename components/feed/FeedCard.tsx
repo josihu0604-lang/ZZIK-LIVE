@@ -35,11 +35,7 @@ export default function FeedCard({ post, influencer, onClick }: FeedCardProps) {
             LIVE
           </div>
         )}
-        {post.offer && (
-          <div className={styles.offerBadge}>
-            {post.offer.discount}% OFF
-          </div>
-        )}
+        {post.offer && <div className={styles.offerBadge}>{post.offer.discount}% OFF</div>}
       </div>
 
       {/* Content */}
@@ -51,9 +47,7 @@ export default function FeedCard({ post, influencer, onClick }: FeedCardProps) {
             <div className={styles.info}>
               <div className={styles.name}>
                 {influencer.displayName}
-                {influencer.verified && (
-                  <span className={styles.verified}>✓</span>
-                )}
+                {influencer.verified && <span className={styles.verified}>✓</span>}
               </div>
               <div className={styles.meta}>
                 {post.location.name} · {timeAgo(post.timestamp)}
@@ -77,15 +71,9 @@ export default function FeedCard({ post, influencer, onClick }: FeedCardProps) {
 
         {/* Stats */}
         <div className={styles.stats}>
-          <span className={styles.stat}>
-            ❤️ {formatNumber(post.likes)}
-          </span>
-          <span className={styles.stat}>
-            💬 {formatNumber(post.comments)}
-          </span>
-          <span className={styles.stat}>
-            👁️ {formatNumber(post.views)}
-          </span>
+          <span className={styles.stat}>❤️ {formatNumber(post.likes)}</span>
+          <span className={styles.stat}>💬 {formatNumber(post.comments)}</span>
+          <span className={styles.stat}>👁️ {formatNumber(post.views)}</span>
         </div>
       </div>
     </article>

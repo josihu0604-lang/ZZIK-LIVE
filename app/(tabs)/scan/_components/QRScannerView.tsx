@@ -45,12 +45,12 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
           video: {
             facingMode: 'environment',
             width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
+            height: { ideal: 720 },
+          },
         });
 
         if (!mounted) {
-          localStream.getTracks().forEach(t => t.stop());
+          localStream.getTracks().forEach((t) => t.stop());
           return;
         }
 
@@ -66,20 +66,20 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
         // Check if BarcodeDetector is available
         if ('BarcodeDetector' in window && (window as any).BarcodeDetector.getSupportedFormats) {
           const formats = await (window as any).BarcodeDetector.getSupportedFormats();
-          
+
           if (formats.includes('qr_code')) {
             // Use native BarcodeDetector
             detectorRef.current = new (window as any).BarcodeDetector({
-              formats: ['qr_code']
+              formats: ['qr_code'],
             });
-            
+
             const scanWithBarcodeDetector = async () => {
               if (!mounted || !videoRef.current || !detectorRef.current) return;
-              
+
               try {
                 if (videoRef.current.readyState >= videoRef.current.HAVE_ENOUGH_DATA) {
                   const barcodes = await detectorRef.current.detect(videoRef.current);
-                  
+
                   if (barcodes.length > 0) {
                     const code = barcodes[0].rawValue;
                     vibrate([50, 100, 50]);
@@ -92,12 +92,12 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
               } catch (error) {
                 console.error('BarcodeDetector error:', error);
               }
-              
+
               if (mounted) {
                 rafRef.current = requestAnimationFrame(scanWithBarcodeDetector);
               }
             };
-            
+
             rafRef.current = requestAnimationFrame(scanWithBarcodeDetector);
           } else {
             throw new Error('QR code format not supported');
@@ -105,33 +105,33 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
         } else {
           // Fallback: Dynamically import jsQR
           const jsQR = (await import('jsqr')).default;
-          
+
           if (!canvasRef.current) {
             const canvas = document.createElement('canvas');
             canvasRef.current = canvas;
           }
-          
+
           const ctx = canvasRef.current.getContext('2d');
-          
+
           const scanWithJsQR = () => {
             if (!mounted || !videoRef.current || !ctx || !canvasRef.current) return;
-            
+
             const video = videoRef.current;
-            
+
             if (video.readyState >= video.HAVE_ENOUGH_DATA) {
               const vw = video.videoWidth;
               const vh = video.videoHeight;
-              
+
               if (vw && vh) {
                 canvasRef.current.width = vw;
                 canvasRef.current.height = vh;
                 ctx.drawImage(video, 0, 0, vw, vh);
-                
+
                 const imageData = ctx.getImageData(0, 0, vw, vh);
                 const code = jsQR(imageData.data, vw, vh, {
                   inversionAttempts: 'dontInvert',
                 });
-                
+
                 if (code && code.data) {
                   vibrate([50, 100, 50]);
                   setScanState('success');
@@ -141,12 +141,12 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
                 }
               }
             }
-            
+
             if (mounted) {
               rafRef.current = requestAnimationFrame(scanWithJsQR);
             }
           };
-          
+
           rafRef.current = requestAnimationFrame(scanWithJsQR);
         }
       } catch (error: any) {
@@ -166,7 +166,7 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
         cancelAnimationFrame(rafRef.current);
       }
       if (localStream || stream) {
-        (localStream || stream)?.getTracks().forEach(t => t.stop());
+        (localStream || stream)?.getTracks().forEach((t) => t.stop());
       }
     };
   }, [onToken, onError]);
@@ -204,17 +204,19 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
   if (err || scanState === 'error') {
     return (
       <div role="alert" className="card" style={{ padding: '24px', textAlign: 'center' }}>
-        <Icon name="alert-circle" size={48} className="text-danger" style={{ marginBottom: '16px' }} />
-        <h3 className="h5" style={{ marginBottom: '8px' }}>Camera Error</h3>
+        <Icon
+          name="alert-circle"
+          size={48}
+          className="text-danger"
+          style={{ marginBottom: '16px' }}
+        />
+        <h3 className="h5" style={{ marginBottom: '8px' }}>
+          Camera Error
+        </h3>
         <p className="body-small text-muted" style={{ marginBottom: '16px' }}>
           {err || 'Unable to access camera'}
         </p>
-        <button 
-          type="button"
-          className="btn primary" 
-          onClick={handleReset}
-          aria-label="Try again"
-        >
+        <button type="button" className="btn primary" onClick={handleReset} aria-label="Try again">
           <Icon name="refresh" size={18} style={{ marginRight: '8px' }} />
           Try Again
         </button>
@@ -234,14 +236,16 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
         <p className="body text-muted" style={{ marginTop: '8px', marginBottom: '24px' }}>
           QR Code detected
         </p>
-        <div style={{ 
-          padding: '12px', 
-          background: 'var(--bg-subtle)', 
-          borderRadius: 'var(--radius-sm)',
-          wordBreak: 'break-all',
-          fontFamily: 'monospace',
-          fontSize: '12px'
-        }}>
+        <div
+          style={{
+            padding: '12px',
+            background: 'var(--bg-subtle)',
+            borderRadius: 'var(--radius-sm)',
+            wordBreak: 'break-all',
+            fontFamily: 'monospace',
+            fontSize: '12px',
+          }}
+        >
           {result}
         </div>
       </div>
@@ -251,12 +255,15 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
   // Render scanning state
   return (
     <section aria-label="QR Scanner" style={{ padding: '0 16px' }}>
-      <div className="card" style={{ 
-        overflow: 'hidden', 
-        borderRadius: 'var(--radius-lg)',
-        position: 'relative',
-        background: 'var(--bg-subtle)'
-      }}>
+      <div
+        className="card"
+        style={{
+          overflow: 'hidden',
+          borderRadius: 'var(--radius-lg)',
+          position: 'relative',
+          background: 'var(--bg-subtle)',
+        }}
+      >
         <video
           ref={videoRef}
           playsInline
@@ -266,11 +273,11 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
             width: '100%',
             height: '320px',
             objectFit: 'cover',
-            display: 'block'
+            display: 'block',
           }}
           aria-label="Camera viewfinder"
         />
-        
+
         {/* Scanning overlay animation */}
         {scanState === 'scanning' && (
           <>
@@ -287,69 +294,81 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
               }}
               aria-hidden="true"
             />
-            
+
             {/* Corner brackets */}
-            <div style={{
-              position: 'absolute',
-              top: '20%',
-              left: '20%',
-              right: '20%',
-              bottom: '20%',
-              pointerEvents: 'none'
-            }}>
+            <div
+              style={{
+                position: 'absolute',
+                top: '20%',
+                left: '20%',
+                right: '20%',
+                bottom: '20%',
+                pointerEvents: 'none',
+              }}
+            >
               {/* Top left */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '30px',
-                height: '30px',
-                borderTop: '3px solid var(--primary)',
-                borderLeft: '3px solid var(--primary)',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '30px',
+                  height: '30px',
+                  borderTop: '3px solid var(--primary)',
+                  borderLeft: '3px solid var(--primary)',
+                }}
+              />
               {/* Top right */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '30px',
-                height: '30px',
-                borderTop: '3px solid var(--primary)',
-                borderRight: '3px solid var(--primary)',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  width: '30px',
+                  height: '30px',
+                  borderTop: '3px solid var(--primary)',
+                  borderRight: '3px solid var(--primary)',
+                }}
+              />
               {/* Bottom left */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '30px',
-                height: '30px',
-                borderBottom: '3px solid var(--primary)',
-                borderLeft: '3px solid var(--primary)',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '30px',
+                  height: '30px',
+                  borderBottom: '3px solid var(--primary)',
+                  borderLeft: '3px solid var(--primary)',
+                }}
+              />
               {/* Bottom right */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-                width: '30px',
-                height: '30px',
-                borderBottom: '3px solid var(--primary)',
-                borderRight: '3px solid var(--primary)',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  width: '30px',
+                  height: '30px',
+                  borderBottom: '3px solid var(--primary)',
+                  borderRight: '3px solid var(--primary)',
+                }}
+              />
             </div>
           </>
         )}
       </div>
 
       {/* Controls */}
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        gap: '16px',
-        marginTop: '16px'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '16px',
+          marginTop: '16px',
+        }}
+      >
         <button
           type="button"
           onClick={toggleFlash}
@@ -362,15 +381,13 @@ export default function QRScannerView({ onToken, onError }: QRScannerViewProps) 
             padding: 0,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}
         >
           <Icon name={flashEnabled ? 'flashlight-off' : 'flashlight'} size={20} />
         </button>
-        
-        <p className="caption text-muted">
-          Align QR code within the frame
-        </p>
+
+        <p className="caption text-muted">Align QR code within the frame</p>
       </div>
 
       <style jsx>{`

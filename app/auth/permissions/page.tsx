@@ -39,19 +39,25 @@ export default function PermissionsPage() {
       setPermissions((prev) => ({ ...prev, location: 'granted' }));
 
       // Track permission grant (with geohash5 only, no raw coordinates)
-      trackEvent('permission_location_granted', JSON.stringify({
-        geohash5: 'xxxxx', // Would use actual geohash5 from position
-        accuracy_m: Math.round(position.coords.accuracy),
-      }));
+      trackEvent(
+        'permission_location_granted',
+        JSON.stringify({
+          geohash5: 'xxxxx', // Would use actual geohash5 from position
+          accuracy_m: Math.round(position.coords.accuracy),
+        })
+      );
 
       return true;
     } catch (error) {
       // Denied or error
       setPermissions((prev) => ({ ...prev, location: 'denied' }));
 
-      trackEvent('permission_location_denied', JSON.stringify({
-        error: error instanceof Error ? error.message : 'unknown',
-      }));
+      trackEvent(
+        'permission_location_denied',
+        JSON.stringify({
+          error: error instanceof Error ? error.message : 'unknown',
+        })
+      );
 
       return false;
     } finally {
@@ -78,9 +84,12 @@ export default function PermissionsPage() {
     } catch (error) {
       setPermissions((prev) => ({ ...prev, camera: 'denied' }));
 
-      trackEvent('permission_camera_denied', JSON.stringify({
-        error: error instanceof Error ? error.message : 'unknown',
-      }));
+      trackEvent(
+        'permission_camera_denied',
+        JSON.stringify({
+          error: error instanceof Error ? error.message : 'unknown',
+        })
+      );
 
       return false;
     } finally {
@@ -235,7 +244,13 @@ export default function PermissionsPage() {
           type="button"
           onClick={handleContinue}
           className="w-full rounded-xl border border-slate-600 py-4 text-lg font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
-          aria-label={allGranted ? '다음 단계로 계속하기' : anyDenied ? '시뮬레이션 모드로 계속하기' : '나중에 권한 설정하기'}
+          aria-label={
+            allGranted
+              ? '다음 단계로 계속하기'
+              : anyDenied
+                ? '시뮬레이션 모드로 계속하기'
+                : '나중에 권한 설정하기'
+          }
         >
           {allGranted ? '계속하기' : anyDenied ? '시뮬레이션 모드로 계속' : '나중에 하기'}
         </button>

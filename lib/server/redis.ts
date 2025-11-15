@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 // Create Redis client instance
 const createRedisClient = () => {
   const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
-  
+
   return new Redis(redisUrl, {
     maxRetriesPerRequest: 3,
     retryStrategy: (times) => {
@@ -13,7 +13,7 @@ const createRedisClient = () => {
     },
     reconnectOnError: (err) => {
       const targetErrors = ['READONLY', 'ECONNREFUSED', 'ETIMEDOUT'];
-      return targetErrors.some(e => err.message.includes(e));
+      return targetErrors.some((e) => err.message.includes(e));
     },
     lazyConnect: true,
     enableOfflineQueue: false,

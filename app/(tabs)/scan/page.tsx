@@ -11,9 +11,17 @@ import { Icon } from '@/components/ui/Icon';
 const QRScannerView = dynamic(() => import('./_components/QRScannerView'), {
   ssr: false,
   loading: () => (
-    <div className="card" style={{ height: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="zzik-skeleton animate" style={{ width: '100%', height: '100%', borderRadius: 'var(--radius-lg)' }}>
-        <p className="caption text-muted" style={{ textAlign: 'center', paddingTop: '150px' }}>Loading camera...</p>
+    <div
+      className="card"
+      style={{ height: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <div
+        className="zzik-skeleton animate"
+        style={{ width: '100%', height: '100%', borderRadius: 'var(--radius-lg)' }}
+      >
+        <p className="caption text-muted" style={{ textAlign: 'center', paddingTop: '150px' }}>
+          Loading camera...
+        </p>
       </div>
     </div>
   ),
@@ -101,7 +109,11 @@ export default function ScanPage() {
         <section className="zzik-page">
           <header className="zzik-col" style={{ marginBottom: '24px' }}>
             <h1 className="h2">
-              <Icon name="qr-code" size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              <Icon
+                name="qr-code"
+                size={24}
+                style={{ marginRight: '8px', verticalAlign: 'middle' }}
+              />
               QR Scan
             </h1>
             <p className="body-small text-muted">Scan the store's QR code to verify your visit</p>
@@ -118,9 +130,9 @@ export default function ScanPage() {
                   opacity: 0.1,
                 }}
               >
-                <Icon 
-                  name={scanResult.success ? 'check' : 'x'} 
-                  size={48} 
+                <Icon
+                  name={scanResult.success ? 'check' : 'x'}
+                  size={48}
                   className={scanResult.success ? 'text-success' : 'text-danger'}
                   style={{ marginBottom: '16px' }}
                 />
@@ -129,7 +141,12 @@ export default function ScanPage() {
                 </p>
               </div>
 
-              <button type="button" className="btn primary" onClick={handleReset} aria-label="다시 스캔하기">
+              <button
+                type="button"
+                className="btn primary"
+                onClick={handleReset}
+                aria-label="다시 스캔하기"
+              >
                 <Icon name="refresh" size={18} style={{ marginRight: '8px' }} />
                 Scan Again
               </button>
@@ -161,10 +178,17 @@ export default function ScanPage() {
 
           <div className="card" style={{ padding: '16px', marginTop: '24px' }}>
             <h2 className="h5" style={{ marginBottom: '12px' }}>
-              <Icon name="shield" size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+              <Icon
+                name="shield"
+                size={20}
+                style={{ marginRight: '8px', verticalAlign: 'middle' }}
+              />
               Triple Verification Process
             </h2>
-            <ol className="body-small text-secondary" style={{ paddingLeft: '20px', lineHeight: 1.8 }}>
+            <ol
+              className="body-small text-secondary"
+              style={{ paddingLeft: '20px', lineHeight: 1.8 }}
+            >
               <li>
                 <Icon name="map-pin" size={14} style={{ marginRight: '6px' }} />
                 GPS location verification

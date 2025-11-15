@@ -10,24 +10,10 @@ export interface BadgeProps {
   className?: string;
 }
 
-export function Badge({
-  variant = 'default',
-  size = 'sm',
-  children,
-  className = ''
-}: BadgeProps) {
-  const classes = [
-    styles.badge,
-    styles[variant],
-    styles[size],
-    className
-  ]
+export function Badge({ variant = 'default', size = 'sm', children, className = '' }: BadgeProps) {
+  const classes = [styles.badge, styles[variant], styles[size], className]
     .filter(Boolean)
     .join(' ');
 
-  return (
-    <span className={classes}>
-      {children}
-    </span>
-  );
+  return <span className={classes}>{children}</span>;
 }

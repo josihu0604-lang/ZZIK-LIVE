@@ -9,7 +9,7 @@ import {
   AlertCircle,
   Lightbulb,
   Bug,
-  Star
+  Star,
 } from 'lucide-react';
 
 type FeedbackType = 'bug' | 'feature' | 'improvement' | 'other';
@@ -38,7 +38,7 @@ const FeedbackWidget: React.FC = () => {
     { type: 'bug' as FeedbackType, label: 'Bug Report', icon: Bug, color: 'red' },
     { type: 'feature' as FeedbackType, label: 'Feature Request', icon: Lightbulb, color: 'yellow' },
     { type: 'improvement' as FeedbackType, label: 'Improvement', icon: ThumbsUp, color: 'blue' },
-    { type: 'other' as FeedbackType, label: 'Other', icon: MessageSquare, color: 'gray' }
+    { type: 'other' as FeedbackType, label: 'Other', icon: MessageSquare, color: 'gray' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +52,7 @@ const FeedbackWidget: React.FC = () => {
       email: email || undefined,
       url: window.location.href,
       userAgent: navigator.userAgent,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     try {
@@ -60,9 +60,9 @@ const FeedbackWidget: React.FC = () => {
       const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(feedbackData)
+        body: JSON.stringify(feedbackData),
       });
 
       if (response.ok) {
@@ -81,7 +81,7 @@ const FeedbackWidget: React.FC = () => {
       const pendingFeedback = JSON.parse(storedFeedback);
       pendingFeedback.push(feedbackData);
       localStorage.setItem('pending-feedback', JSON.stringify(pendingFeedback));
-      
+
       setStep('success');
       setTimeout(() => {
         setIsOpen(false);
@@ -183,10 +183,7 @@ const FeedbackWidget: React.FC = () => {
                                 : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                             } transition-all`}
                           >
-                            <Icon
-                              size={32}
-                              className={`mx-auto mb-2 text-${item.color}-500`}
-                            />
+                            <Icon size={32} className={`mx-auto mb-2 text-${item.color}-500`} />
                             <span className="text-sm font-medium text-gray-900 dark:text-white">
                               {item.label}
                             </span>

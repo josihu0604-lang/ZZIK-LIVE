@@ -2,7 +2,7 @@
  * Media Query and Device Utilities
  */
 
-export type MediaQuery = 
+export type MediaQuery =
   | 'prefers-reduced-motion'
   | 'prefers-color-scheme-dark'
   | 'prefers-color-scheme-light'
@@ -19,7 +19,7 @@ export function createMediaQueryListener(
   if (typeof window === 'undefined') return () => {};
 
   const mql = window.matchMedia(query);
-  
+
   const handler = (e: MediaQueryListEvent | MediaQueryList) => {
     callback(e.matches);
   };
@@ -143,7 +143,9 @@ export function getOrientation(): 'portrait' | 'landscape' {
   return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
 }
 
-export function onOrientationChange(callback: (orientation: 'portrait' | 'landscape') => void): () => void {
+export function onOrientationChange(
+  callback: (orientation: 'portrait' | 'landscape') => void
+): () => void {
   if (typeof window === 'undefined') return () => {};
 
   const handler = () => {

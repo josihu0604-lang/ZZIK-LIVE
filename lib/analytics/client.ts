@@ -109,12 +109,7 @@ function getSessionId(): string {
  * Track event with Google Analytics compatible format
  * This is for backward compatibility with existing code
  */
-export function trackEvent(
-  category: string,
-  action: string,
-  label?: string,
-  value?: number
-): void {
+export function trackEvent(category: string, action: string, label?: string, value?: number): void {
   // Convert to internal tracking format
   track(action, {
     category,

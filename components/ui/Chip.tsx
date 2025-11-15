@@ -18,14 +18,9 @@ export function Chip({
   onRemove,
   disabled = false,
   children,
-  className = ''
+  className = '',
 }: ChipProps) {
-  const classes = [
-    styles.chip,
-    selected && styles.selected,
-    disabled && styles.disabled,
-    className
-  ]
+  const classes = [styles.chip, selected && styles.selected, disabled && styles.disabled, className]
     .filter(Boolean)
     .join(' ');
 

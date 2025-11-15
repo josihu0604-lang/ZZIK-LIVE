@@ -59,7 +59,13 @@ export function LocationPermissionRequest({
           </p>
         </div>
 
-        <button type="button" className="btn" onClick={handleRequest} disabled={isRequesting} aria-label="위치 권한 허용하기">
+        <button
+          type="button"
+          className="btn"
+          onClick={handleRequest}
+          disabled={isRequesting}
+          aria-label="위치 권한 허용하기"
+        >
           {isRequesting ? '요청 중...' : '위치 권한 허용'}
         </button>
 
@@ -118,7 +124,13 @@ export function CameraPermissionRequest({
           <p className="typo-caption muted">QR 코드 스캔을 위해 카메라 접근이 필요합니다</p>
         </div>
 
-        <button type="button" className="btn" onClick={handleRequest} disabled={isRequesting} aria-label="카메라 권한 허용하기">
+        <button
+          type="button"
+          className="btn"
+          onClick={handleRequest}
+          disabled={isRequesting}
+          aria-label="카메라 권한 허용하기"
+        >
           {isRequesting ? '요청 중...' : '카메라 권한 허용'}
         </button>
 

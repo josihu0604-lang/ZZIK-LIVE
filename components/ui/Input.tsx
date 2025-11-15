@@ -34,18 +34,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const errorId = `${inputId}-error`;
     const hintId = `${inputId}-hint`;
 
-    const describedBy = [
-      ariaDescribedBy,
-      error && errorId,
-      hint && hintId
-    ]
+    const describedBy = [ariaDescribedBy, error && errorId, hint && hintId]
       .filter(Boolean)
       .join(' ');
 
     const containerClasses = [
       styles.container,
       fullWidth && styles.fullWidth,
-      error && styles.hasError
+      error && styles.hasError,
     ]
       .filter(Boolean)
       .join(' ');
@@ -55,7 +51,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       leftIcon && styles.hasLeftIcon,
       rightIcon && styles.hasRightIcon,
       error && styles.error,
-      className
+      className,
     ]
       .filter(Boolean)
       .join(' ');

@@ -56,20 +56,20 @@ export default function MapViewDynamic({
 
     const initMap = async () => {
       setLoadStartTime(Date.now());
-      
+
       try {
         // Dynamically import mapbox-gl
         const mapboxgl = (await import('mapbox-gl')).default;
         mapboxglRef.current = mapboxgl;
-        
+
         // Import mapbox CSS
         // await import('mapbox-gl/dist/mapbox-gl.css');
-        
+
         mapboxgl.accessToken = accessToken;
 
         // Decode geohash to coordinates
         const center = decodeGeohash(centerGeohash5);
-        
+
         const map = new mapboxgl.Map({
           container: mapContainer.current!,
           style: 'mapbox://styles/mapbox/dark-v11',
@@ -172,7 +172,7 @@ export default function MapViewDynamic({
 
     sampleOffers.forEach((offer) => {
       const coords = decodeGeohash(offer.geohash5);
-      
+
       // Create custom marker element
       const el = document.createElement('div');
       el.className = 'custom-marker';
@@ -186,7 +186,7 @@ export default function MapViewDynamic({
       el.style.alignItems = 'center';
       el.style.justifyContent = 'center';
       el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-      
+
       // Add icon based on category
       const iconEl = document.createElement('div');
       iconEl.innerHTML = getCategoryIcon(offer.category);
@@ -199,8 +199,7 @@ export default function MapViewDynamic({
         const marker = new (mapboxgl as any).Marker(el)
           .setLngLat([coords.longitude, coords.latitude])
           .setPopup(
-            new (mapboxgl as any).Popup({ offset: 25 })
-              .setHTML(`
+            new (mapboxgl as any).Popup({ offset: 25 }).setHTML(`
                 <div style="padding: 8px;">
                   <h3 style="margin: 0 0 4px; font-size: 14px; font-weight: 600;">
                     ${offer.title}
@@ -255,16 +254,24 @@ export default function MapViewDynamic({
   // Show error state
   if (mapError) {
     return (
-      <div className="card" style={{ 
-        padding: '24px', 
-        textAlign: 'center',
-        minHeight: '300px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <Icon name="alert-circle" size={48} className="text-danger" style={{ marginBottom: '16px' }} />
+      <div
+        className="card"
+        style={{
+          padding: '24px',
+          textAlign: 'center',
+          minHeight: '300px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Icon
+          name="alert-circle"
+          size={48}
+          className="text-danger"
+          style={{ marginBottom: '16px' }}
+        />
         <h3 className="h5">Map Error</h3>
         <p className="body-small text-muted" style={{ marginTop: '8px' }}>
           {mapError}
