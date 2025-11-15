@@ -4,17 +4,25 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FEED_POSTS_2025, INFLUENCERS_2025, getInfluencerById } from '@/lib/data/influencers-2025';
 import FeedCard from '@/components/feed/FeedCard';
+import { SkeletonFeedCard } from '@/components/ui/Skeleton';
+import { EmptyFeed } from '@/components/ui/EmptyState';
 import styles from './feed.module.css';
 
 export default function FeedPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<'all' | 'live' | 'offers'>('all');
   const [isGuest, setIsGuest] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is a guest
     const guestCookie = document.cookie.includes('zzik_guest=1');
     setIsGuest(guestCookie);
+
+    // Simulate loading state
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
   }, []);
 
   const filteredPosts = FEED_POSTS_2025.filter((post) => {
@@ -113,19 +121,30 @@ export default function FeedPage() {
       <div
         className={`${styles.grid} container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-nav`}
       >
-        {filteredPosts.map((post) => {
-          const influencer = getInfluencerById(post.influencerId);
-          if (!influencer) return null;
+        {isLoading ? (
+          // Loading state with skeleton cards
+          Array.from({ length: 6 }).map((_, i) => <SkeletonFeedCard key={`skeleton-${i}`} />)
+        ) : filteredPosts.length === 0 ? (
+          // Empty state
+          <div className="col-span-full">
+            <EmptyFeed />
+          </div>
+        ) : (
+          // Actual content
+          filteredPosts.map((post) => {
+            const influencer = getInfluencerById(post.influencerId);
+            if (!influencer) return null;
 
-          return (
-            <FeedCard
-              key={post.id}
-              post={post}
-              influencer={influencer}
-              onClick={() => handlePostClick(post.id)}
-            />
-          );
-        })}
+            return (
+              <FeedCard
+                key={post.id}
+                post={post}
+                influencer={influencer}
+                onClick={() => handlePostClick(post.id)}
+              />
+            );
+          })
+        )}
       </div>
 
       {filteredPosts.length === 0 && (
