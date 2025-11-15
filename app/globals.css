@@ -1,615 +1,43 @@
 @import 'tailwindcss';
 @import '../styles/typography.css';
 
-/* ========= Design Tokens ========= */
-/* 사업계획서/진단 스펙에 맞춘 라이트/다크 토큰 구조  */
+/* ========================================
+   ZZIK LIVE Design System v2.0
+   단일화된 디자인 토큰 - 중복 제거 완료
+======================================== */
 
 :root {
+  /* ===== Colors ===== */
   /* Text */
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --text-inverse: #ffffff;
-  --text-muted: #6b7280; /* Improved from #9ca3af for better contrast */
-
-  /* Background/Surface */
-  --bg-base: #ffffff;
-  --bg-subtle: #f9fafb;
-  --bg-elev-1: #ffffffcc;
-  --bg-elev-2: #fffffff2;
-  --bg-inverse: #111827;
-  --bg: #ffffff;
-  --surface: #f9fafb;
-  --surface-2: #f3f4f6;
-
-  /* Brand & States */
-  --brand: #2563eb;
-  --brand-hover: #1d4ed8;
-  --brand-active: #1e40af;
-  --primary: #059669; /* Improved from #10b981 for better contrast */
-  --primary-600: #047857;
-  --success: #059669; /* Improved from #10b981 for better contrast */
-  --warning: #d97706; /* Improved from #f59e0b for better contrast */
-  --danger: #dc2626; /* Improved from #ef4444 for better contrast */
-  --info: #0ea5e9;
-
-  /* Interactive (스펙 요구: --interactive-primary) */
-  --interactive-primary: #059669; /* Improved from #10b981 for better contrast */
-  --interactive-primary-hover: #047857;
-  --interactive-primary-active: #065f46;
-
-  /* Border & Ring */
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
-  --ring: #93c5fd;
-  --outline: #3b82f6;
-  --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.5);
-
-  /* Overlay & Shadow */
-  --scrim: rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
-  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --elev-2: 0 6px 16px rgba(0, 0, 0, 0.1);
-
-  /* Spacing (4px grid) */
-  --sp-0: 0px;
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-8: 32px;
-  --sp-10: 40px;
-  --sp-12: 48px;
-
-  /* Touch Target (최소 48×48px) */
-  --touch-min: 48px;
-
-  /* Radius */
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 999px;
-
-  /* Motion */
-  --dur-fast: 120ms;
-  --dur-md: 200ms;
-  --dur-slow: 320ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
-  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  /* Font families */
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
-}
-
-/* Dark mode */
-.dark,
-[data-theme='dark'] {
-  color-scheme: dark;
-
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #9ca3af;
-  --text-inverse: #111827;
-  --text-muted: #9ca3af;
-
-  --bg-base: #0b0f14;
-  --bg-subtle: #111827;
-  --bg-elev-1: #111827cc;
-  --bg-elev-2: #111827f2;
-  --bg: #0b0f14;
-  --surface: #111827;
-  --surface-2: #0f172a;
-
-  --border: #1f2937;
-  --border-strong: #374151;
-  --ring: #60a5fa;
-
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-
-/* Default to dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-
-    --text-primary: #e5e7eb;
-    --text-secondary: #d1d5db;
-    --text-tertiary: #9ca3af;
-    --text-inverse: #111827;
-    --text-muted: #9ca3af;
-
-    --bg-base: #0b0f14;
-    --bg-subtle: #111827;
-    --bg-elev-1: #111827cc;
-    --bg-elev-2: #111827f2;
-    --bg: #0b0f14;
-    --surface: #111827;
-    --surface-2: #0f172a;
-
-    --border: #1f2937;
-    --border-strong: #374151;
-    --ring: #60a5fa;
-
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.35);
-  }
-}
-
-/* Motion reduced for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ========= Reset + Base ========= */
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#__next {
-  height: 100%;
-}
-
-html {
-  color-scheme: dark;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* ========= A11y Focus & Utilities ========= */
-:focus-visible {
-  outline: 3px solid var(--outline);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* Touch target minimum size (WCAG 2.1 Level AAA) */
-.touch-target-48 {
-  min-width: 48px;
-  min-height: 48px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Screen reader only */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Skip to main content link */
-.skip-to-main {
-  position: absolute;
-  left: -9999px;
-  z-index: 999;
-  padding: 1em;
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  text-decoration: none;
-  border: 2px solid var(--outline);
-}
-
-.skip-to-main:focus {
-  left: 50%;
-  transform: translateX(-50%);
-  top: 1em;
-}
-
-/* Skeleton loading states */
-.zzik-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--surface) 25%,
-    var(--border) 50%,
-    var(--surface) 75%
-  );
-  background-size: 200% 100%;
-  border-radius: var(--radius-sm);
-}
-
-.zzik-skeleton.animate {
-  animation: shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* ========= Typography ========= */
-.typo-body {
-  font-size: 16px;
-  line-height: 24px;
-}
-
-.typo-caption {
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.typo-label {
-  font-size: 12px;
-  line-height: 16px;
-}
-
-.text-h1 {
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-/* ========= Buttons ========= */
-.btn,
-.zzik-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 0 16px;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: #00130e;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 14px;
-  line-height: 20px;
-  transition:
-    background var(--dur-md) var(--ease-soft),
-    transform var(--dur-fast) var(--ease-soft);
-}
-
-.btn:hover,
-.zzik-btn:hover {
-  background: var(--primary-600);
-}
-
-.btn:active,
-.zzik-btn:active {
-  transform: scale(0.98);
-}
-
-.btn.ghost,
-.zzik-btn.ghost {
-  background: transparent;
-  color: var(--text-primary);
-  border-color: var(--border);
-}
-
-/* ========= Cards & Sheets ========= */
-.card,
-.zzik-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--elev-1);
-}
-
-/* ========= Layout Utils ========= */
-.zzik-app-shell {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr auto;
-}
-
-.zzik-page {
-  padding-inline: var(--sp-4);
-  padding-block: var(--sp-4);
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.zzik-row,
-.row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.zzik-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-}
-
-.grid {
-  display: grid;
-  gap: 16px;
-}
-
-/* ========= Touch & Interaction ========= */
-.touch {
-  min-height: 48px;
-  min-width: 48px;
-}
-
-/* ========= Skeleton Loading States ========= */
-.zzik-skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.06) 25%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.06) 75%
-  );
-  background-size: 200% 100%;
-  border-radius: var(--radius);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Light mode skeleton */
-.light .zzik-skeleton,
-:root:not(.dark) .zzik-skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.04) 25%,
-    rgba(0, 0, 0, 0.08) 50%,
-    rgba(0, 0, 0, 0.04) 75%
-  );
-  background-size: 200% 100%;
-}
-
-.zzik-skeleton.animate {
-  animation: shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Skeleton variants */
-.zzik-skeleton.text {
-  height: 1em;
-  border-radius: var(--radius-sm);
-}
-
-.zzik-skeleton.title {
-  height: 1.5em;
-  width: 60%;
-  border-radius: var(--radius-sm);
-}
-
-.zzik-skeleton.button {
-  height: 48px;
-  border-radius: var(--radius);
-}
-
-.zzik-skeleton.card {
-  height: 180px;
-  border-radius: var(--radius-lg);
-}
-
-.zzik-skeleton.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-}
-
-/* ========= Tab Bar ========= */
-.zzik-tabbar {
-  position: sticky;
-  bottom: 0;
-  inset-inline: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-3);
-  backdrop-filter: blur(16px);
-  background: var(--bg-elev-1);
-  border-top: 1px solid var(--border);
-}
-
-.zzik-tab {
-  min-height: var(--touch-min);
-  border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  color: var(--text-tertiary);
-  text-decoration: none;
-  font-size: 11px;
-  transition: background var(--dur-fast) var(--ease-soft);
-}
-
-.zzik-tab[aria-current='page'],
-.zzik-tab[aria-selected='true'] {
-  color: var(--interactive-primary);
-  background: var(--bg-subtle);
-}
-
-/* ========= States ========= */
-.zzik-state {
-  min-height: 160px;
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--border);
-  background: var(--bg-subtle);
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: var(--sp-4);
-}
-
-/* ========= Utility ========= */
-.muted {
-  color: var(--text-muted);
-}
-
-/* ========= Form Elements ========= */
-.zzik-input {
-  width: 100%;
-  min-height: var(--touch-min);
-  padding-inline: var(--sp-3);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--bg-elev-1);
-  color: var(--text-primary);
-  font-size: 14px;
-}
-
-.zzik-input::placeholder {
-  color: var(--text-tertiary);
-}
-
-.zzik-input:focus-visible {
-  border-color: var(--ring);
-  box-shadow: 0 0 0 1px var(--ring);
-}
-
-/* ========= Skeleton Loading ========= */
-.zzik-skeleton {
-  border-radius: var(--radius-md);
-  background: var(--bg-subtle);
-}
-
-.zzik-skeleton.animate {
-  animation: shimmer 1.5s linear infinite;
-  background-image: linear-gradient(
-    to right,
-    var(--bg-subtle) 0%,
-    var(--border) 20%,
-    var(--bg-subtle) 40%,
-    var(--bg-subtle) 100%
-  );
-  background-size: 800px 100%;
-}
-
-/* ========= Animations ========= */
-@keyframes pin-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.06);
-    opacity: 0.85;
-  }
-}
-
-@keyframes badge-pop {
-  from {
-    transform: translateY(8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-.animate-pin-pulse {
-  animation: pin-pulse 600ms var(--ease-soft);
-}
-.animate-badge-pop {
-  animation: badge-pop var(--dur-fast) var(--ease-out);
-}
-.animate-fade-up {
-  animation: fade-up var(--dur-md) var(--ease-out);
-}
-.animate-shimmer {
-  animation: shimmer 1.5s linear infinite;
-}
-
-/* ========= High Contrast Mode Support ========= */
-@media (prefers-contrast: more) {
-  :root {
-    --border: #9ca3af;
-    --border-strong: #6b7280;
-  }
-}
-
-/* ========= ZZIK LIVE Neo-Minimal Design System ========= */
-/* 단일화된 디자인 토큰 - 중복 제거 및 최적화 */
-
-:root {
-  /* ===== Color Palette ===== */
-  /* Text */
-  --text: #0F172A;            /* slate-900 - Primary text */
-  --text-secondary: #475569;   /* slate-600 - Secondary text */
-  --text-muted: #64748B;       /* slate-500 - Muted text */
-  --text-inverse: #ffffff;     /* White on dark backgrounds */
+  --text: #0F172A;            /* Primary text */
+  --text-secondary: #475569;   /* Secondary text */
+  --text-muted: #64748B;       /* Muted/disabled text */
+  --text-inverse: #ffffff;     /* On dark backgrounds */
   
   /* Background */
   --bg: #ffffff;               /* Main background */
-  --bg-subtle: #F8FAFC;        /* slate-50 - Subtle backgrounds */
-  --bg-surface: #ffffff;       /* Card/surface backgrounds */
-  --bg-hover: #F1F5F9;         /* slate-100 - Hover states */
+  --bg-subtle: #F8FAFC;        /* Subtle backgrounds */
+  --bg-surface: #ffffff;       /* Cards/panels */
+  --bg-hover: #F1F5F9;         /* Hover states */
   
-  /* Brand Colors */
-  --brand: #10B981;            /* emerald-500 - Primary brand */
-  --brand-hover: #059669;      /* emerald-600 - Brand hover */
-  --brand-active: #047857;     /* emerald-700 - Brand active */
-  --brand-subtle: #D1FAE5;     /* emerald-100 - Subtle brand */
+  /* Brand - Emerald Green */
+  --brand: #10B981;            /* Primary actions */
+  --brand-hover: #059669;      /* Brand hover */
+  --brand-active: #047857;     /* Brand pressed */
+  --brand-subtle: #D1FAE5;     /* Subtle brand */
   
-  /* Semantic Colors */
-  --success: #10B981;          /* emerald-500 */
-  --warning: #F59E0B;          /* amber-500 */
-  --error: #EF4444;            /* red-500 */
-  --info: #3B82F6;             /* blue-500 */
+  /* Semantic */
+  --success: #10B981;          /* Success states */
+  --warning: #F59E0B;          /* Warning states */
+  --error: #EF4444;            /* Error states */
+  --info: #3B82F6;             /* Info states */
   
   /* UI Elements */
-  --border: #E2E8F0;           /* slate-200 - Default borders */
-  --border-strong: #CBD5E1;    /* slate-300 - Strong borders */
-  --focus: #3B82F6;            /* blue-500 - Focus rings */
-  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);  /* Subtle shadows */
+  --border: #E2E8F0;           /* Default borders */
+  --border-strong: #CBD5E1;    /* Emphasized borders */
+  --focus: #3B82F6;            /* Focus indicators */
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
   
   /* ===== Spacing (4px grid) ===== */
   --sp-1: 4px;
@@ -625,13 +53,14 @@ body {
   
   /* ===== Border Radius ===== */
   --radius-sm: 6px;
-  --radius: 10px;              /* Default */
+  --radius: 10px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-full: 9999px;
   
-  /* ===== Typography Scale ===== */
+  /* ===== Typography ===== */
+  /* Font Sizes */
   --text-xs: 0.75rem;      /* 12px */
   --text-sm: 0.875rem;     /* 14px */
   --text-base: 1rem;       /* 16px */
@@ -656,7 +85,7 @@ body {
   /* Font Family */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
   
-  /* ===== Motion & Transitions ===== */
+  /* ===== Motion ===== */
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --duration-slow: 300ms;
@@ -665,83 +94,126 @@ body {
   
   /* ===== Touch Targets ===== */
   --touch-min: 44px;           /* WCAG 2.1 AA minimum */
-  --touch-target: 48px;        /* Comfortable touch size */
+  --touch-target: 48px;        /* Comfortable size */
   
-  /* ===== Z-Index Scale ===== */
+  /* ===== Z-Index ===== */
   --z-base: 0;
   --z-dropdown: 1000;
   --z-sticky: 1020;
   --z-fixed: 1030;
   --z-modal-backdrop: 1040;
   --z-modal: 1050;
-  --z-popover: 1060;
   --z-tooltip: 1070;
 }
 
 /* ===== Dark Mode ===== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #F1F5F9;           /* slate-100 */
-    --text-secondary: #CBD5E1;  /* slate-300 */
-    --text-muted: #94A3B8;      /* slate-400 */
-    --text-inverse: #0F172A;    /* slate-900 */
+    --text: #F1F5F9;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-inverse: #0F172A;
     
-    --bg: #0F172A;              /* slate-900 */
-    --bg-subtle: #1E293B;       /* slate-800 */
-    --bg-surface: #1E293B;      /* slate-800 */
-    --bg-hover: #334155;        /* slate-700 */
+    --bg: #0F172A;
+    --bg-subtle: #1E293B;
+    --bg-surface: #1E293B;
+    --bg-hover: #334155;
     
-    --border: #334155;          /* slate-700 */
-    --border-strong: #475569;   /* slate-600 */
+    --border: #334155;
+    --border-strong: #475569;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
 }
 
-/* ===== Typography Utility Classes ===== */
-.text-h1 { 
-  font-size: var(--text-4xl); 
-  font-weight: var(--font-bold); 
-  line-height: var(--leading-tight);
-  letter-spacing: -0.02em;
-}
-.text-h2 { 
-  font-size: var(--text-3xl); 
-  font-weight: var(--font-bold); 
-  line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
-}
-.text-h3 { 
-  font-size: var(--text-2xl); 
-  font-weight: var(--font-semibold); 
-  line-height: var(--leading-snug);
-}
-.text-h4 { 
-  font-size: var(--text-xl); 
-  font-weight: var(--font-semibold); 
-  line-height: var(--leading-snug);
-}
-.text-body { 
-  font-size: var(--text-base); 
-  font-weight: var(--font-normal); 
-  line-height: var(--leading-normal);
-}
-.text-small { 
-  font-size: var(--text-sm); 
-  line-height: var(--leading-normal);
-}
-.text-xs { 
-  font-size: var(--text-xs); 
-  line-height: var(--leading-normal);
+/* ===== Reduced Motion (Accessibility) ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-/* ===== Enhanced Focus States ===== */
-:where(a, button, input, select, textarea):focus-visible {
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Focus States ===== */
+:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
   border-radius: var(--radius-sm);
 }
 
-/* ===== Button Base Styles ===== */
+/* ===== Typography Classes ===== */
+.text-h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+}
+.text-h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+}
+.text-h3 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+}
+.text-h4 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+}
+.text-body {
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+}
+.text-small {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+.text-xs {
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+/* Text Colors */
+.text-muted {
+  color: var(--text-muted);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* ===== Button Styles ===== */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -758,13 +230,11 @@ body {
   cursor: pointer;
   transition: all var(--duration-base) var(--ease-in-out);
 }
-
 .btn-primary:hover {
   background: var(--brand-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
-
 .btn-primary:active {
   background: var(--brand-active);
   transform: translateY(0);
@@ -786,7 +256,6 @@ body {
   cursor: pointer;
   transition: all var(--duration-base) var(--ease-in-out);
 }
-
 .btn-secondary:hover {
   background: var(--bg-hover);
   border-color: var(--border-strong);
@@ -801,7 +270,6 @@ body {
   padding: var(--sp-4);
   transition: all var(--duration-base) var(--ease-in-out);
 }
-
 .card:hover {
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
   transform: translateY(-2px);
@@ -820,25 +288,90 @@ body {
   font-family: var(--font-sans);
   transition: all var(--duration-base) var(--ease-in-out);
 }
-
 .input::placeholder {
   color: var(--text-muted);
 }
-
 .input:hover {
   border-color: var(--border-strong);
 }
-
 .input:focus {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* ===== Layout ===== */
+.zzik-page {
+  padding: var(--sp-4);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ===== Skeleton Loading ===== */
+.zzik-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-subtle) 25%,
+    var(--border) 50%,
+    var(--bg-subtle) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius);
+}
+.zzik-skeleton.animate {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== Animations ===== */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up var(--duration-base) var(--ease-out);
+}
+
+/* ===== Accessibility ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* ===== Utility Classes ===== */
-.text-muted { color: var(--text-muted); }
-.text-secondary { color: var(--text-secondary); }
-.bg-subtle { background: var(--bg-subtle); }
-.border-default { border: 1px solid var(--border); }
-.rounded { border-radius: var(--radius); }
-.rounded-lg { border-radius: var(--radius-lg); }
-.shadow { box-shadow: var(--shadow); }
+.bg-subtle {
+  background: var(--bg-subtle);
+}
+.border-default {
+  border: 1px solid var(--border);
+}
+.rounded {
+  border-radius: var(--radius);
+}
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+.shadow {
+  box-shadow: var(--shadow);
+}
