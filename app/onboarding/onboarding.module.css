@@ -1,0 +1,286 @@
+/* Onboarding Page - Optimized UX/UI */
+
+/* Container */
+.container {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-4);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-subtle) 100%);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Skip button */
+.skipButton {
+  position: absolute;
+  top: var(--sp-6);
+  right: var(--sp-6);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: all var(--duration-base) var(--ease-out);
+  z-index: 10;
+}
+
+.skipButton:hover,
+.skipButton:focus {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.skipButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Content wrapper */
+.content {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Slide wrapper with animation */
+.slideWrapper {
+  animation: slideIn 0.3s var(--ease-out);
+}
+
+.slideForward {
+  animation: slideInFromRight 0.3s var(--ease-out);
+}
+
+.slideBackward {
+  animation: slideInFromLeft 0.3s var(--ease-out);
+}
+
+/* Icon */
+.iconWrapper {
+  margin-bottom: var(--sp-6);
+  animation: iconBounce 0.5s var(--ease-out) 0.1s both;
+}
+
+.icon {
+  display: inline-block;
+  font-size: 64px;
+  line-height: 1;
+}
+
+/* Title */
+.title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text);
+  margin: 0 0 var(--sp-3) 0;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+}
+
+/* Description */
+.description {
+  font-size: var(--text-lg);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--sp-8) 0;
+}
+
+/* Progress indicators */
+.indicators {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: center;
+  margin-bottom: var(--sp-8);
+}
+
+.indicator {
+  width: 32px;
+  height: 4px;
+  background: var(--border);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-out);
+  padding: 0;
+}
+
+.indicator:hover {
+  background: var(--border-strong);
+}
+
+.indicator:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.indicatorActive {
+  background: var(--brand);
+  width: 48px;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: center;
+}
+
+/* Buttons */
+.button {
+  min-width: 120px;
+  min-height: var(--touch-target);
+  padding: var(--sp-3) var(--sp-6);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-out);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.buttonPrimary {
+  background: var(--brand);
+  color: white;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+  background: var(--brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.buttonPrimary:active:not(:disabled) {
+  background: var(--brand-active);
+  transform: translateY(0);
+}
+
+.buttonSecondary {
+  background: var(--bg-surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.buttonSecondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Accessibility: Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slideWrapper,
+  .slideForward,
+  .slideBackward,
+  .iconWrapper,
+  .button {
+    animation: none;
+    transform: none;
+  }
+  
+  .buttonPrimary:hover:not(:disabled),
+  .buttonPrimary:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .container {
+    padding: var(--sp-6) var(--sp-4);
+  }
+  
+  .skipButton {
+    top: var(--sp-4);
+    right: var(--sp-4);
+    font-size: var(--text-xs);
+    padding: var(--sp-1) var(--sp-3);
+  }
+  
+  .icon {
+    font-size: 48px;
+  }
+  
+  .title {
+    font-size: var(--text-2xl);
+  }
+  
+  .description {
+    font-size: var(--text-base);
+  }
+  
+  .button {
+    min-width: 100px;
+    padding: var(--sp-2) var(--sp-4);
+    font-size: var(--text-sm);
+  }
+  
+  .navigation {
+    gap: var(--sp-2);
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 375px) {
+  .button {
+    min-width: 80px;
+    font-size: var(--text-xs);
+  }
+}
