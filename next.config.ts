@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Turbopack configuration for Next.js 16 (Web Workers are supported by default)
+  turbopack: {},
 };
 
 export default nextConfig;

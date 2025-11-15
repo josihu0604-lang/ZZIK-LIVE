@@ -11,15 +11,16 @@ export default function ScanPage() {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [showScanner, setShowScanner] = useState(true);
 
-  const handleScanResult = (payload: string) => {
+  const handleScanResult = (result: { text: string; ts: number; source: string }) => {
+    const payload = result.text;
     console.log('Scan result:', payload);
 
     // Parse QR code payload
-    let result: ScanResult;
+    let scanResult: ScanResult;
 
     if (payload.startsWith('VOUCHER:')) {
       const voucherId = payload.replace('VOUCHER:', '');
-      result = {
+      scanResult = {
         kind: 'voucher',
         payload,
         voucherId,
@@ -28,7 +29,7 @@ export default function ScanPage() {
       analytics.qrScanResult('voucher');
     } else if (payload.startsWith('CHECKIN:')) {
       const placeId = payload.replace('CHECKIN:', '');
-      result = {
+      scanResult = {
         kind: 'checkin',
         payload,
         placeId,
@@ -36,14 +37,14 @@ export default function ScanPage() {
       };
       analytics.qrScanResult('checkin');
     } else if (payload.startsWith('MEMBER:')) {
-      result = {
+      scanResult = {
         kind: 'membership',
         payload,
         timestamp: new Date(),
       };
       analytics.qrScanResult('membership');
     } else {
-      result = {
+      scanResult = {
         kind: 'unknown',
         payload,
         timestamp: new Date(),
@@ -51,7 +52,7 @@ export default function ScanPage() {
       analytics.qrScanResult('unknown');
     }
 
-    setScanResult(result);
+    setScanResult(scanResult);
     setShowScanner(false);
   };
 
@@ -82,11 +83,12 @@ export default function ScanPage() {
 
   if (showScanner) {
     return (
-      <QRScannerView
-        onResult={handleScanResult}
-        onError={handleScanError}
-        onClose={handleClose}
-      />
+      <div className="container max-w-2xl mx-auto p-4">
+        <QRScannerView
+          onResult={handleScanResult}
+          continuous={false}
+        />
+      </div>
     );
   }
 
