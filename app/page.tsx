@@ -16,7 +16,7 @@ export default function HomePage() {
 
     // Route based on authentication state
     if (hasSession || isGuest) {
-      router.replace('/feed');
+      router.replace('/content');
     } else {
       router.replace('/splash');
     }

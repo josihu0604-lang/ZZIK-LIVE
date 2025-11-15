@@ -6,7 +6,7 @@ import { FEED_POSTS_2025, INFLUENCERS_2025, getInfluencerById } from '@/lib/data
 import FeedCard from '@/components/feed/FeedCard';
 import { SkeletonFeedCard } from '@/components/ui/Skeleton';
 import { EmptyFeed } from '@/components/ui/EmptyState';
-import styles from './feed.module.css';
+import styles from './content.module.css';
 
 export default function FeedPage() {
   const router = useRouter();
