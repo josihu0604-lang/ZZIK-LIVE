@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import '../styles/tokens.css';
+import ButtonInitializer from '@/components/ButtonInitializer';
 
 // Geist for Latin characters - Modern, clean design
 const geistSans = Geist({
@@ -94,6 +95,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-main">
           Skip to main content
         </a>
+        <ButtonInitializer />
         {children}
       </body>
     </html>

@@ -28,8 +28,11 @@ function BottomTabBar() {
         display: 'grid',
         justifyItems: 'center',
         gap: 4,
-        padding: '10px',
+        padding: '12px 10px',
+        minHeight: '48px',
         color: active(href) ? 'var(--text)' : 'var(--text-muted)',
+        transition: 'all var(--duration-base)',
+        position: 'relative',
       }}
     >
       <Icon size={24} strokeWidth={1.75} aria-hidden />

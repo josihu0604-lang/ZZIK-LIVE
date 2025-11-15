@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '../styles/typography.css';
+@import '../styles/buttons.css';
 
 /* ========================================
    ZZIK LIVE Design System v2.0
@@ -32,12 +33,19 @@
   --error: #EF4444;            /* Error states */
   --info: #3B82F6;             /* Info states */
   
+  /* Danger (Destructive actions) */
+  --danger: #EF4444;           /* Danger primary */
+  --danger-hover: #DC2626;     /* Danger hover */
+  --danger-active: #B91C1C;    /* Danger pressed */
+  
   /* UI Elements */
   --border: #E2E8F0;           /* Default borders */
   --border-strong: #CBD5E1;    /* Emphasized borders */
   --focus: #3B82F6;            /* Focus indicators */
   --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 6px rgba(15, 23, 42, 0.1);
   --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+  --shadow-xl: 0 20px 40px rgba(15, 23, 42, 0.15);
   
   /* ===== Spacing (4px grid) ===== */
   --sp-1: 4px;
@@ -213,53 +221,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ===== Button Styles ===== */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-2);
-  min-height: var(--touch-target);
-  padding: 0 var(--sp-4);
-  border-radius: var(--radius);
-  background: var(--brand);
-  color: white;
-  font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  border: none;
-  cursor: pointer;
-  transition: all var(--duration-base) var(--ease-in-out);
-}
-.btn-primary:hover {
-  background: var(--brand-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
-.btn-primary:active {
-  background: var(--brand-active);
-  transform: translateY(0);
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-2);
-  min-height: var(--touch-target);
-  padding: 0 var(--sp-4);
-  border-radius: var(--radius);
-  background: transparent;
-  color: var(--text);
-  font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all var(--duration-base) var(--ease-in-out);
-}
-.btn-secondary:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-strong);
-}
+/* Button Styles moved to styles/buttons.css for better organization */
 
 /* ===== Card Styles ===== */
 .card {

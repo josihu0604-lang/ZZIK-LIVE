@@ -194,27 +194,13 @@ function TabButton({
         aria-controls={`panel-${id}`}
         tabIndex={active ? 0 : -1}
         onClick={onClick}
-        className="tab-button"
+        className="btn btn-tab"
       >
         {label}
       </button>
       <style jsx>{`
-        .tab-button {
+        .btn-tab {
           flex: 1;
-          padding: var(--sp-2) var(--sp-3);
-          border: none;
-          border-radius: var(--radius);
-          background: ${active ? 'var(--bg)' : 'transparent'};
-          color: ${active ? 'var(--text)' : 'var(--text-muted)'};
-          font-size: var(--text-sm);
-          font-weight: ${active ? 'var(--font-semibold)' : 'var(--font-normal)'};
-          cursor: pointer;
-          transition: all var(--duration-base);
-          box-shadow: ${active ? 'var(--shadow)' : 'none'};
-        }
-        .tab-button:hover {
-          color: var(--text);
-          background: ${active ? 'var(--bg)' : 'var(--bg-hover)'};
         }
       `}</style>
     </>
@@ -266,35 +252,10 @@ function OAuthButton({
 }) {
   return (
     <>
-      <a href={href} className="oauth-button">
+      <a href={href} className="btn btn-social btn-social-${provider} btn-block">
         <BrandIcon provider={provider} />
         <span>{label}</span>
       </a>
-      <style jsx>{`
-        .oauth-button {
-          display: flex;
-          align-items: center;
-          gap: var(--sp-3);
-          padding: var(--sp-3) var(--sp-4);
-          background: var(--bg);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          color: var(--text);
-          text-decoration: none;
-          font-size: var(--text-base);
-          font-weight: var(--font-medium);
-          transition: all var(--duration-base);
-          box-shadow: var(--shadow);
-        }
-        .oauth-button:hover {
-          border-color: var(--border-strong);
-          box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
-          transform: translateY(-1px);
-        }
-        .oauth-button:active {
-          transform: translateY(0);
-        }
-      `}</style>
     </>
   );
 }
@@ -368,7 +329,7 @@ function EmailForm() {
             aria-label="이메일 주소"
           />
         </label>
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn btn-primary btn-block">
           로그인 링크 받기
         </button>
       </form>
@@ -407,7 +368,7 @@ function PhoneForm() {
             aria-label="휴대폰 번호"
           />
         </label>
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn btn-primary btn-block">
           인증 코드 받기
         </button>
       </form>

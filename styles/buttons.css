@@ -1,0 +1,537 @@
+/* ========================================
+   ZZIK LIVE - Button System v2.0
+   ========================================
+   
+   🎯 Design Goals:
+   - WCAG AAA: 48px minimum touch targets
+   - Consistent interaction states (hover, active, focus, disabled, loading)
+   - Mobile-first with touch feedback (ripple effects)
+   - Korean text support with proper spacing
+   - Unified button system across entire app
+   
+   📊 Button Sizes:
+   - Large: 56px height (hero CTAs)
+   - Medium: 48px height (primary actions) - DEFAULT
+   - Small: 40px height (secondary actions)
+   - Tiny: 32px height (inline actions only)
+   
+   🎨 Button Variants:
+   - Primary: Brand color, main CTAs
+   - Secondary: Outline style, secondary actions
+   - Ghost: Minimal, text-only appearance
+   - Danger: Destructive actions
+   - Social: OAuth provider buttons
+   
+   ======================================== */
+
+/* ===== Base Button Reset ===== */
+button {
+  -webkit-tap-highlight-color: transparent; /* Remove mobile tap highlight */
+  touch-action: manipulation; /* Improve touch responsiveness */
+  user-select: none; /* Prevent text selection on double tap */
+}
+
+/* ===== Core Button Styles ===== */
+.btn,
+.button,
+button[class*="btn-"] {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  position: relative;
+  overflow: hidden; /* For ripple effect */
+  
+  /* Sizing - DEFAULT to medium (48px) for WCAG */
+  min-height: 48px;
+  padding: 0 var(--sp-5);
+  
+  /* Typography */
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  
+  /* Appearance */
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  
+  /* Transitions */
+  transition: all var(--duration-base) var(--ease-out);
+  
+  /* Disable default behaviors */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Korean text optimization */
+  word-break: keep-all;
+}
+
+/* ===== Size Variants ===== */
+.btn-large,
+.button-large {
+  min-height: 56px;
+  padding: 0 var(--sp-6);
+  font-size: var(--text-lg);
+  border-radius: var(--radius-lg);
+}
+
+.btn-medium,
+.button-medium {
+  min-height: 48px; /* Default size */
+  padding: 0 var(--sp-5);
+  font-size: var(--text-base);
+}
+
+.btn-small,
+.button-small {
+  min-height: 40px;
+  padding: 0 var(--sp-4);
+  font-size: var(--text-sm);
+}
+
+.btn-tiny,
+.button-tiny {
+  min-height: 32px;
+  padding: 0 var(--sp-3);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+}
+
+/* ===== Primary Button ===== */
+.btn-primary,
+.button-primary {
+  background: var(--brand);
+  color: white;
+  border-color: var(--brand);
+}
+
+.btn-primary:hover,
+.button-primary:hover {
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 8px rgba(16, 185, 129, 0.25),
+    0 8px 16px rgba(16, 185, 129, 0.15);
+}
+
+.btn-primary:active,
+.button-primary:active {
+  background: var(--brand-active);
+  border-color: var(--brand-active);
+  transform: translateY(0);
+  box-shadow: 
+    0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+/* ===== Secondary Button ===== */
+.btn-secondary,
+.button-secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:hover,
+.button-secondary:hover {
+  background: var(--bg-subtle);
+  border-color: var(--text-muted);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.btn-secondary:active,
+.button-secondary:active {
+  background: var(--bg-hover);
+  transform: translateY(0);
+}
+
+/* ===== Ghost Button ===== */
+.btn-ghost,
+.button-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: transparent;
+  padding: 0 var(--sp-3);
+}
+
+.btn-ghost:hover,
+.button-ghost:hover {
+  color: var(--text);
+  background: var(--bg-subtle);
+}
+
+.btn-ghost:active,
+.button-ghost:active {
+  background: var(--bg-hover);
+}
+
+/* ===== Danger Button ===== */
+.btn-danger,
+.button-danger {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+}
+
+.btn-danger:hover,
+.button-danger:hover {
+  background: var(--danger-hover);
+  border-color: var(--danger-hover);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 8px rgba(239, 68, 68, 0.25),
+    0 8px 16px rgba(239, 68, 68, 0.15);
+}
+
+.btn-danger:active,
+.button-danger:active {
+  background: var(--danger-active);
+  border-color: var(--danger-active);
+  transform: translateY(0);
+}
+
+/* ===== Full Width Variant ===== */
+.btn-block,
+.button-block {
+  width: 100%;
+}
+
+/* ===== Icon Buttons ===== */
+.btn-icon,
+.button-icon {
+  padding: 0;
+  min-width: 48px; /* Square by default for WCAG */
+  width: 48px;
+}
+
+.btn-icon.btn-small,
+.button-icon.button-small {
+  min-width: 40px;
+  width: 40px;
+}
+
+.btn-icon.btn-tiny,
+.button-icon.button-tiny {
+  min-width: 32px;
+  width: 32px;
+}
+
+/* Icon inside buttons */
+.btn svg,
+.button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.btn-small svg,
+.button-small svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-tiny svg,
+.button-tiny svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== Focus States (Keyboard Navigation) ===== */
+.btn:focus-visible,
+.button:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+  z-index: 10;
+}
+
+.btn-danger:focus-visible,
+.button-danger:focus-visible {
+  outline-color: var(--danger);
+}
+
+/* ===== Disabled States ===== */
+.btn:disabled,
+.button:disabled,
+.btn[aria-disabled="true"],
+.button[aria-disabled="true"],
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+/* Visual indication for disabled */
+.btn:disabled::after,
+.button:disabled::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: inherit;
+}
+
+/* ===== Loading States ===== */
+.btn-loading,
+.button-loading {
+  color: transparent !important;
+  pointer-events: none;
+  position: relative;
+}
+
+.btn-loading::after,
+.button-loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+/* White spinner for primary/danger buttons */
+.btn-primary.btn-loading::after,
+.btn-danger.btn-loading::after {
+  border-color: white;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Ripple Effect (Touch Feedback) ===== */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+.btn-primary .btn-ripple,
+.btn-danger .btn-ripple {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary .btn-ripple,
+.btn-ghost .btn-ripple {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===== Button Groups ===== */
+.btn-group {
+  display: inline-flex;
+  gap: var(--sp-2);
+}
+
+.btn-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Connected button group (no gap) */
+.btn-group-connected {
+  display: inline-flex;
+  gap: 0;
+}
+
+.btn-group-connected > .btn:not(:first-child),
+.btn-group-connected > .button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left-width: 0;
+}
+
+.btn-group-connected > .btn:not(:last-child),
+.btn-group-connected > .button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* ===== Social OAuth Buttons ===== */
+.btn-social {
+  background: white;
+  color: var(--text);
+  border: 2px solid var(--border);
+  min-height: 48px;
+  padding: 0 var(--sp-5);
+  font-weight: var(--font-medium);
+}
+
+.btn-social:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-social:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow);
+}
+
+/* Provider-specific colors on hover */
+.btn-social-google:hover {
+  border-color: #4285F4;
+  background: rgba(66, 133, 244, 0.04);
+}
+
+.btn-social-instagram:hover {
+  border-color: #E4405F;
+  background: rgba(228, 64, 95, 0.04);
+}
+
+.btn-social-tiktok:hover {
+  border-color: #000;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* ===== Tab Buttons ===== */
+.btn-tab {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: var(--sp-3) var(--sp-4);
+  min-height: 40px;
+  font-weight: var(--font-medium);
+  border-radius: var(--radius);
+}
+
+.btn-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.btn-tab[aria-selected="true"] {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: var(--font-semibold);
+  box-shadow: var(--shadow);
+}
+
+/* ===== Floating Action Button (FAB) ===== */
+.btn-fab {
+  position: fixed;
+  bottom: calc(60px + var(--sp-4)); /* Above bottom nav */
+  right: var(--sp-4);
+  width: 56px;
+  height: 56px;
+  min-height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+
+.btn-fab:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-xl);
+}
+
+.btn-fab:active {
+  transform: scale(0.95);
+}
+
+/* ===== Mobile Optimizations ===== */
+@media (max-width: 640px) {
+  /* Increase tap targets on mobile */
+  .btn,
+  .button {
+    min-height: 48px; /* Ensure WCAG compliance */
+  }
+  
+  /* Full width buttons on mobile for better UX */
+  .btn-mobile-block {
+    width: 100%;
+  }
+  
+  /* Larger FAB on mobile */
+  .btn-fab {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* ===== Dark Mode Support ===== */
+@media (prefers-color-scheme: dark) {
+  .btn-secondary {
+    border-color: var(--border);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-strong);
+  }
+  
+  .btn-social {
+    background: var(--bg-subtle);
+    border-color: var(--border);
+  }
+  
+  .btn-social:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-strong);
+  }
+  
+  .btn-ripple {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  .btn,
+  .button,
+  button {
+    border: 1px solid #000 !important;
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* ===== Animation Performance ===== */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .button {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .btn:hover,
+  .button:hover {
+    transform: none !important;
+  }
+  
+  .btn-ripple {
+    display: none;
+  }
+}
