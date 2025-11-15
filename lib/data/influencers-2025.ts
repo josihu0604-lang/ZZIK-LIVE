@@ -20,20 +20,23 @@ export interface Post {
   id: string;
   influencerId: string;
   type: 'reel' | 'photo' | 'live';
+  contentType?: 'video' | 'image' | 'short' | 'live';
   thumbnail: string;
   videoUrl?: string;
   title: string;
   description: string;
+  content?: string;
   location: {
     name: string;
     address: string;
     geohash5: string;
   };
   tags: string[];
+  hashtags?: string[];
   likes: number;
   comments: number;
   views: number;
-  timestamp: string;
+  timestamp: string | number;
   offer?: {
     discount: number;
     validUntil: string;

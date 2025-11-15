@@ -1,16 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
+import { Search, Filter, TrendingUp, Clock, Star, Play } from 'lucide-react';
 import { FEED_POSTS_2025, INFLUENCERS_2025, getInfluencerById } from '@/lib/data/influencers-2025';
 import FeedCard from '@/components/feed/FeedCard';
 import { SkeletonFeedCard } from '@/components/ui/Skeleton';
 import { EmptyFeed } from '@/components/ui/EmptyState';
 import styles from './content.module.css';
 
-export default function FeedPage() {
+type TabType = 'trending' | 'latest' | 'top' | 'live';
+type FilterType = 'all' | 'video' | 'live' | 'offers';
+
+function ContentPageContent() {
   const router = useRouter();
-  const [filter, setFilter] = useState<'all' | 'live' | 'offers'>('all');
+  const [activeTab, setActiveTab] = useState<TabType>('trending');
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,11 +32,58 @@ export default function FeedPage() {
     }, 800);
   }, []);
 
-  const filteredPosts = FEED_POSTS_2025.filter((post) => {
-    if (filter === 'live') return post.type === 'live';
-    if (filter === 'offers') return !!post.offer;
-    return true;
-  });
+  // Filter and sort posts based on active tab and filters
+  const getFilteredPosts = () => {
+    let posts = [...FEED_POSTS_2025];
+
+    // Apply filter
+    if (filter === 'video') {
+      posts = posts.filter((post) => post.contentType === 'video' || post.contentType === 'short');
+    } else if (filter === 'live') {
+      posts = posts.filter((post) => post.type === 'live');
+    } else if (filter === 'offers') {
+      posts = posts.filter((post) => !!post.offer);
+    }
+
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      posts = posts.filter((post) => {
+        const influencer = getInfluencerById(post.influencerId);
+        return (
+          post.content.toLowerCase().includes(query) ||
+          post.hashtags?.some((tag) => tag.toLowerCase().includes(query)) ||
+          influencer?.name.toLowerCase().includes(query) ||
+          influencer?.category.toLowerCase().includes(query)
+        );
+      });
+    }
+
+    // Sort by tab
+    switch (activeTab) {
+      case 'trending':
+        // Sort by engagement (views + likes)
+        posts.sort((a, b) => b.views + b.likes - (a.views + a.likes));
+        break;
+      case 'latest':
+        // Sort by timestamp (newest first)
+        posts.sort((a, b) => b.timestamp - a.timestamp);
+        break;
+      case 'top':
+        // Sort by likes
+        posts.sort((a, b) => b.likes - a.likes);
+        break;
+      case 'live':
+        // Only show live content
+        posts = posts.filter((post) => post.type === 'live');
+        posts.sort((a, b) => b.timestamp - a.timestamp);
+        break;
+    }
+
+    return posts;
+  };
+
+  const filteredPosts = getFilteredPosts();
 
   const handlePostClick = (postId: string) => {
     if (isGuest) {
@@ -47,14 +101,54 @@ export default function FeedPage() {
   return (
     <main className={styles.main}>
       <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className="h1">ZZIK LIVE</h1>
-          <p className="sub">실시간 나노 크리에이터 콘텐츠</p>
+        <div className={styles.headerTop}>
+          <div className={styles.headerTitle}>
+            <h1 className="h2">콘텐츠 탐색</h1>
+            <p className="caption text-muted">나노 인플루언서의 트렌딩 콘텐츠</p>
+          </div>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.searchToggle}
+              onClick={() => setShowSearch(!showSearch)}
+              aria-label="검색 토글"
+            >
+              <Search size={20} />
+            </button>
+            <button type="button" className={styles.filterToggle} aria-label="필터 열기">
+              <Filter size={20} />
+              {filter !== 'all' && <span className={styles.filterBadge}>1</span>}
+            </button>
+          </div>
         </div>
+
+        {showSearch && (
+          <div className={styles.searchBar}>
+            <Search size={18} className={styles.searchIcon} />
+            <input
+              type="search"
+              className={styles.searchInput}
+              placeholder="크리에이터, 해시태그, 콘텐츠 검색..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="콘텐츠 검색"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                className={styles.searchClear}
+                onClick={() => setSearchQuery('')}
+                aria-label="검색어 지우기"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        )}
 
         {isGuest && (
           <div className={styles.guestBanner} role="status" aria-live="polite">
-            <span>게스트 모드로 둘러보는 중</span>
+            <span>💡 로그인하면 맞춤 콘텐츠를 추천받을 수 있어요</span>
             <button
               type="button"
               className={styles.loginBtn}
@@ -67,35 +161,86 @@ export default function FeedPage() {
         )}
       </header>
 
-      <nav className={styles.filters} role="navigation" aria-label="피드 필터">
+      {/* Tab Navigation */}
+      <nav className={styles.tabs} role="navigation" aria-label="콘텐츠 탭">
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === 'trending' ? styles.active : ''}`}
+          onClick={() => setActiveTab('trending')}
+          aria-selected={activeTab === 'trending'}
+        >
+          <TrendingUp size={16} />
+          <span>트렌딩</span>
+        </button>
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === 'latest' ? styles.active : ''}`}
+          onClick={() => setActiveTab('latest')}
+          aria-selected={activeTab === 'latest'}
+        >
+          <Clock size={16} />
+          <span>최신</span>
+        </button>
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === 'top' ? styles.active : ''}`}
+          onClick={() => setActiveTab('top')}
+          aria-selected={activeTab === 'top'}
+        >
+          <Star size={16} />
+          <span>인기</span>
+        </button>
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === 'live' ? styles.active : ''}`}
+          onClick={() => setActiveTab('live')}
+          aria-selected={activeTab === 'live'}
+        >
+          <Play size={16} />
+          <span>라이브</span>
+          {FEED_POSTS_2025.filter((p) => p.type === 'live').length > 0 && (
+            <span className={styles.liveBadge}>
+              {FEED_POSTS_2025.filter((p) => p.type === 'live').length}
+            </span>
+          )}
+        </button>
+      </nav>
+
+      {/* Filter Pills */}
+      <div className={styles.filters} role="navigation" aria-label="콘텐츠 필터">
         <button
           type="button"
           className={`${styles.filterBtn} ${filter === 'all' ? styles.active : ''}`}
           onClick={() => setFilter('all')}
           aria-pressed={filter === 'all'}
-          aria-label="전체 피드 보기"
         >
           전체
+        </button>
+        <button
+          type="button"
+          className={`${styles.filterBtn} ${filter === 'video' ? styles.active : ''}`}
+          onClick={() => setFilter('video')}
+          aria-pressed={filter === 'video'}
+        >
+          🎬 동영상
         </button>
         <button
           type="button"
           className={`${styles.filterBtn} ${filter === 'live' ? styles.active : ''}`}
           onClick={() => setFilter('live')}
           aria-pressed={filter === 'live'}
-          aria-label="라이브 피드만 보기"
         >
-          LIVE
+          🔴 라이브
         </button>
         <button
           type="button"
           className={`${styles.filterBtn} ${filter === 'offers' ? styles.active : ''}`}
           onClick={() => setFilter('offers')}
           aria-pressed={filter === 'offers'}
-          aria-label="할인 중인 피드만 보기"
         >
-          할인중
+          🏷️ 오퍼
         </button>
-      </nav>
+      </div>
 
       <div className={`${styles.stats} container mb-6 grid grid-cols-3 gap-4`}>
         <div className={`${styles.statItem} text-center p-4 rounded-lg bg-subtle`}>
@@ -147,11 +292,22 @@ export default function FeedPage() {
         )}
       </div>
 
-      {filteredPosts.length === 0 && (
-        <div className={styles.empty}>
-          <p className="body">해당하는 콘텐츠가 없습니다.</p>
+      {/* Show search results count */}
+      {searchQuery && !isLoading && (
+        <div className={styles.searchResults}>
+          <p className="caption text-muted">
+            "{searchQuery}" 검색 결과: {filteredPosts.length}개의 콘텐츠
+          </p>
         </div>
       )}
     </main>
+  );
+}
+
+export default function ContentPage() {
+  return (
+    <Suspense fallback={<div>로딩 중...</div>}>
+      <ContentPageContent />
+    </Suspense>
   );
 }
