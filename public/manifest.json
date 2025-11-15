@@ -1,69 +1,137 @@
 {
+  "name": "ZZIK LIVE - 나노 크리에이터 플랫폼",
   "short_name": "ZZIK LIVE",
-  "name": "ZZIK LIVE - Personal Safety Companion",
-  "description": "Your personal safety companion for real-time location sharing and emergency assistance",
+  "description": "나노 크리에이터와 로컬 비즈니스를 연결하는 신뢰 기반 라이브 커머스 플랫폼",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10B981",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "categories": ["business", "social", "lifestyle"],
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo192.png",
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512",
       "purpose": "any maskable"
-    }
-  ],
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "theme_color": "#4F46E5",
-  "background_color": "#ffffff",
-  "orientation": "portrait-primary",
-  "categories": ["safety", "navigation", "social"],
-  "shortcuts": [
-    {
-      "name": "Emergency SOS",
-      "short_name": "SOS",
-      "description": "Send emergency alert",
-      "url": "/emergency",
-      "icons": [{ "src": "/icons/sos.png", "sizes": "192x192" }]
     },
     {
-      "name": "Share Location",
-      "short_name": "Share",
-      "description": "Share your location",
-      "url": "/share",
-      "icons": [{ "src": "/icons/share.png", "sizes": "192x192" }]
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/home.png",
+      "src": "/screenshots/screenshot-1.png",
+      "sizes": "1080x1920",
       "type": "image/png",
-      "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "/screenshots/map.png",
+      "src": "/screenshots/screenshot-2.png",
+      "sizes": "1920x1080",
       "type": "image/png",
-      "sizes": "540x720",
-      "form_factor": "narrow"
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "피드",
+      "short_name": "피드",
+      "description": "라이브 콘텐츠 피드 보기",
+      "url": "/feed",
+      "icons": [
+        {
+          "src": "/icons/shortcut-feed.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "검색",
+      "short_name": "검색",
+      "description": "크리에이터 및 콘텐츠 검색",
+      "url": "/search",
+      "icons": [
+        {
+          "src": "/icons/shortcut-search.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "프로필",
+      "short_name": "프로필",
+      "description": "내 프로필 보기",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "/icons/shortcut-profile.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "related_applications": [],
   "prefer_related_applications": false,
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
   "protocol_handlers": [
     {
-      "protocol": "web+zziklive",
-      "url": "/open?url=%s"
+      "protocol": "web+zzik",
+      "url": "/link?url=%s"
     }
   ]
 }

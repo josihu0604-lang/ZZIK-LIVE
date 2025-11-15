@@ -1,0 +1,830 @@
+/* ============================================
+   MOBILE RESPONSIVE SYSTEM v1.0
+   Complete mobile optimization for ZZIK LIVE
+   ============================================ */
+
+/* ============================================
+   MOBILE-FIRST BASE STYLES
+   ============================================ */
+
+html {
+  /* Prevent text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  
+  /* Enable smooth scrolling */
+  scroll-behavior: smooth;
+  
+  /* Optimize font rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  /* Prevent overscroll bounce on iOS */
+  overscroll-behavior-y: none;
+  
+  /* Fix iOS body scrolling */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Prevent pull-to-refresh on Chrome */
+  overscroll-behavior: contain;
+  
+  /* Optimize mobile rendering */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
+   TOUCH OPTIMIZATION
+   ============================================ */
+
+/* Remove tap highlight color on all interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Keep tap highlight for links and buttons */
+a,
+button,
+input[type="button"],
+input[type="submit"],
+.btn {
+  -webkit-tap-highlight-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Improve touch target sizes - WCAG AAA */
+.touch-target {
+  min-width: 48px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.touch-target-large {
+  min-width: 56px;
+  min-height: 56px;
+}
+
+/* ============================================
+   SAFE AREA SUPPORT (iOS Notch)
+   ============================================ */
+
+/* iOS safe area variables */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+/* Safe area utilities */
+.safe-top {
+  padding-top: max(var(--spacing-4), var(--safe-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(var(--spacing-4), var(--safe-bottom));
+}
+
+.safe-left {
+  padding-left: max(var(--spacing-4), var(--safe-left));
+}
+
+.safe-right {
+  padding-right: max(var(--spacing-4), var(--safe-right));
+}
+
+.safe-x {
+  padding-left: max(var(--spacing-4), var(--safe-left));
+  padding-right: max(var(--spacing-4), var(--safe-right));
+}
+
+.safe-y {
+  padding-top: max(var(--spacing-4), var(--safe-top));
+  padding-bottom: max(var(--spacing-4), var(--safe-bottom));
+}
+
+.safe-all {
+  padding-top: max(var(--spacing-4), var(--safe-top));
+  padding-right: max(var(--spacing-4), var(--safe-right));
+  padding-bottom: max(var(--spacing-4), var(--safe-bottom));
+  padding-left: max(var(--spacing-4), var(--safe-left));
+}
+
+/* Fixed elements with safe area */
+.fixed-top-safe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-top: var(--safe-top);
+  z-index: var(--z-sticky);
+}
+
+.fixed-bottom-safe {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: var(--safe-bottom);
+  z-index: var(--z-sticky);
+}
+
+/* ============================================
+   MOBILE NAVIGATION
+   ============================================ */
+
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: max(var(--spacing-2), var(--safe-bottom));
+  z-index: var(--z-sticky);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mobile-nav-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: var(--spacing-2);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  text-decoration: none;
+  transition: all var(--duration-base);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.mobile-nav-item:active {
+  transform: scale(0.95);
+  background: var(--bg-hover);
+}
+
+.mobile-nav-item.active {
+  color: var(--brand);
+}
+
+.mobile-nav-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+/* Badge for notifications */
+.mobile-nav-badge {
+  position: absolute;
+  top: 8px;
+  right: 50%;
+  transform: translateX(12px);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--danger);
+  color: white;
+  font-size: 10px;
+  font-weight: var(--font-bold);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   MOBILE HEADER
+   ============================================ */
+
+.mobile-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: var(--spacing-3) var(--spacing-4);
+  padding-top: max(var(--spacing-3), var(--safe-top));
+  z-index: var(--z-sticky);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mobile-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 44px;
+}
+
+.mobile-header-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--text);
+}
+
+.mobile-header-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: calc(var(--spacing-2) * -1);
+  color: var(--text);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.mobile-header-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* ============================================
+   TOUCH GESTURES
+   ============================================ */
+
+/* Swipeable items */
+.swipeable {
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.swipeable-content {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-surface);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swipeable-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.swipeable-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 0 var(--spacing-4);
+  color: white;
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--duration-base);
+}
+
+.swipeable-action-delete {
+  background: var(--danger);
+}
+
+.swipeable-action-archive {
+  background: var(--warning);
+}
+
+.swipeable-action-primary {
+  background: var(--brand);
+}
+
+/* Pull to refresh */
+.pull-to-refresh {
+  position: relative;
+  overflow: hidden;
+}
+
+.pull-to-refresh-indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  transition: transform 0.3s ease-out;
+}
+
+.pull-to-refresh-indicator.pulling {
+  transform: translateX(-50%) translateY(0);
+}
+
+.pull-to-refresh-spinner {
+  width: 32px;
+  height: 32px;
+}
+
+/* ============================================
+   KEYBOARD HANDLING (Android)
+   ============================================ */
+
+/* Fix viewport when keyboard is open */
+.keyboard-open {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
+}
+
+/* Ensure input is visible when keyboard opens */
+.input-focused {
+  scroll-margin-bottom: 150px;
+}
+
+/* Prevent zoom on input focus (iOS) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px; /* Minimum 16px prevents iOS zoom */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ============================================
+   MOBILE MODAL/SHEET
+   ============================================ */
+
+.mobile-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.mobile-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.mobile-modal-content {
+  position: relative;
+  width: 100%;
+  max-height: 90vh;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding-bottom: max(var(--spacing-6), var(--safe-bottom));
+  overflow: auto;
+  animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpModal {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mobile-modal-handle {
+  width: 40px;
+  height: 4px;
+  margin: var(--spacing-3) auto var(--spacing-4);
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   RESPONSIVE IMAGES
+   ============================================ */
+
+/* Responsive image container */
+.responsive-image {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.responsive-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Aspect ratio containers */
+.aspect-1-1 { aspect-ratio: 1 / 1; }
+.aspect-4-3 { aspect-ratio: 4 / 3; }
+.aspect-16-9 { aspect-ratio: 16 / 9; }
+.aspect-9-16 { aspect-ratio: 9 / 16; }
+
+/* Image loading states */
+.image-loading {
+  background: linear-gradient(
+    90deg,
+    var(--bg-subtle) 0%,
+    var(--border) 50%,
+    var(--bg-subtle) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.image-loaded {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ============================================
+   MOBILE SCROLL OPTIMIZATION
+   ============================================ */
+
+/* Momentum scrolling */
+.scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar on mobile */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Snap scrolling */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-y {
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* ============================================
+   HAPTIC FEEDBACK STATES
+   ============================================ */
+
+.haptic-light:active {
+  transform: scale(0.98);
+}
+
+.haptic-medium:active {
+  transform: scale(0.95);
+}
+
+.haptic-heavy:active {
+  transform: scale(0.92);
+}
+
+/* ============================================
+   MOBILE-SPECIFIC LAYOUT
+   ============================================ */
+
+.mobile-container {
+  max-width: 100%;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+  margin: 0 auto;
+}
+
+.mobile-full {
+  margin-left: calc(var(--spacing-4) * -1);
+  margin-right: calc(var(--spacing-4) * -1);
+  width: calc(100% + var(--spacing-8));
+}
+
+/* Mobile-only content */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* ============================================
+   ORIENTATION SUPPORT
+   ============================================ */
+
+@media (orientation: portrait) {
+  .portrait-only {
+    display: block;
+  }
+  
+  .landscape-only {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) {
+  .portrait-only {
+    display: none;
+  }
+  
+  .landscape-only {
+    display: block;
+  }
+  
+  /* Adjust layout for landscape */
+  .mobile-header {
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+  
+  .mobile-nav {
+    display: none; /* Hide bottom nav in landscape */
+  }
+}
+
+/* ============================================
+   OFFLINE MODE
+   ============================================ */
+
+.offline-indicator {
+  position: fixed;
+  top: max(var(--spacing-2), var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-2) var(--spacing-4);
+  background: var(--warning);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-tooltip);
+  animation: slideDown 0.3s ease-out;
+}
+
+/* ============================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Hardware acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Optimize animations for mobile */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-animate {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Reduce animations on slower devices */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   MOBILE TYPOGRAPHY ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+  /* Slightly smaller text on small screens */
+  .text-h1 {
+    font-size: 2rem; /* 32px instead of 36px */
+  }
+  
+  .text-h2 {
+    font-size: 1.5rem; /* 24px instead of 30px */
+  }
+  
+  .text-h3 {
+    font-size: 1.25rem; /* 20px instead of 24px */
+  }
+  
+  /* Increase line height for better readability */
+  .text-body {
+    line-height: 1.6;
+  }
+}
+
+/* ============================================
+   MOBILE CARD ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .card {
+    border-radius: var(--radius);
+    padding: var(--spacing-4);
+  }
+  
+  .card-compact {
+    padding: var(--spacing-3);
+  }
+}
+
+/* ============================================
+   MOBILE FORM IMPROVEMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .input,
+  .btn {
+    min-height: 48px; /* Comfortable touch target */
+  }
+  
+  /* Stack buttons vertically on mobile */
+  .button-group-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+  
+  .button-group-mobile .btn {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   MOBILE ACCESSIBILITY
+   ============================================ */
+
+/* Ensure sufficient contrast on mobile */
+@media (max-width: 640px) {
+  .text-muted {
+    color: var(--text-secondary); /* Slightly darker for better contrast */
+  }
+}
+
+/* Focus indicators for keyboard navigation on mobile */
+@media (max-width: 640px) {
+  *:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================
+   MOBILE TOAST NOTIFICATIONS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .toast {
+    position: fixed;
+    bottom: max(var(--spacing-4), var(--safe-bottom));
+    left: var(--spacing-4);
+    right: var(--spacing-4);
+    max-width: none;
+    width: auto;
+  }
+}
+
+/* ============================================
+   MOBILE GRID ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .grid {
+    gap: var(--spacing-3); /* Tighter gaps on mobile */
+  }
+  
+  /* Single column by default on mobile */
+  .mobile-single-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   MOBILE VIDEO PLAYER
+   ============================================ */
+
+.mobile-video-container {
+  position: relative;
+  width: 100%;
+  background: black;
+  overflow: hidden;
+}
+
+.mobile-video-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mobile-video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-4);
+  padding-bottom: max(var(--spacing-4), var(--safe-bottom));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+/* ============================================
+   MOBILE LOADING STATES
+   ============================================ */
+
+@media (max-width: 640px) {
+  .skeleton-feed-card {
+    padding: var(--spacing-3);
+  }
+  
+  .loading-overlay {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================
+   VIEWPORT HEIGHT FIX (iOS Safari)
+   ============================================ */
+
+.full-height {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height */
+}
+
+.full-height-ios {
+  min-height: -webkit-fill-available;
+}
+
+/* ============================================
+   MOBILE MENU/DRAWER
+   ============================================ */
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100%;
+  height: 100dvh;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-modal);
+  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-drawer.open {
+  right: 0;
+}
+
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: calc(var(--z-modal) - 1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-drawer-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}

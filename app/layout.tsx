@@ -35,12 +35,24 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: 'ZZIK LIVE - 나노 크리에이터 × 로컬 비즈니스 매칭 플랫폼',
+  title: {
+    default: 'ZZIK LIVE - 나노 크리에이터 × 로컬 비즈니스 매칭 플랫폼',
+    template: '%s | ZZIK LIVE',
+  },
   description:
     'GPS+QR+영수증 삼중 검증 시스템으로 나노 크리에이터와 로컬 비즈니스를 연결하는 로컬 마케팅 플랫폼',
   keywords: '로컬, 릴스, 지도, GPS, QR코드, 영수증, 할인, 쿠폰, 바우처, 나노 크리에이터',
   authors: [{ name: 'ZZIK LIVE Team' }],
   manifest: '/manifest.json',
+  applicationName: 'ZZIK LIVE',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'ZZIK LIVE',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
@@ -72,8 +84,15 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  minimumScale: 1,
+  userScalable: true,
   viewportFit: 'cover', // Safe-area support for notch
-  themeColor: '#0B0F14',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#10B981' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0F14' },
+  ],
+  colorScheme: 'light dark',
+  interactiveWidget: 'resizes-content', // Better keyboard handling
 };
 
 export default function RootLayout({
