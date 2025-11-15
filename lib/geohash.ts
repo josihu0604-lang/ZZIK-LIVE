@@ -23,8 +23,8 @@ export function encode(lat: number, lng: number, precision: number = 5): string 
   let evenBit = true;
   let geohash = '';
 
-  let latRange = [-90.0, 90.0];
-  let lngRange = [-180.0, 180.0];
+  const latRange = [-90.0, 90.0];
+  const lngRange = [-180.0, 180.0];
 
   while (geohash.length < precision) {
     if (evenBit) {
@@ -72,8 +72,8 @@ export function decode(geohash: string): {
   center: { lat: number; lng: number };
 } {
   let evenBit = true;
-  let latRange = [-90.0, 90.0];
-  let lngRange = [-180.0, 180.0];
+  const latRange = [-90.0, 90.0];
+  const lngRange = [-180.0, 180.0];
 
   for (const char of geohash) {
     const idx = BASE32.indexOf(char);
@@ -126,7 +126,7 @@ export function getNeighbors(geohash: string): string[] {
   const neighbors: string[] = [geohash];
 
   // Get approximate neighbors by varying the last character
-  for (let offset of [-1, 1]) {
+  for (const offset of [-1, 1]) {
     const newIdx = idx + offset;
     if (newIdx >= 0 && newIdx < BASE32.length) {
       neighbors.push(parent + BASE32[newIdx]);

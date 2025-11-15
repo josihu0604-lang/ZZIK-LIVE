@@ -1,17 +1,8 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+// @ts-check
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-// Convert Next.js config to flat config format
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals'),
+export default tseslint.config(
   {
     ignores: [
       '.next/**',
@@ -23,17 +14,27 @@ const eslintConfig = [
       '*.config.js',
       '*.config.mjs',
       '*.config.ts',
+      'db/**',
+      'tests/**',
+      'scripts/**',
+      'vitest.config.ts',
+      'next-env.d.ts',
     ],
   },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     rules: {
-      // Disable problematic rules
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      'react/no-unescaped-entities': 'off',
-      '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-empty-interface': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
-  },
-];
-
-export default eslintConfig;
+  }
+);

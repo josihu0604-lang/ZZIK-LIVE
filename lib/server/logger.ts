@@ -64,7 +64,7 @@ export function log(level: Level, msg: string, ctx: Record<string, unknown> = {}
   const payload = { ts, level, msg, ...redact(ctx) };
 
   // Always use structured JSON logging
-  // eslint-disable-next-line no-console
+   
   console.log(JSON.stringify(payload));
 }
 
@@ -89,7 +89,7 @@ export function logCtx(level: Level, ctx: LogCtx): void {
   };
 
   // Always use structured JSON logging
-  // eslint-disable-next-line no-console
+   
   console.log(JSON.stringify(payload));
 }
 

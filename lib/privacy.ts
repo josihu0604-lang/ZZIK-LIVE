@@ -16,8 +16,8 @@ export function toGeohash5(lat: number, lng: number): string {
   let evenBit = true;
   let geohash = '';
 
-  let latRange = [-90.0, 90.0];
-  let lngRange = [-180.0, 180.0];
+  const latRange = [-90.0, 90.0];
+  const lngRange = [-180.0, 180.0];
 
   while (geohash.length < 5) {
     if (evenBit) {
