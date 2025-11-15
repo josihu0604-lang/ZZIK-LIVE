@@ -3,12 +3,11 @@
 import dynamic from 'next/dynamic';
 import AuthGate from '@/components/auth/AuthGate';
 import BottomTabBar from '@/components/navigation/BottomTabBar';
-import ReelsCarousel from '@/components/reels/ReelsCarousel';
 import { useEffect } from 'react';
 import { track } from '@/lib/analytics';
 import { Icon } from '@/components/ui/Icon';
 
-// Dynamic import to avoid SSR issues with Mapbox
+// Dynamic imports for performance optimization
 const MapView = dynamic(() => import('@/components/map/MapViewDynamic'), {
   ssr: false,
   loading: () => (
@@ -17,6 +16,20 @@ const MapView = dynamic(() => import('@/components/map/MapViewDynamic'), {
       style={{
         width: '100%',
         height: 'calc(100vh - 200px)',
+        borderRadius: 'var(--radius-lg)',
+      }}
+    />
+  ),
+});
+
+const ReelsCarousel = dynamic(() => import('@/components/reels/ReelsCarousel'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="zzik-skeleton animate"
+      style={{
+        width: '100%',
+        height: '240px',
         borderRadius: 'var(--radius-lg)',
       }}
     />
