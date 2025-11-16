@@ -157,16 +157,17 @@ model Ledger {
 }
 
 model Verification {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  placeId    String
-  place      Place    @relation(fields: [placeId], references: [id])
-  gpsOk      Boolean  @default(false)
-  qrOk       Boolean  @default(false)
-  receiptOk  Boolean  @default(false)
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  placeId     String
+  place       Place    @relation(fields: [placeId], references: [id])
+  gpsOk       Boolean  @default(false)
+  qrOk        Boolean  @default(false)
+  receiptOk   Boolean  @default(false)
+  gpsMetadata Json?    // { accuracy: number, confidence: number, distance: number, ts: number }
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
   
   @@unique([userId, placeId])
 }

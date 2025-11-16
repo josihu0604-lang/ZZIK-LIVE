@@ -5,6 +5,8 @@ import SearchBar from '@/components/pass/SearchBar';
 import FilterChips from '@/components/pass/FilterChips';
 import ReelsCarousel from '@/components/pass/ReelsCarousel';
 import MiniMap from '@/components/pass/MiniMap';
+import MapLiveExplore from '@/components/map/MapLiveExplore';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 import { Filter, Reel, MapPin } from '@/types';
 import { analytics } from '@/lib/analytics';
 import { useRouter } from 'next/navigation';
@@ -50,6 +52,16 @@ const mockPins: MapPin[] = [
   { id: 'place2', lat: 37.5675, lng: 126.98, category: 'bar', count: 3 },
   { id: 'place3', lat: 37.565, lng: 126.975, category: 'activity' },
 ];
+
+// Convert to Store format for enhanced map
+const mockStores = mockPins.map(pin => ({
+  id: pin.id,
+  name: `Store ${pin.id}`,
+  lat: pin.lat,
+  lng: pin.lng,
+  radius: 120, // 120m geofence radius
+  strictMode: pin.category === 'bar', // Stricter validation for bars
+}));
 
 export default function PassPage() {
   const router = useRouter();
@@ -107,7 +119,7 @@ export default function PassPage() {
       {/* LIVE Reels Carousel */}
       <ReelsCarousel items={mockReels} onOpen={handleReelOpen} />
 
-      {/* Mini Map */}
+      {/* Map - Use enhanced map if feature flag is enabled */}
       <div className="px-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">
@@ -120,12 +132,21 @@ export default function PassPage() {
             전체 지도 보기
           </button>
         </div>
-        <MiniMap
-          pins={mockPins}
-          onPinTap={handlePinTap}
-          onMyLocation={handleMyLocation}
-          className="h-[300px]"
-        />
+        {isFeatureEnabled('GEOFENCE_V2') ? (
+          <MapLiveExplore
+            stores={mockStores}
+            onStoreSelect={handlePinTap}
+            height={300}
+            enableGeofence={true}
+          />
+        ) : (
+          <MiniMap
+            pins={mockPins}
+            onPinTap={handlePinTap}
+            onMyLocation={handleMyLocation}
+            className="h-[300px]"
+          />
+        )}
       </div>
 
       {/* Additional content sections can be added here */}
