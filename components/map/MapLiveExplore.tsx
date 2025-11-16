@@ -46,6 +46,15 @@ export default function MapLiveExplore({
     if (!mapContainerRef.current || mapRef.current) return;
     if (!process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
       console.warn('NEXT_PUBLIC_MAPBOX_TOKEN not set');
+      setGpsError('지도 서비스를 사용할 수 없습니다. Mapbox 토큰을 설정해주세요.');
+      return;
+    }
+    
+    // Validate token format
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (token.includes('demo_token') || !token.startsWith('pk.')) {
+      console.warn('Invalid Mapbox token detected');
+      setGpsError('유효하지 않은 Mapbox 토큰입니다.');
       return;
     }
 
