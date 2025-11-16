@@ -131,12 +131,21 @@ export async function POST(req: NextRequest) {
     // TODO: 실제 인증 시스템 연동 시 req.headers에서 userId 추출
     const userId = 'demo-user'; // 임시 사용자 ID
     
+    // Prepare GPS metadata
+    const gpsMetadata = body.location ? {
+      accuracy: body.location.accuracy ?? -1,
+      confidence: body.location.confidence ?? 0,
+      distance: Math.round(distance),
+      ts: Date.now(),
+    } : null;
+    
     await upsertVerification({
       userId,
       placeId: storeId,
       gpsOk: true, // GPS 검증 통과
       qrOk: true, // QR 검증 통과
       receiptOk: !!body.evidence?.receiptId, // 영수증 있으면 true
+      gpsMetadata,
     });
 
     // 7) 정산 큐 등록 (Bull Queue - Redis 기반 영속적 큐)
