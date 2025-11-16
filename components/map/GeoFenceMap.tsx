@@ -31,8 +31,9 @@ export default function GeoFenceMap({
 
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
-    if (!process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
-      console.warn('NEXT_PUBLIC_MAPBOX_TOKEN not set');
+    if (!process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 
+        process.env.NEXT_PUBLIC_MAPBOX_TOKEN.includes('demo_token')) {
+      console.warn('NEXT_PUBLIC_MAPBOX_TOKEN not set or invalid');
       return;
     }
 

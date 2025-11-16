@@ -34,7 +34,8 @@ export default function StoreClusterMap({
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
-    if (!ref.current || !process.env.NEXT_PUBLIC_MAPBOX_TOKEN) return;
+    if (!ref.current || !process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
+        process.env.NEXT_PUBLIC_MAPBOX_TOKEN.includes('demo_token')) return;
 
     const map = new mapboxgl.Map({
       container: ref.current,
