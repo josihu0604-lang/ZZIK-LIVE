@@ -12,12 +12,14 @@ export interface CreateVerificationInput {
   gpsOk?: boolean;
   qrOk?: boolean;
   receiptOk?: boolean;
+  gpsMetadata?: any;
 }
 
 export interface UpdateVerificationInput {
   gpsOk?: boolean;
   qrOk?: boolean;
   receiptOk?: boolean;
+  gpsMetadata?: any;
 }
 
 /**
@@ -46,6 +48,7 @@ export async function upsertVerification(
       gpsOk: data.gpsOk ?? false,
       qrOk: data.qrOk ?? false,
       receiptOk: data.receiptOk ?? false,
+      gpsMetadata: data.gpsMetadata ?? undefined,
     },
   });
 }
