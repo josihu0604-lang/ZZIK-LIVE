@@ -140,17 +140,20 @@ model Reel {
 }
 
 model Ledger {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  type      String   // credit|debit
-  amount    Int
-  balance   Int
-  reason    String
-  meta      Json?
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // credit|debit
+  amount      Int
+  balance     Int
+  reason      String
+  status      String?  @db.VarChar(16) // pending|completed|failed
+  meta        Json?
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
   
   @@index([userId, createdAt])
+  @@index([status])
 }
 
 model Verification {

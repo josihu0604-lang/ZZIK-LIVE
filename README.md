@@ -4,6 +4,14 @@
 
 GPS 기반 삼중 검증 시스템으로 나노 크리에이터(팔로워 100~10,000명)와 로컬 비즈니스를 연결하는 혁신적인 마케팅 플랫폼입니다.
 
+## 🔗 개발 서버 (고정 주소)
+
+**Live Demo:** https://3000-ika6c7p2vsovx61qfxeth-5185f4aa.sandbox.novita.ai
+
+**API Health Check:** https://3000-ika6c7p2vsovx61qfxeth-5185f4aa.sandbox.novita.ai/api/health
+
+**진행 상황:** 6% 완료 (Step 6/100)
+
 ## 🚀 프로젝트 개요
 
 ZZIK LIVE는 다음 두 가지 핵심 문제를 해결합니다:

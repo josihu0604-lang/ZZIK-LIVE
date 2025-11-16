@@ -16,10 +16,12 @@ export default defineConfig({
         statements: 80,
       },
     },
+    setupFiles: ['./tests/setup.ts'],
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
+      'server-only': path.resolve(__dirname, './tests/mocks/server-only.ts'),
     },
   },
 });
